@@ -31,7 +31,37 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-app.get('/test2', (req, res) => {
+
+
+app.get("/test", (req, res) => {
+  const db = client.db(process.env.MONGODB_DBNAME_2);
+  res.writeHead(200, headers);
+  res.write(JSON.stringify({
+    message: "test work!",
+    method: "get",
+    variables: process.env
+  })
+  );
+  res.end();
+});
+
+app.get("/test2", (req, res) => {
+  const db = client.db(process.env.MONGODB_DBNAME_2);
+  res.writeHead(200, headers);
+  res.write(JSON.stringify({
+    message: "test work!",
+    method: "get",
+    port: port,
+    url: uri,
+    db: db,
+  })
+  );
+  res.end();
+
+});
+
+
+app.get('/test3', (req, res) => {
   console.log('進1');
 
   MongoClient.connect(uri, (err, client) => {
@@ -59,18 +89,6 @@ app.get('/test2', (req, res) => {
       res.end();
     };
 
-  });
-});
-
-app.get("/test", (req, res) => {
-  const db = client.db(process.env.MONGODB_DBNAME_2);
-  res.json({
-    message: "test work!",
-    method: "get",
-    port: port,
-    url: uri,
-    db: db,
-    variables: process.env
   });
 });
 
