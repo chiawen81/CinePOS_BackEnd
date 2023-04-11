@@ -29,7 +29,7 @@ app.use('/users', usersRouter);
 app.get('/test2', (req, res) => {
   console.log('進1');
 
-  MongoClient.connect(uri, async (err, client) => {
+  MongoClient.connect(uri, (err, client) => {
     console.log('進2');
     if (err) {
       res.writeHead(500, headers);
@@ -40,15 +40,14 @@ app.get('/test2', (req, res) => {
       res.end();
     } else {
       const db = client.db(process.env.MONGODB_DBNAME); // 從環境變數中取得資料庫名稱
-      const rooms = await db.collection('rooms');
-      const users = await db.collection('users');
-      res.writeHead(500, headers);
+      const rooms = db.collection('rooms');
+      // const users = await db.collection('users');
+      res.writeHead(200, headers);
 
       res.write(JSON.stringify({
         message: "test2 work!",
         method: "get",
         roomData: rooms,
-        userData: users
       })
       );
       res.end();
@@ -59,7 +58,7 @@ app.get('/test2', (req, res) => {
 
 app.get("/test", (req, res) => {
   res.json({
-    message: "test2 work!",
+    message: "test work!",
     method: "get"
   });
 });
