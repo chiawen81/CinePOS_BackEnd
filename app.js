@@ -39,7 +39,7 @@ app.get('/test2', (req, res) => {
       }));
       res.end();
     } else {
-      const db = client.db(process.env.MONGODB_DBNAME); // 從環境變數中取得資料庫名稱
+      const db = client.db(process.env.MONGODB_DBNAME_2); // 從環境變數中取得資料庫名稱
       const rooms = db.collection('rooms');
       // const users = await db.collection('users');
       console.log('db', db);
@@ -58,9 +58,14 @@ app.get('/test2', (req, res) => {
 });
 
 app.get("/test", (req, res) => {
+  const db = client.db(process.env.MONGODB_DBNAME_2);
   res.json({
     message: "test work!",
-    method: "get"
+    method: "get",
+    port: port,
+    url: uri,
+    db: db
+
   });
 });
 
