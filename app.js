@@ -3,16 +3,38 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
+
+
+
 // 測試
-const { MongoClient } = require('mongodb');
-const port = process.env.PORT || 3000;
-const uri = process.env.MONGODB_URI; // 從環境變數中取得MongoDB連線字串
 const headers = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization, Content-Length, X-Requested-With',
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'PATCH, POST, GET,OPTIONS,DELETE',
   'Content-Type': 'application/json'
 };
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://fangchiawen:aass6688@cluster0.t7hdpfl.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+client.connect(err => {
+  const collection = client.db("hotel").collection("rooms");
+  // perform actions on the collection object
+  app.get("/test3", async (req, res) => {
+    let roomData = await collection.find({}).toArray();
+    res.writeHead(200, headers);
+    res.write(JSON.stringify({
+      message: "test work!",
+      method: "get",
+      roomData
+    })
+    );
+    res.end();
+
+  });
+  client.close();
+});
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -67,6 +89,10 @@ app.get("/test3", (req, res) => {
   res.end();
 
 });
+
+
+
+
 
 
 app.get('/test4', (req, res) => {
