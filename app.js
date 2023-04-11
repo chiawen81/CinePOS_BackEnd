@@ -42,8 +42,9 @@ app.get('/test2', (req, res) => {
       const db = client.db(process.env.MONGODB_DBNAME); // 從環境變數中取得資料庫名稱
       const rooms = db.collection('rooms');
       // const users = await db.collection('users');
-      res.writeHead(200, headers);
+      console.log('db', db);
 
+      res.writeHead(200, headers);
       res.write(JSON.stringify({
         message: "test2 work!",
         method: "get",
