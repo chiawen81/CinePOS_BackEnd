@@ -3,6 +3,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+// 測試
+const { MongoClient } = require('mongodb');
+const port = process.env.PORT || 3000;
+const uri = process.env.MONGODB_URI; // 從環境變數中取得MongoDB連線字串
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -22,9 +26,40 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
+app.get('/test2', (req, res) => {
+  console.log('進1');
+
+  MongoClient.connect(uri, async (err, client) => {
+    console.log('進2');
+    if (err) {
+      res.writeHead(500, headers);
+      res.write(JSON.stringify({
+        "status": 500,
+        "msg": "Failed to connect to MongoDB Atlas"
+      }));
+      res.end();
+    } else {
+      const db = client.db(process.env.MONGODB_DBNAME); // 從環境變數中取得資料庫名稱
+      const rooms = await db.collection('rooms');
+      const users = await db.collection('users');
+      res.writeHead(500, headers);
+
+      res.write(JSON.stringify({
+        message: "test2 work!",
+        method: "get",
+        roomData: rooms,
+        userData: users
+      })
+      );
+      res.end();
+    };
+
+  });
+});
+
 app.get("/test", (req, res) => {
   res.json({
-    message: "test work!",
+    message: "test2 work!",
     method: "get"
   });
 });
@@ -53,7 +88,7 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-const port = process.env.PORT || 8080;
+// const port = process.env.PORT || 8080;
 
 app.listen(port, () => {
   console.log(`Express Server started on port ${port}`);
