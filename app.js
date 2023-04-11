@@ -1,44 +1,46 @@
 const express = require('express');
+const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 
-const app = express();
-
-// 設定CORS
 app.use(cors());
-app.options('*', cors());
 
-// 連接MongoDB
-mongoose.connect('mongodb+srv://fangchiawen:aass6688@cluster0.t7hdpfl.mongodb.net/?retryWrites=true&w=majority', {
+const uri = "mongodb+srv://fangchiawen:aass6688@cluster0.t7hdpfl.mongodb.net/hotel?retryWrites=true&w=majority";
+const options = {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => {
-  console.log('MongoDB Connected');
-}).catch((err) => {
-  console.log(err);
+  useUnifiedTopology: true
+};
+
+mongoose.connect(uri, options).then(() => {
+  console.log('MongoDB Atlas connected');
+}).catch(err => {
+  console.log('MongoDB Atlas connection error:', err);
 });
 
-// 定義資料模型
-const Room = mongoose.model('Room', {
-  rating: Number,
-  name: String,
-  price: Number,
-});
-
-// 設定路由
-app.get('/rooms', async (req, res, next) => {
-  try {
-    // 讀取資料
-    const rooms = await Room.find().exec();
-    res.json(rooms);
-  } catch (err) {
-    next(err);
+const UserSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  age: {
+    type: Number,
+    required: true,
   }
 });
 
-// 啟動伺服器
-app.listen(3000, () => {
-  console.log('Server started');
+const User = mongoose.model('User', UserSchema);
+
+app.get('/user', async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.listen(process.env.PORT || 3005, () => {
+  console.log(`Server is running on port ${process.env.PORT || 3005}`);
 });
 
 
