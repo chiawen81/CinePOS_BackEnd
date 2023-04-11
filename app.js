@@ -7,7 +7,12 @@ var logger = require('morgan');
 const { MongoClient } = require('mongodb');
 const port = process.env.PORT || 3000;
 const uri = process.env.MONGODB_URI; // 從環境變數中取得MongoDB連線字串
-
+const headers = {
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, Content-Length, X-Requested-With',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'PATCH, POST, GET,OPTIONS,DELETE',
+  'Content-Type': 'application/json'
+};
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -64,8 +69,8 @@ app.get("/test", (req, res) => {
     method: "get",
     port: port,
     url: uri,
-    db: db
-
+    db: db,
+    variables: process.env
   });
 });
 
