@@ -21,7 +21,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(err => {
   const collection = client.db("hotel").collection("rooms");
   // perform actions on the collection object
-  app.get("/test3", async (req, res) => {
+  app.get("/test7", async (req, res) => {
     let roomData = await collection.find({}).toArray();
     res.writeHead(200, headers);
     res.write(JSON.stringify({
