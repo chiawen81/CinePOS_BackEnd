@@ -73,34 +73,43 @@ app.get('/test4', (req, res) => {
   console.log('進1');
 
   MongoClient.connect(uri, (err, client) => {
-    console.log('進2');
-    cobsole.log()
-    if (err) {
-      res.writeHead(500, headers);
-      res.write(JSON.stringify({
-        "status": 500,
-        "msg": "Failed to connect to MongoDB Atlas"
-      }));
-      res.end('client', client);
-    } else {
-      const db = client.db(process.env.MONGODB_DBNAME_2); // 從環境變數中取得資料庫名稱
-      const rooms = db.collection('rooms');
-      console.log('db', db);
-
-      res.writeHead(200, headers);
-      res.write(JSON.stringify({
-        message: "test2 work!",
-        method: "get",
-        roomData: rooms,
-      })
-      );
-      res.end();
-    };
-
+    res.writeHead(200, headers);
+    res.write(JSON.stringify({
+      message: "MongoClient.connect成功",
+      method: "get",
+      client: client
+    })
+    );
+    res.end();
   });
 });
 
-app.get('/test5', (req, res) => {
+app.get('/test5', async (req, res) => {
+  try {
+    const client = await MongoClient.connect(uri);
+    const db = client.db(process.env.MONGODB_DBNAME_2);
+    console.log('Connected to MongoDB Atlas');
+    res.writeHead(200, headers);
+    res.write(JSON.stringify({
+      message: "MongoClient.connect成功",
+      method: "get",
+      data: db
+    })
+    );
+    res.end();
+  } catch (err) {
+    res.writeHead(500, headers);
+    res.write(JSON.stringify({
+      message: "失敗",
+      method: "get",
+      err: err
+    })
+    );
+    res.end();
+  }
+});
+
+app.get('/test6', (req, res) => {
   console.log('進1');
 
   MongoClient.connect(uri, (err, client) => {
