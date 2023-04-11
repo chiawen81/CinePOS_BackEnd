@@ -2,18 +2,24 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, '請輸入您的名字']
+        required: true,
     },
-    email: {
-        type: String,
-        required: [true, '請輸入您的 Email'],
-        unique: true,
-        lowercase: true,
-        select: false
-    },
-    photo: String,
+    age: {
+        type: Number,
+        required: true,
+    }
 });
 
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;
+
+// app.get("/test", (req, res) => {
+//   res.writeHead(200, headers);
+//   res.write(JSON.stringify({
+//     message: "test work!",
+//     method: "get",
+//   })
+//   );
+//   res.end();
+// });
