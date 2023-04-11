@@ -8,14 +8,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-// 共用的headers
-const headers = {
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization, Content-Length, X-Requested-With',
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'PATCH, POST, GET,OPTIONS,DELETE',
-  'Content-Type': 'application/json'
-};
-
 // 引入路由模組
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

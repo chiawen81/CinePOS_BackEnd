@@ -13,13 +13,3 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
-
-// app.get("/test", (req, res) => {
-//   res.writeHead(200, headers);
-//   res.write(JSON.stringify({
-//     message: "test work!",
-//     method: "get",
-//   })
-//   );
-//   res.end();
-// });

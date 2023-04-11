@@ -2,10 +2,26 @@ var express = require('express');
 var router = express.Router();
 const User = require('./../models/usersModels');
 
+// 共用的headers
+const headers = {
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, Content-Length, X-Requested-With',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'PATCH, POST, GET,OPTIONS,DELETE',
+  'Content-Type': 'application/json'
+};
+
 router.get('/', async (req, res) => {
   try {
     const users = await User.find();
-    res.status(200).json(users);
+    res.writeHead(200, headers);
+    res.write(JSON.stringify({
+      message: "user work:MongoDB Atlas connected!",
+      method: "get",
+      data: users
+    })
+    );
+    res.end();
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
