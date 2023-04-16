@@ -1,16 +1,15 @@
 // 設定引入的套件
+import cors from "cors";
+import mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
 const express = require('express');
-const app = express();
-const cors = require('cors');
-const mongoose = require('mongoose');
-const createError = require('http-errors');
 const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+const app = express();
 
 // 引入路由模組
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+import { indexRouter } from './routes/index';
+import { usersRouter } from './routes/users';
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,7 +23,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
+// 僅入路由
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
 
@@ -34,7 +33,7 @@ const options = {
   useUnifiedTopology: true
 };
 
-mongoose.connect(uri, options).then(() => {
+mongoose.connect(uri, options as any).then(() => {
   console.log('MongoDB Atlas connected');
 }).catch(err => {
   console.log('MongoDB Atlas connection error:', err);

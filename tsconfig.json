@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2016",                       /* 编译目标ES版本*/
+    "module": "commonjs",                     /* 编译目标模块系统*/
+    "declaration": false,                     /* 编译时创建声明文件(.ｄ.ts結尾的檔案) */
+    "outDir": "dist",                         /* ts编译输出目录 */
+    "rootDir": "src",                         /* ts编译根目录. */
+    // "strict": true,                        /* 會一併開啟noImplicitAny、strictNullChecks、strictFunctionTypes、strictBindCallApply */
+    "noUnusedLocals": true,                   /* 未使用局部变量报错*/
+    "noUnusedParameters": false,              /* 未使用参数报错*/
+    "allowSyntheticDefaultImports": false,    /* 允许从没有设置默认导出的模块中默认导入，仅用于提示，不影响编译结果*/
+    "esModuleInterop": true,                  
+    /* 允许编译生成文件时，在代码中注入工具类(__importDefault、__importStar)对ESM与commonjs混用情况做兼容处理*/
+    "allowJs": true,                          // 允許編譯 javascript 文件
+    "checkJs": true,                          // 報告 javascript 文件中的錯誤
+    "baseUrl": "./",                          // 用於解析非相對模組名稱的基目錄
+    "skipLibCheck": true,                     // 不會檢查引入的函式庫檔案
+    "forceConsistentCasingInFileNames": true, /* Ensure that casing is correct in imports. */
+    "types": ["node", "express"],
+    "removeComments": true, 
+  },
+  "include": [                                /* 需要编译的文件 */
+    "src/**/*.ts",
+   // "typings/**/*.ts"
+  ],
+  "exclude": [                                /* 编译需要排除的文件 */
+    "node_modules/**"
+  ],
+}

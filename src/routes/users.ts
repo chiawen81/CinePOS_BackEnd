@@ -1,6 +1,7 @@
-var express = require('express');
-var router = express.Router();
-const User = require('./../models/usersModels');
+const express = require('express');
+const router = express.Router();
+import User from '../models/usersModels';
+
 
 // 共用的headers
 const headers = {
@@ -27,4 +28,4 @@ router.get('/', async (req, res) => {
   }
 });
 
-module.exports = router;
+export const usersRouter = router;
