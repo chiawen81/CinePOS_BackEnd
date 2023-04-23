@@ -1,19 +1,21 @@
-// 設定引入的套件
+// 引入的套件
 import cors from "cors";
-import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 const express = require('express');
 const path = require('path');
 const app = express();
 
+// 引入錯誤處理模組
+import ErrorService from './service/error';
+
 // 引入路由模組
 import { indexRouter } from './routes/index';
-import { usersRouter } from './routes/users';
+import { userRouter } from './routes/user';
+import { logInRouter } from './routes/log-in';
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+// 資料庫設定開始
+import "./service/connection";
 
 // 設定 middleware
 app.use(cors());
@@ -23,23 +25,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 僅入路由
+// 設定路由
 app.use('/', indexRouter);
-app.use('/user', usersRouter);
+app.use('/user', userRouter);
+app.use('/log-in', logInRouter);
 
-const uri = "mongodb+srv://fangchiawen:aass6688@cluster0.t7hdpfl.mongodb.net/hotel?retryWrites=true&w=majority";
-const options = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-};
+// 設定錯誤處理
+app.use(ErrorService.catchCustomError); // 自訂錯誤
 
-mongoose.connect(uri, options as any).then(() => {
-  console.log('MongoDB Atlas connected');
-}).catch(err => {
-  console.log('MongoDB Atlas connection error:', err);
-});
-
-
-app.listen(process.env.PORT || 3005, () => {
+// 本機環境埠號設定
+app.listen(process.env.LOCAL_PORT || 3005, () => {
   console.log(`Server is running on port ${process.env.PORT || 3005}`);
 });
