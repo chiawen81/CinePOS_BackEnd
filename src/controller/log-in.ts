@@ -25,7 +25,7 @@ class LogInController {
             // 驗證密碼
             try {
                 const user = await User.findOne({ staffId, role }).select('+password');
-                console.log('user', user, user.name, user.password);
+                console.log('user', user);
 
                 if (!user) {
                     return next(ErrorService.appError(400, "查無此人！", next));
