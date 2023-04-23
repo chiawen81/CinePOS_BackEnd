@@ -13,8 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const usersModels_1 = __importDefault(require("../models/usersModels"));
 const error_1 = __importDefault(require("../service/error"));
+const usersModels_1 = __importDefault(require("../models/usersModels"));
 class AuthService {
     constructor() {
         this.sendBackJWT = (reqData, res, statusCode) => {
@@ -35,7 +35,7 @@ class AuthService {
             let token;
             if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
                 token = req.headers.authorization.split(' ')[1];
-                console.log('token', token);
+                console.log('目前使用的token', token);
             }
             else {
                 return next(error_1.default.appError(401, "請重新登入！", next));

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import User from '../models/usersModels';
 import ErrorService from '../service/error';
+import User from '../models/usersModels';
 
 class AuthService {
     // 產生JWT token
@@ -28,7 +28,7 @@ class AuthService {
         let token;
         if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
             token = req.headers.authorization.split(' ')[1];
-            console.log('token', token);
+            console.log('目前使用的token', token);
         } else {
             return next(ErrorService.appError(401, "請重新登入！", next));
         };

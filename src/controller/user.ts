@@ -24,17 +24,18 @@ class UserController {
                 { new: true }       // 參數(表示返回更新後的文檔。如果沒有設置這個參數，則返回更新前的文檔。)
             );
             console.log('updatedUser ', updatedUser);
-            res.writeHead(200, process.env.HEADERS);
-            res.write(JSON.stringify({
+
+            if (!updatedUser) {
+                return next(ErrorService.appError(400, "查無此人！", next));
+            };
+
+            res.status(200).json({
                 message: "已經成功修改姓名!",
                 data: {
                     staffId: updatedUser.staffId,
                     newName: updatedUser.name
                 }
-            })
-            );
-            res.end();
-
+            });
         } catch (err) {
             res.status(500).json({ error: err.message });
         };

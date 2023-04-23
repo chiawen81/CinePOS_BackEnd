@@ -8,5 +8,5 @@ router.get('/', function (req, res, next) {
 
 
 
-export const indexRouter = router;
+export const StaffIndexRouter = router;
 

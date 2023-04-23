@@ -27,15 +27,17 @@ class UserController {
             try {
                 const updatedUser = yield usersModels_1.default.findOneAndUpdate({ staffId }, { name: newName }, { new: true });
                 console.log('updatedUser ', updatedUser);
-                res.writeHead(200, process.env.HEADERS);
-                res.write(JSON.stringify({
+                if (!updatedUser) {
+                    return next(error_1.default.appError(400, "查無此人！", next));
+                }
+                ;
+                res.status(200).json({
                     message: "已經成功修改姓名!",
                     data: {
                         staffId: updatedUser.staffId,
                         newName: updatedUser.name
                     }
-                }));
-                res.end();
+                });
             }
             catch (err) {
                 res.status(500).json({ error: err.message });
