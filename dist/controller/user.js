@@ -24,6 +24,12 @@ class UserController {
                 return next(error_1.default.appError(400, "姓名欄位驗證錯誤！", next));
             }
             ;
+            let role = (req.originalUrl.split('/')[1] === "admin") ? "manager" : "staff";
+            const user = yield usersModels_1.default.findOne({ staffId, role }).select('+password');
+            if (!user) {
+                return next(error_1.default.appError(400, "查無此人！", next));
+            }
+            ;
             try {
                 const updatedUser = yield usersModels_1.default.findOneAndUpdate({ staffId }, { name: newName }, { new: true });
                 console.log('updatedUser ', updatedUser);

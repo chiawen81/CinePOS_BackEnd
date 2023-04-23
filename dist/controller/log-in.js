@@ -20,8 +20,7 @@ const usersModels_1 = __importDefault(require("../models/usersModels"));
 class LogInController {
     constructor() {
         this.lonIn = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-            console.log(req.originalUrl, req.originalUrl.split('/')[1], req.originalUrl.split('/')[2]);
-            console.log('進來登入了～');
+            console.log('進來登入了～', req.originalUrl.split('/')[1]);
             let { staffId, password } = req.body;
             console.log('staffId', staffId, 'password', password);
             let passwordValidator = validator_1.default.isLength(password, { min: 8 });
@@ -31,7 +30,6 @@ class LogInController {
                 let role = (req.originalUrl.split('/')[1] === "admin") ? "manager" : "staff";
                 try {
                     const user = yield usersModels_1.default.findOne({ staffId, role }).select('+password');
-                    console.log('user', user, user.name, user.password);
                     if (!user) {
                         return next(error_1.default.appError(400, "查無此人！", next));
                     }

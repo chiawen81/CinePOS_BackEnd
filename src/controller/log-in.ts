@@ -11,8 +11,7 @@ class LogInController {
 
     // ———————————————————————  登入系統  ———————————————————————
     lonIn = async (req, res, next) => {
-        console.log(req.originalUrl, req.originalUrl.split('/')[1], req.originalUrl.split('/')[2]);
-        console.log('進來登入了～');
+        console.log('進來登入了～', req.originalUrl.split('/')[1]);
         let { staffId, password } = req.body;
         console.log('staffId', staffId, 'password', password);
 
@@ -25,7 +24,6 @@ class LogInController {
             // 驗證密碼
             try {
                 const user = await User.findOne({ staffId, role }).select('+password');
-                console.log('user', user);
 
                 if (!user) {
                     return next(ErrorService.appError(400, "查無此人！", next));
