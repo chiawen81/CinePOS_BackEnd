@@ -16,6 +16,12 @@ class UserController {
         if (!validator.isLength(newName, { min: 2 })) {
             return next(ErrorService.appError(400, "姓名欄位驗證錯誤！", next));
         };
+        let role = (req.originalUrl.split('/')[1] === "admin") ? "manager" : "staff";
+        const user = await User.findOne({ staffId, role }).select('+password');
+
+        if (!user) {
+            return next(ErrorService.appError(400, "查無此人！", next));
+        };
 
         try {
             const updatedUser = await User.findOneAndUpdate(
