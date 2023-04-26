@@ -48,7 +48,7 @@
                 }
             }
         },
-        "/info/update": {
+        "/user/info/update": {
             "post": {
                 "tags": [
                     "Member"
@@ -60,7 +60,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/LoginReq"
+                                "$ref": "#/components/schemas/InfoUpdateReq"
                             }
                         }
                     }
@@ -71,7 +71,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/LoginRes"
+                                    "$ref": "#/components/schemas/InfoUpdateRes"
                                 }
                             }
                         }
