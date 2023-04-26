@@ -6,6 +6,8 @@ import logger from 'morgan';
 const express = require('express');
 const path = require('path');
 const app = express();
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../swagger.json');
 // 路由模組
 import { StaffIndexRouter } from './routes/staff/index';
 import { ManagerIndexRouter } from './routes/manager/index';
@@ -48,4 +50,12 @@ app.use(ErrorService.catchCustomError);     // 自訂錯誤
 // 本機環境埠號設定
 app.listen(process.env.LOCAL_PORT || 3005, () => {
   console.log(`Server is running on port ${process.env.PORT || 3005}`);
+});
+
+// ——————————  swagger  —————————— 
+// 前台swagger
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.get('/swagger.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerDocument);
 });

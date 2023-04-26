@@ -1,0 +1,159 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "CinePOS_BackEnd",
+        "description": "CinePOS 後端API"
+    },
+    "tags": [
+        {
+            "name": "Account"
+        },
+        {
+            "name": "Member"
+        }
+    ],
+    "paths": {
+        "/log-in": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "登入請求",
+                "requestBody": {
+                    "description": "資料格式",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginReq"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginRes"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "未知錯誤"
+                    }
+                }
+            }
+        },
+        "/info/update": {
+            "post": {
+                "tags": [
+                    "Member"
+                ],
+                "summary": "修改會員名字",
+                "requestBody": {
+                    "description": "資料格式",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginReq"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginRes"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "未知錯誤"
+                    }
+                }
+            }
+        }
+
+    },
+    "components": {
+        "schemas": {
+            "LoginReq": {
+                "properties": {
+                    "staffId": {
+                        "type": "string",
+                        "description": "員工編號",
+                        "example": "A0002"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "密碼",
+                        "example": "asd123"
+                    }
+                },
+                "required": [
+                    "staffId",
+                    "password"
+                ]
+            },
+            "LoginRes": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "message"
+                    }
+                },
+                "required": [
+                    "code",
+                    "message"
+                ]
+            },
+            "InfoUpdateReq": {
+                "properties": {
+                    "newName": {
+                        "type": "string",
+                        "description": "名字",
+                        "example": "黃小狗"
+                    },
+                    "staffId": {
+                        "type": "string",
+                        "description": "員工編號",
+                        "example": "A0002"
+                    }
+                },
+                "required": [
+                    "newName",
+                    "staffId"
+                ]
+            },
+            "InfoUpdateRes": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "message"
+                    }
+                },
+                "required": [
+                    "code",
+                    "message"
+                ]
+            }
+        }
+    }
+}
