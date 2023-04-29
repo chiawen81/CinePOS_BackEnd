@@ -14,25 +14,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const error_1 = __importDefault(require("../service/error"));
-const usersModels_1 = __importDefault(require("../models/usersModels"));
+const usersModels_1 = __importDefault(require("../models/common/usersModels"));
 class AuthService {
     constructor() {
         this.sendBackJWT = (reqData, res, statusCode) => {
             console.log(reqData._id);
-            const token = jsonwebtoken_1.default.sign({ id: reqData._id }, process.env.JWT_SECRET, {
+            let data = {
+                id: reqData._id,
+                name: reqData.name,
+                staffId: reqData.staffId,
+                stickerUrl: ""
+            };
+            const token = jsonwebtoken_1.default.sign(data, process.env.JWT_SECRET, {
                 expiresIn: process.env.JWT_EXPIRES_DAY
             });
             res.status(statusCode).json({
-                status: 'success',
-                statusCode,
-                user: {
-                    token,
-                    name: reqData.name
+                code: 1,
+                message: "已成功登入!",
+                data: {
+                    staffId: reqData.staffId,
+                    name: reqData.name,
+                    token
                 }
             });
         };
         this.isAuth = error_1.default.handleErrorAsync((req, res, next) => __awaiter(this, void 0, void 0, function* () {
             let token;
+            let { staffId } = req.body;
+            console.log('登入者- staffId', staffId);
             if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
                 token = req.headers.authorization.split(' ')[1];
                 console.log('目前使用的token', token);
@@ -54,10 +63,16 @@ class AuthService {
                 });
             });
             console.log('decodedClientData', decodedClientData);
-            const currentUser = yield usersModels_1.default.findOne({ id: decodedClientData.id });
-            console.log('currentUser', currentUser);
-            req.user = currentUser;
-            next();
+            if (decodedClientData.staffId === staffId) {
+                const currentUser = yield usersModels_1.default.findOne({ staffId: decodedClientData.staffId });
+                console.log('currentUser', currentUser);
+                req.user = currentUser;
+                next();
+            }
+            else {
+                return next(error_1.default.appError(403, "只能修改本人姓名", next));
+            }
+            ;
         }));
     }
 }
