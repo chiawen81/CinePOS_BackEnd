@@ -1,6 +1,6 @@
 import validator from "validator";
-import User from '../models/usersModels';
-import ErrorService from '../service/error';
+import User from '../../models/common/usersModels';
+import ErrorService from './../../service/error';
 
 class UserController {
     constructor() {
@@ -9,18 +9,21 @@ class UserController {
 
     // 更新使用者姓名
     changeUserName = async (req, res, next) => {
-        console.log("抓到路由- user/info/update");
-        const { newName, staffId } = req.body;
+        console.log("抓到路由- profile");
+        const { newName } = req.body;
+        const { staffId } = req.user;
+        console.log('newName', newName, 'staffId', staffId);
 
         // 驗證欄位
         if (!validator.isLength(newName, { min: 2 })) {
-            return next(ErrorService.appError(400, "姓名欄位驗證錯誤！", next));
+            return next(ErrorService.appError(401, "姓名欄位驗證錯誤！", next));
         };
-        let role = (req.originalUrl.split('/')[1] === "admin") ? "manager" : "staff";
+        console.log(req.originalUrl.split('/'));
+        let role = (req.originalUrl.split('/')[2] === "manager") ? "manager" : "staff";
         const user = await User.findOne({ staffId, role }).select('+password');
 
         if (!user) {
-            return next(ErrorService.appError(400, "查無此人！", next));
+            return next(ErrorService.appError(401, "查無此人！", next));
         };
 
         try {
@@ -32,10 +35,11 @@ class UserController {
             console.log('updatedUser ', updatedUser);
 
             if (!updatedUser) {
-                return next(ErrorService.appError(400, "查無此人！", next));
+                return next(ErrorService.appError(401, "查無此人！", next));
             };
 
             res.status(200).json({
+                code: 1,
                 message: "已經成功修改姓名!",
                 data: {
                     staffId: updatedUser.staffId,

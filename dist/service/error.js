@@ -21,14 +21,14 @@ class ErrorService {
             console.log('resErrorProd');
             if (err.isOperational) {
                 res.status(err.statusCode).json({
-                    status: err.status,
+                    code: -1,
                     message: err.message
                 });
             }
             else {
                 console.error('出現重大錯誤', err);
                 res.status(500).json({
-                    status: 'error',
+                    code: -1,
                     message: '系統錯誤，請恰系統管理員'
                 });
             }

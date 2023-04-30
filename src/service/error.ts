@@ -20,7 +20,7 @@ class ErrorService {
 
 
 
-    // 擴充async fun，加上catch捕捉錯誤訊息
+    // ——————————  擴充async fun，加上catch捕捉錯誤訊息  ——————————
     handleErrorAsync = function handleErrorAsync(func) {
         console.log('有進來 handleErrorAsync');
         return function (req, res, next) {
@@ -34,7 +34,7 @@ class ErrorService {
 
 
 
-    // 設定錯誤訊息
+    // ——————————  設定錯誤訊息  ——————————
     appError = (httpStatus, errMessage, next) => {
         const error: any = new Error(errMessage);
         error.statusCode = httpStatus;
@@ -45,12 +45,12 @@ class ErrorService {
 
 
 
-    // 自己設定的 err 錯誤 
+    // ——————————  自己設定的 err 錯誤  ——————————
     resErrorProd = (err, res) => {
         console.log('resErrorProd');
         if (err.isOperational) {
             res.status(err.statusCode).json({
-                status: err.status,
+                code: -1,
                 message: err.message
             });
         } else {
@@ -59,7 +59,7 @@ class ErrorService {
 
             // 送出罐頭預設訊息
             res.status(500).json({
-                status: 'error',
+                code: -1,
                 message: '系統錯誤，請恰系統管理員'
             });
         }
@@ -67,7 +67,7 @@ class ErrorService {
 
 
 
-    // 開發環境錯誤
+    // ——————————  開發環境錯誤  ——————————
     resErrorDev = (err, res, req) => {
         console.log('resErrorDev');
         let error = {
@@ -93,7 +93,7 @@ class ErrorService {
 
 
 
-    // 自訂錯誤
+    // ——————————  自訂錯誤  ——————————
     catchCustomError = (err, req: Request, res: Response, next: NextFunction) => {
         console.log('catchCustomError');
         // 測試機環境dev

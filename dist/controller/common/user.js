@@ -13,31 +13,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const validator_1 = __importDefault(require("validator"));
-const usersModels_1 = __importDefault(require("../models/usersModels"));
-const error_1 = __importDefault(require("../service/error"));
+const usersModels_1 = __importDefault(require("../../models/common/usersModels"));
+const error_1 = __importDefault(require("./../../service/error"));
 class UserController {
     constructor() {
         this.changeUserName = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-            console.log("抓到路由- user/info/update");
-            const { newName, staffId } = req.body;
+            console.log("抓到路由- profile");
+            const { newName } = req.body;
+            const { staffId } = req.user;
+            console.log('newName', newName, 'staffId', staffId);
             if (!validator_1.default.isLength(newName, { min: 2 })) {
-                return next(error_1.default.appError(400, "姓名欄位驗證錯誤！", next));
+                return next(error_1.default.appError(401, "姓名欄位驗證錯誤！", next));
             }
             ;
-            let role = (req.originalUrl.split('/')[1] === "admin") ? "manager" : "staff";
+            console.log(req.originalUrl.split('/'));
+            let role = (req.originalUrl.split('/')[2] === "manager") ? "manager" : "staff";
             const user = yield usersModels_1.default.findOne({ staffId, role }).select('+password');
             if (!user) {
-                return next(error_1.default.appError(400, "查無此人！", next));
+                return next(error_1.default.appError(401, "查無此人！", next));
             }
             ;
             try {
                 const updatedUser = yield usersModels_1.default.findOneAndUpdate({ staffId }, { name: newName }, { new: true });
                 console.log('updatedUser ', updatedUser);
                 if (!updatedUser) {
-                    return next(error_1.default.appError(400, "查無此人！", next));
+                    return next(error_1.default.appError(401, "查無此人！", next));
                 }
                 ;
                 res.status(200).json({
+                    code: 1,
                     message: "已經成功修改姓名!",
                     data: {
                         staffId: updatedUser.staffId,

@@ -1,31 +1,44 @@
 import jwt from "jsonwebtoken";
 import ErrorService from '../service/error';
-import User from '../models/usersModels';
+import User from '../models/common/usersModels';
 
 class AuthService {
-    // 產生JWT token
+    // ——————————  產生JWT token——————————
     sendBackJWT = (reqData, res, statusCode) => {
         console.log(reqData._id)
+        let data = {
+            id: reqData._id,
+            name: reqData.name,
+            staffId: reqData.staffId,
+            stickerUrl: ""    // ====待補大頭貼照片====
+        };
+
         // 產生 JWT token
-        const token = jwt.sign({ id: reqData._id }, process.env.JWT_SECRET, {
+        const token = jwt.sign(data, process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_EXPIRES_DAY
         });
 
         // 回傳JWT
         res.status(statusCode).json({
-            status: 'success',
-            statusCode,
-            user: {
-                token,
-                name: reqData.name
+            code: 1,
+            message: "已成功登入!",
+            data: {
+                staffId: reqData.staffId,
+                name: reqData.name,
+                token
             }
         });
     }
 
-    // JWT驗證 
+
+
+    // ——————————  JWT驗證  ——————————
     isAuth = ErrorService.handleErrorAsync(async (req, res, next) => {
         // 取得Client端的JWT token   
         let token;
+        let { staffId } = req.body;
+        console.log('登入者- staffId', staffId);
+
         if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
             token = req.headers.authorization.split(' ')[1];
             console.log('目前使用的token', token);
@@ -46,12 +59,18 @@ class AuthService {
         });
         console.log('decodedClientData', decodedClientData);
 
-        // 抓出資料庫中的使用者資料
-        const currentUser = await User.findOne({ id: decodedClientData.id });
-        console.log('currentUser', currentUser);
-        req.user = currentUser;
-        next();
+        if (decodedClientData.staffId === staffId) {
+            // 抓出資料庫中的使用者資料
+            const currentUser = await User.findOne({ staffId: decodedClientData.staffId });
+            console.log('currentUser', currentUser);
+            req.user = currentUser;
+            next();
+
+        } else {
+            return next(ErrorService.appError(403, "只能修改本人姓名", next));
+        };
     });
+
 }
 
 

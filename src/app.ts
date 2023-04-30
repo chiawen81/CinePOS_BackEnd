@@ -9,10 +9,10 @@ const app = express();
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../swagger.json');
 // 路由模組
-import { StaffIndexRouter } from './routes/staff/index';
-import { ManagerIndexRouter } from './routes/manager/index';
-import { CommonUserRouter } from './routes/common/user';
-import { CommonLogInRouter } from './routes/common/log-in';
+import { StaffIndexRouter } from './routes/v1/staff/index';
+import { ManagerIndexRouter } from './routes/v1/manager/index';
+import { CommonUserRouter } from './routes/v1/common/user';
+import { CommonLogInRouter } from './routes/v1/common/login';
 // 其它
 import "./service/connection";                        // 資料庫設定
 import ErrorService from './service/error';           // 錯誤處理 
@@ -31,13 +31,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ——————————  設定路由  ——————————
 // 前台
-app.use('/', StaffIndexRouter);
-app.use('/user', CommonUserRouter);
-app.use('/log-in', CommonLogInRouter);
+app.use('/v1/staff', StaffIndexRouter);
+app.use('/v1/staff/user', CommonUserRouter);
+app.use('/v1/staff/login', CommonLogInRouter);
 // 後台
-app.use('/admin/', ManagerIndexRouter);
-app.use('/admin/user', CommonUserRouter);
-app.use('/admin/log-in', CommonLogInRouter);
+app.use('/v1/manager/', ManagerIndexRouter);
+app.use('/v1/manager/user', CommonUserRouter);
+app.use('/v1/manager/login', CommonLogInRouter);
 
 
 
