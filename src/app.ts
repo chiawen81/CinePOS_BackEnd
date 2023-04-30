@@ -53,9 +53,8 @@ app.listen(process.env.LOCAL_PORT || 3005, () => {
 });
 
 // ——————————  swagger  —————————— 
-// 前台swagger
-app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.get('/swagger.json', (req, res) => {
+app.use('/v1/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.get('/v1/swagger.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.send(swaggerDocument);
 });
