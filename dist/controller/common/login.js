@@ -14,12 +14,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const validator_1 = __importDefault(require("validator"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const error_1 = __importDefault(require("../service/error"));
-const auth_1 = __importDefault(require("../service/auth"));
-const usersModels_1 = __importDefault(require("../models/usersModels"));
+const error_1 = __importDefault(require("../../service/error"));
+const auth_1 = __importDefault(require("../../service/auth"));
+const usersModels_1 = __importDefault(require("../../models/common/usersModels"));
 class LogInController {
     constructor() {
-        this.lonIn = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+        this.logIn = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             console.log('進來登入了～', req.originalUrl.split('/')[1]);
             let { staffId, password } = req.body;
             console.log('staffId', staffId, 'password', password);
@@ -27,11 +27,11 @@ class LogInController {
             let staffIdValidator = validator_1.default.isLength(staffId, { min: 5 });
             console.log('passwordValidator', passwordValidator, 'staffIdValidator', staffIdValidator);
             if (passwordValidator && staffIdValidator) {
-                let role = (req.originalUrl.split('/')[1] === "admin") ? "manager" : "staff";
+                let role = (req.originalUrl.split('/')[2] === "manager") ? "manager" : "staff";
                 try {
                     const user = yield usersModels_1.default.findOne({ staffId, role }).select('+password');
                     if (!user) {
-                        return next(error_1.default.appError(400, "查無此人！", next));
+                        return next(error_1.default.appError(401, "查無此人！", next));
                     }
                     ;
                     console.log('password', password, 'user.password', user.password);
@@ -41,7 +41,7 @@ class LogInController {
                         auth_1.default.sendBackJWT(user, res, 200);
                     }
                     else {
-                        return next(error_1.default.appError(400, "密碼錯誤！", next));
+                        return next(error_1.default.appError(401, "密碼錯誤！", next));
                     }
                     ;
                 }
@@ -52,7 +52,7 @@ class LogInController {
             }
             else {
                 console.log(2);
-                return next(error_1.default.appError(400, "欄位驗證錯誤，請確認填寫的資料！", next));
+                return next(error_1.default.appError(401, "欄位驗證錯誤，請確認填寫的資料！", next));
             }
             ;
         });
