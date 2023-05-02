@@ -23,7 +23,9 @@
     "nodemon": "^2.0.22",
     "path": "^0.12.7",
     "ts-node": "^10.9.1",
-    "validator": "^13.9.0"
+    "validator": "^13.9.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.2"
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
