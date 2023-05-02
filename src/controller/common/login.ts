@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import ErrorService from '../../service/error';
 import AuthService from '../../service/auth';
 import User from '../../models/common/usersModels';
+import { Request, Response, NextFunction } from 'express';
+import { LoginReq } from "src/interface/swagger-model/loginReq";
 
 class LogInController {
     constructor() {
@@ -10,7 +12,7 @@ class LogInController {
     }
 
     // ———————————————————————  登入系統  ———————————————————————
-    logIn = async (req, res, next) => {
+    logIn = async (req: Request<{}, {}, LoginReq>, res: Response, next: NextFunction) => {
         console.log('進來登入了～', req.originalUrl.split('/')[1]);
         let { staffId, password } = req.body;
         console.log('staffId', staffId, 'password', password);
