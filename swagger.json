@@ -1,35 +1,38 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "version": "1.0.0",
         "title": "CinePOS_BackEnd",
-        "description": "CinePOS 後端API"
+        "description": "CinePOS 後端API",
+        "version": "1.0.0"
     },
     "tags": [
         {
-            "name": "Account"
+            "name": "Staff"
         },
         {
-            "name": "Member"
+            "name": "Manager"
+        },
+        {
+            "name": "Common"
         }
     ],
     "paths": {
-        "/log-in": {
+        "/v1/staff/login": {
             "post": {
                 "tags": [
-                    "Account"
+                    "Staff"
                 ],
                 "summary": "登入請求",
                 "requestBody": {
                     "description": "資料格式",
-                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/LoginReq"
                             }
                         }
-                    }
+                    },
+                    "required": true
                 },
                 "responses": {
                     "200": {
@@ -43,27 +46,34 @@
                         }
                     },
                     "400": {
-                        "description": "未知錯誤"
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
                     }
                 }
             }
         },
-        "/user/info/update": {
+        "/v1/staff/user/profile": {
             "post": {
                 "tags": [
-                    "Member"
+                    "Staff"
                 ],
                 "summary": "修改會員名字",
                 "requestBody": {
                     "description": "資料格式",
-                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/InfoUpdateReq"
                             }
                         }
-                    }
+                    },
+                    "required": true
                 },
                 "responses": {
                     "200": {
@@ -77,16 +87,108 @@
                         }
                     },
                     "400": {
-                        "description": "未知錯誤"
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/login": {
+            "post": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "登入請求",
+                "requestBody": {
+                    "description": "資料格式",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginRes"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/user/profile": {
+            "post": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "修改會員名字",
+                "requestBody": {
+                    "description": "資料格式",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InfoUpdateReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InfoUpdateRes"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-
     },
     "components": {
         "schemas": {
             "LoginReq": {
+                "required": [
+                    "password",
+                    "staffId"
+                ],
                 "properties": {
                     "staffId": {
                         "type": "string",
@@ -98,13 +200,14 @@
                         "description": "密碼",
                         "example": "asd123"
                     }
-                },
-                "required": [
-                    "staffId",
-                    "password"
-                ]
+                }
             },
             "LoginRes": {
+                "required": [
+                    "code",
+                    "data",
+                    "message"
+                ],
                 "properties": {
                     "code": {
                         "type": "number",
@@ -113,14 +216,29 @@
                     "message": {
                         "type": "string",
                         "example": "message"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/LoginRes_data"
                     }
-                },
-                "required": [
-                    "code",
-                    "message"
-                ]
+                }
+            },
+            "CommonResFailed": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "格式錯誤!"
+                    }
+                }
             },
             "InfoUpdateReq": {
+                "required": [
+                    "newName",
+                    "staffId"
+                ],
                 "properties": {
                     "newName": {
                         "type": "string",
@@ -132,13 +250,13 @@
                         "description": "員工編號",
                         "example": "A0002"
                     }
-                },
-                "required": [
-                    "newName",
-                    "staffId"
-                ]
+                }
             },
             "InfoUpdateRes": {
+                "required": [
+                    "code",
+                    "message"
+                ],
                 "properties": {
                     "code": {
                         "type": "number",
@@ -147,12 +265,41 @@
                     "message": {
                         "type": "string",
                         "example": "message"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/InfoUpdateRes_data"
                     }
-                },
-                "required": [
-                    "code",
-                    "message"
-                ]
+                }
+            },
+            "LoginRes_data": {
+                "type": "object",
+                "properties": {
+                    "staffId": {
+                        "type": "string",
+                        "example": "A0001"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "文文"
+                    },
+                    "token": {
+                        "type": "string",
+                        "example": "123234345"
+                    }
+                }
+            },
+            "InfoUpdateRes_data": {
+                "type": "object",
+                "properties": {
+                    "staffId": {
+                        "type": "string",
+                        "example": "A0001"
+                    },
+                    "newName": {
+                        "type": "string",
+                        "example": "文文2"
+                    }
+                }
             }
         }
     }
