@@ -1,10 +1,10 @@
-import { NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 
 class ErrorService {
 
     constructor() {
         // 同步錯誤
-        process.on('uncaughtException', err => {
+        process.on('uncaughtException', (err: Error) => {
             // 記錄錯誤下來，等到服務都處理完後，停掉該 process
             console.error('【同步錯誤】Uncaughted Exception！')
             console.error(err);
@@ -12,7 +12,7 @@ class ErrorService {
         });
 
         // 非同步錯誤
-        process.on('unhandledRejection', (reason, promise) => {
+        process.on('unhandledRejection', (reason: any, promise: any) => {
             console.error('【非同步錯誤】未捕捉到的 rejection：', promise, '原因：', reason);
         });
 
@@ -21,11 +21,11 @@ class ErrorService {
 
 
     // ——————————  擴充async fun，加上catch捕捉錯誤訊息  ——————————
-    handleErrorAsync = function handleErrorAsync(func) {
+    handleErrorAsync = function handleErrorAsync(func: Function) {
         console.log('有進來 handleErrorAsync');
-        return function (req, res, next) {
+        return function (req: Request, res: Response, next: NextFunction) {
             func(req, res, next).catch(
-                function (error) {
+                function (error: Error) {
                     return next(error);
                 }
             );
@@ -35,7 +35,7 @@ class ErrorService {
 
 
     // ——————————  設定錯誤訊息  ——————————
-    appError = (httpStatus, errMessage, next) => {
+    appError = (httpStatus: number, errMessage: string, next: NextFunction) => {
         const error: any = new Error(errMessage);
         error.statusCode = httpStatus;
         error.isOperational = true;
@@ -46,7 +46,7 @@ class ErrorService {
 
 
     // ——————————  自己設定的 err 錯誤  ——————————
-    resErrorProd = (err, res) => {
+    resErrorProd = (err: ErrorInfo, res: Response) => {
         console.log('resErrorProd');
         if (err.isOperational) {
             res.status(err.statusCode).json({
@@ -68,7 +68,7 @@ class ErrorService {
 
 
     // ——————————  開發環境錯誤  ——————————
-    resErrorDev = (err, res, req) => {
+    resErrorDev = (err: ErrorInfo, res: Response, req: Request) => {
         console.log('resErrorDev');
         let error = {
             statusCode: err.statusCode,
@@ -94,7 +94,7 @@ class ErrorService {
 
 
     // ——————————  自訂錯誤  ——————————
-    catchCustomError = (err, req: Request, res: Response, next: NextFunction) => {
+    catchCustomError = (err: ErrorInfo, req: Request, res: Response, next: NextFunction) => {
         console.log('catchCustomError');
         // 測試機環境dev
         err.statusCode = err.statusCode || 500;
