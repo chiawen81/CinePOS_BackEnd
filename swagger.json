@@ -45,12 +45,12 @@
                             }
                         }
                     },
-                    "400": {
+                    "401": {
                         "description": "Failed",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CommonResFailed"
+                                    "$ref": "#/components/schemas/CommonResFailedWrongPassword"
                                 }
                             }
                         }
@@ -86,12 +86,12 @@
                             }
                         }
                     },
-                    "400": {
+                    "401": {
                         "description": "Failed",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CommonResFailed"
+                                    "$ref": "#/components/schemas/CommonResFailedFieldInvalid"
                                 }
                             }
                         }
@@ -127,12 +127,12 @@
                             }
                         }
                     },
-                    "400": {
+                    "401": {
                         "description": "Failed",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CommonResFailed"
+                                    "$ref": "#/components/schemas/CommonResFailedNoFound"
                                 }
                             }
                         }
@@ -168,12 +168,12 @@
                             }
                         }
                     },
-                    "400": {
+                    "401": {
                         "description": "Failed",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CommonResFailed"
+                                    "$ref": "#/components/schemas/CommonResFailedAuthInvalid"
                                 }
                             }
                         }
@@ -222,7 +222,7 @@
                     }
                 }
             },
-            "CommonResFailed": {
+            "CommonResFailedWrongPassword": {
                 "properties": {
                     "code": {
                         "type": "number",
@@ -230,7 +230,43 @@
                     },
                     "message": {
                         "type": "string",
-                        "example": "格式錯誤!"
+                        "example": "密碼錯誤!"
+                    }
+                }
+            },
+            "CommonResFailedNoFound": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "查無此人!"
+                    }
+                }
+            },
+            "CommonResFailedFieldInvalid": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "欄位驗證錯誤!"
+                    }
+                }
+            },
+            "CommonResFailedAuthInvalid": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "請重新登入!"
                     }
                 }
             },
