@@ -1,6 +1,7 @@
 import validator from "validator";
 import User from '../../models/common/usersModels';
 import ErrorService from './../../service/error';
+import { NextFunction } from "express";
 
 class UserController {
     constructor() {
@@ -8,7 +9,7 @@ class UserController {
     }
 
     // 更新使用者姓名
-    changeUserName = async (req, res, next) => {
+    changeUserName = async (req, res, next: NextFunction) => {
         console.log("抓到路由- profile");
         const { newName } = req.body;
         const { staffId } = req.user;
