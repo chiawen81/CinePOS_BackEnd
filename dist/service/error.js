@@ -66,7 +66,7 @@ class ErrorService {
             ;
             this.resErrorProd(err, res);
         };
-        process.on('uncaughtException', err => {
+        process.on('uncaughtException', (err) => {
             console.error('【同步錯誤】Uncaughted Exception！');
             console.error(err);
             process.exit(1);
