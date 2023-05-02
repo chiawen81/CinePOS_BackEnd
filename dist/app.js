@@ -9,6 +9,8 @@ const morgan_1 = __importDefault(require("morgan"));
 const express = require('express');
 const path = require('path');
 const app = express();
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../swagger.json');
 const index_1 = require("./routes/v1/staff/index");
 const index_2 = require("./routes/v1/manager/index");
 const user_1 = require("./routes/v1/common/user");
@@ -30,4 +32,9 @@ app.use('/v1/manager/login', login_1.CommonLogInRouter);
 app.use(error_1.default.catchCustomError);
 app.listen(process.env.LOCAL_PORT || 3005, () => {
     console.log(`Server is running on port ${process.env.PORT || 3005}`);
+});
+app.use('/v1/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.get('/v1/swagger.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerDocument);
 });
