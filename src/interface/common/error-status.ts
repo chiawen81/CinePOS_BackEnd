@@ -1,3 +1,3 @@
-interface ErrorWithStatus extends Error {
+export interface ErrorWithStatus extends Error {
     status?: number;
 }

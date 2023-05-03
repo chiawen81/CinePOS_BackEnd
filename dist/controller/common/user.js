@@ -54,6 +54,8 @@ class UserController {
             }
             ;
         });
+        this.changeSticker = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+        });
     }
 }
 exports.default = new UserController();

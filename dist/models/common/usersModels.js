@@ -40,7 +40,15 @@ const userSchema = new mongoose_1.default.Schema({
     createdAt: {
         type: String,
         required: false
-    }
+    },
+    stickerUrl: {
+        type: String,
+        required: false
+    },
+    stickerFileName: {
+        type: String,
+        required: false
+    },
 });
 var User = mongoose_1.default.model('User', userSchema);
 exports.default = User;
