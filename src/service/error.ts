@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { ErrorInfo } from "../interface/common/error-info";
 
 class ErrorService {
 

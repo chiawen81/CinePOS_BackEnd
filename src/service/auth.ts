@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+const jwt = require('jsonwebtoken');
 import ErrorService from '../service/error';
 import User from '../models/common/usersModels';
 
@@ -37,6 +37,7 @@ class AuthService {
         // 取得Client端的JWT token   
         let token;
         let { staffId } = req.body;
+        staffId = staffId ?? req.query.staffId;
         console.log('登入者- staffId', staffId);
 
         if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {

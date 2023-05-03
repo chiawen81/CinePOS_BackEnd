@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const jwt = require('jsonwebtoken');
 const error_1 = __importDefault(require("../service/error"));
 const usersModels_1 = __importDefault(require("../models/common/usersModels"));
 class AuthService {
@@ -25,7 +25,7 @@ class AuthService {
                 staffId: reqData.staffId,
                 stickerUrl: ""
             };
-            const token = jsonwebtoken_1.default.sign(data, process.env.JWT_SECRET, {
+            const token = jwt.sign(data, process.env.JWT_SECRET, {
                 expiresIn: process.env.JWT_EXPIRES_DAY
             });
             res.status(statusCode).json({
@@ -41,6 +41,7 @@ class AuthService {
         this.isAuth = error_1.default.handleErrorAsync((req, res, next) => __awaiter(this, void 0, void 0, function* () {
             let token;
             let { staffId } = req.body;
+            staffId = staffId !== null && staffId !== void 0 ? staffId : req.query.staffId;
             console.log('登入者- staffId', staffId);
             if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
                 token = req.headers.authorization.split(' ')[1];
@@ -51,7 +52,7 @@ class AuthService {
             }
             ;
             const decodedClientData = yield new Promise((resolve, reject) => {
-                jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, (err, payload) => {
+                jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
                     if (err) {
                         reject(err);
                     }
