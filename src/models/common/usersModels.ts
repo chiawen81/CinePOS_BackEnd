@@ -36,7 +36,15 @@ const userSchema = new mongoose.Schema({
     createdAt: {
         type: String,
         required: false
-    }
+    },
+    stickerUrl: {
+        type: String,
+        required: false
+    },
+    stickerFileName: {
+        type: String,
+        required: false
+    },
 });
 
 var User = mongoose.model('User', userSchema);
