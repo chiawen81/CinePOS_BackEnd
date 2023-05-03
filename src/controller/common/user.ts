@@ -51,6 +51,17 @@ class UserController {
             res.status(500).json({ error: err.message });
         };
     }
+
+
+
+    // ————————————  更新大頭貼照片  ————————————
+    changeSticker = async (req, res, next: NextFunction) => {
+
+
+
+    }
+
+
 }
 
 
