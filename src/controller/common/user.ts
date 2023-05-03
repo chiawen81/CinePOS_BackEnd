@@ -8,7 +8,7 @@ class UserController {
 
     }
 
-    // 更新使用者姓名
+    // ———————————————————————  更新使用者姓名  ———————————————————————
     changeUserName = async (req, res, next: NextFunction) => {
         console.log("抓到路由- profile");
         const { newName } = req.body;
@@ -19,7 +19,7 @@ class UserController {
         if (!validator.isLength(newName, { min: 2 })) {
             return next(ErrorService.appError(401, "姓名欄位驗證錯誤！", next));
         };
-        console.log(req.originalUrl.split('/'));
+
         let role = (req.originalUrl.split('/')[2] === "manager") ? "manager" : "staff";
         const user = await User.findOne({ staffId, role }).select('+password');
 
@@ -54,12 +54,18 @@ class UserController {
 
 
 
-    // ————————————  更新大頭貼照片  ————————————
-    changeSticker = async (req, res, next: NextFunction) => {
+    // 比對使用者
+    async filterTargetUser(condition: any, next: NextFunction) {
+        const user = await User.findOne(condition).select('+password');
+        console.log('比對使用者:', user);
 
-
-
+        if (!user) {
+            return next(ErrorService.appError(401, "查無此人！", next));
+        } else {
+            return user;
+        };
     }
+
 
 
 }
