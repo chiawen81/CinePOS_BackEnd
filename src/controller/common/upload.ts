@@ -42,7 +42,7 @@ class UploadController {
 
             // 上傳失敗
             blobStream.on('error', (err) => {
-                res.status(500).send(`上傳失敗：${err.message}`);
+                res.status(500).send(`上傳失敗(系統報錯)：${err.message}`);
             });
 
             // 上傳結束
