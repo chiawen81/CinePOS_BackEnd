@@ -35,9 +35,10 @@ class AuthService {
     // ——————————  JWT驗證  ——————————
     isAuth = ErrorService.handleErrorAsync(async (req, res, next) => {
         // 取得Client端的JWT token   
+        console.log('req', req);
         let token;
         let { staffId } = req.body;
-        staffId = staffId ?? req.query.staffId;// 員編可以放在body或網址參數
+        staffId = staffId ?? (req.params.staffId || req.query.staffId);         // 員編可以放在body或網址參數
         console.log('登入者- staffId', staffId);
 
         if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -68,7 +69,7 @@ class AuthService {
             next();
 
         } else {
-            return next(ErrorService.appError(403, "只能修改本人姓名", next));
+            return next(ErrorService.appError(403, "非本人帳號，請重新登入！", next));
         };
     });
 

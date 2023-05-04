@@ -9,6 +9,39 @@ class UserController {
 
     }
 
+    // ———————————————————————  取得使用者資料  ———————————————————————
+    getUserProfile = async (req, res, next: NextFunction) => {
+        console.log("getUserProfile");
+        try {
+            const { staffId } = req.user;
+            let role = (req.originalUrl.split('/')[2] === "manager") ? "manager" : "staff";
+            const user = await User.findOne({ staffId, role }).select('+password');
+            res.status(200).json({
+                code: 1,
+                message: "成功取得使用者資料!",
+                data: {
+                    staffId: user.staffId,
+                    name: user.name,
+                    role: user.role,
+                    status: user.status,
+                    stickerUrl: user.stickerUrl,
+                    stickerFileName: user.stickerFileName,
+                    createdAt: user.createdAt,
+                }
+            });
+
+        } catch (err) {
+            res.status(500).json({
+                code: -1,
+                message: err.message || "取得使用者資料(其它)!",
+            });
+        };
+    }
+
+
+
+
+
     // ———————————————————————  更新使用者姓名  ———————————————————————
     changeUserName = async (req, res, next: NextFunction) => {
         console.log("抓到路由- profile");
@@ -49,7 +82,10 @@ class UserController {
                 }
             });
         } catch (err) {
-            res.status(500).json({ error: err.message });
+            res.status(500).json({
+                code: -1,
+                message: err.message || "更新姓名錯誤(其它)!",
+            });
         };
     }
 
