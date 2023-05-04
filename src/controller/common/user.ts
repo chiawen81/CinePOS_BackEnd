@@ -77,6 +77,7 @@ class UserController {
             );
             console.log('updatedUser ', updatedUser);
 
+            // 回傳client端成功訊息
             res.send({
                 code: 1,
                 message: '上傳成功！',
@@ -86,6 +87,7 @@ class UserController {
                 }
             });
 
+            // 刪除舊大頭貼
             UploadController.deleteFile(req, res, next, req.user.stickerFileName);
 
         } catch (err) {

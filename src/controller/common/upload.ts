@@ -13,48 +13,46 @@ class UploadController {
 
 
     // ———————————————————————  上傳檔案/照片  ———————————————————————
-    upload = function upload(customFunc: Function) {
-        return function (req, res, next: NextFunction) {
-            try {
-                console.log('req.file', req.file);
-                const bucket = firebaseAdmin.storage().bucket();
-                const file = req.file;                                              // 取得上傳的檔案資訊
-                const uniqueId = uuid.v4();                                         // 產生唯一識別碼
-                const fileName = uniqueId + '-' + file.originalname;
-                const blob = bucket.file(fileName);                                 // 基於檔案的原始名稱建立一個 blob 物件
-                const blobStream = blob.createWriteStream();                        // 建立一個可以寫入 blob 的物件
+    upload = async (req, res, next: NextFunction) => {
+        try {
+            console.log('req.file', req.file);
+            const bucket = firebaseAdmin.storage().bucket();
+            const file = req.file;                                              // 取得上傳的檔案資訊
+            const uniqueId = uuid.v4();                                         // 產生唯一識別碼
+            const fileName = uniqueId + '-' + file.originalname;
+            const blob = bucket.file(fileName);                                 // 基於檔案的原始名稱建立一個 blob 物件
+            const blobStream = blob.createWriteStream();                        // 建立一個可以寫入 blob 的物件
 
-                // 監聽上傳完成事件
-                blobStream.on('finish', async () => {
-                    // 設定檔案的存取權限
-                    const config = {
-                        action: 'read',                                             // 權限
-                        expires: '12-31-2030',                                      // 網址的有效期限
-                    };
+            // 監聽上傳完成事件
+            blobStream.on('finish', async () => {
+                // 設定檔案的存取權限
+                const config = {
+                    action: 'read',                                             // 權限
+                    expires: '12-31-2030',                                      // 網址的有效期限
+                };
 
-                    // 取得檔案網址
-                    blob.getSignedUrl(config, async (err, imgUrl) => {
-                        console.log('檔案網址', imgUrl);
-                        req.fileData = { fileName, err, imgUrl, file };             // 整理相關資料
-                        customFunc(req, res, next);                                 // 後續自訂義的處理
-                    });
+                // 取得檔案網址
+                blob.getSignedUrl(config, async (err, imgUrl) => {
+                    console.log('檔案網址', imgUrl);
+                    req.fileData = { fileName, err, imgUrl, file };             // 整理相關資料
+                    next();                                                     // 後續自訂義的處理
                 });
+            });
 
 
-                // 上傳失敗
-                blobStream.on('error', (err) => {
-                    res.status(500).send(`上傳失敗：${err.message}`);
-                });
+            // 上傳失敗
+            blobStream.on('error', (err) => {
+                res.status(500).send(`上傳失敗：${err.message}`);
+            });
 
-                // 上傳結束
-                blobStream.end(file.buffer);                                        // 將檔案的 buffer 寫入 blobStream
+            // 上傳結束
+            blobStream.end(file.buffer);                                        // 將檔案的 buffer 寫入 blobStream
 
-            } catch (err) {
-                res.status(500).json({
-                    code: -1,
-                    message: err.message || "上傳檔案錯誤！"
-                });
-            };
+        } catch (err) {
+            res.status(500).json({
+                code: -1,
+                message: err.message || "上傳檔案錯誤！"
+            });
         };
     }
 
