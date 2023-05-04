@@ -8,9 +8,7 @@ class AuthService {
         console.log(reqData._id)
         let data = {
             id: reqData._id,
-            name: reqData.name,
             staffId: reqData.staffId,
-            stickerUrl: ""    // ====待補大頭貼照片====
         };
 
         // 產生 JWT token
