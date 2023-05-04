@@ -1,6 +1,7 @@
 import validator from "validator";
 import User from '../../models/common/usersModels';
 import ErrorService from './../../service/error';
+import UploadController from "./../../controller/common/upload";
 import { NextFunction } from "express";
 
 class UserController {
@@ -54,6 +55,49 @@ class UserController {
 
 
 
+
+
+    // ———————————————————————  更新大頭貼  ———————————————————————
+    changeSticker = async function changeSticker(req, res, next) {
+        console.log('自訂義程式(更新大頭貼) 之我接到囉～');
+        console.log('req.fileData', req.fileData);
+        console.log('req.user', req.user);
+
+        try {
+            let updateData = {
+                stickerUrl: req.fileData.imgUrl,
+                stickerFileName: req.fileData.fileName
+            };
+            let condition = { staffId: req.user.staffId };
+
+            const updatedUser = await User.findOneAndUpdate(
+                condition,          // 條件
+                updateData,         // 更新的內容
+                { new: true }       // 參數(表示返回更新後的文檔。如果沒有設置這個參數，則返回更新前的文檔。)
+            );
+            console.log('updatedUser ', updatedUser);
+
+            res.send({
+                code: 1,
+                message: '上傳成功！',
+                data: {
+                    stickerFileName: updateData.stickerFileName,
+                    stickerUrl: updateData.stickerUrl,
+                }
+            });
+
+            UploadController.deleteFile(req, res, next, req.user.stickerFileName);
+
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        };
+    }
+
+
+
+
+
+    // ———————————————————————  其它  ———————————————————————
     // 比對使用者
     async filterTargetUser(condition: any, next: NextFunction) {
         const user = await User.findOne(condition).select('+password');
