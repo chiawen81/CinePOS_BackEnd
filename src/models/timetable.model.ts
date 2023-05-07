@@ -1,15 +1,10 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+import { Schema } from 'mongoose';
+import mongoose = require('mongoose');
 
-const timetableSchema = new Schema({
-  movieId: {
-    type: String,
-    required: true
-  },
-  theaterId: {
-    type: String,
-    required: true
-  },
+
+const timetableSchema = new mongoose.Schema({
+  // movie: { type: Schema.Types.ObjectId, ref: 'Movie' },
+  theater: { type: Schema.Types.ObjectId, ref: 'Theater' },
   startTime: {
     type: Date,
     required: true

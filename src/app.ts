@@ -13,6 +13,7 @@ import { StaffIndexRouter } from './routes/v1/staff/index';
 import { ManagerIndexRouter } from './routes/v1/manager/index';
 import { CommonUserRouter } from './routes/v1/common/user';
 import { CommonLogInRouter } from './routes/v1/common/login';
+import { TimetableIndexRouter } from './routes/v1/manager/timetable';
 // 其它
 import "./service/connection";                        // 資料庫設定
 import ErrorService from './service/error';           // 錯誤處理 
@@ -38,6 +39,8 @@ app.use('/v1/staff/login', CommonLogInRouter);
 app.use('/v1/manager/', ManagerIndexRouter);
 app.use('/v1/manager/user', CommonUserRouter);
 app.use('/v1/manager/login', CommonLogInRouter);
+/** 時刻表 */
+app.use('/v1/manager/', TimetableIndexRouter);
 
 
 
