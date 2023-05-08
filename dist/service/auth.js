@@ -21,9 +21,7 @@ class AuthService {
             console.log(reqData._id);
             let data = {
                 id: reqData._id,
-                name: reqData.name,
                 staffId: reqData.staffId,
-                stickerUrl: ""
             };
             const token = jwt.sign(data, process.env.JWT_SECRET, {
                 expiresIn: process.env.JWT_EXPIRES_DAY
@@ -39,9 +37,10 @@ class AuthService {
             });
         };
         this.isAuth = error_1.default.handleErrorAsync((req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            console.log('req', req);
             let token;
             let { staffId } = req.body;
-            staffId = staffId !== null && staffId !== void 0 ? staffId : req.query.staffId;
+            staffId = staffId !== null && staffId !== void 0 ? staffId : (req.params.staffId || req.query.staffId);
             console.log('登入者- staffId', staffId);
             if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
                 token = req.headers.authorization.split(' ')[1];
@@ -71,7 +70,7 @@ class AuthService {
                 next();
             }
             else {
-                return next(error_1.default.appError(403, "只能修改本人姓名", next));
+                return next(error_1.default.appError(403, "非本人帳號，請重新登入！", next));
             }
             ;
         }));
