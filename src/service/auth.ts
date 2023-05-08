@@ -8,9 +8,7 @@ class AuthService {
         console.log(reqData._id)
         let data = {
             id: reqData._id,
-            name: reqData.name,
             staffId: reqData.staffId,
-            stickerUrl: ""    // ====待補大頭貼照片====
         };
 
         // 產生 JWT token
@@ -35,9 +33,10 @@ class AuthService {
     // ——————————  JWT驗證  ——————————
     isAuth = ErrorService.handleErrorAsync(async (req, res, next) => {
         // 取得Client端的JWT token   
+        console.log('req', req);
         let token;
         let { staffId } = req.body;
-        staffId = staffId ?? req.query.staffId;
+        staffId = staffId ?? (req.params.staffId || req.query.staffId);         // 員編可以放在body或網址參數
         console.log('登入者- staffId', staffId);
 
         if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -64,11 +63,11 @@ class AuthService {
             // 抓出資料庫中的使用者資料
             const currentUser = await User.findOne({ staffId: decodedClientData.staffId });
             console.log('currentUser', currentUser);
-            req.user = currentUser;
+            req.user = currentUser;                 // 將使用者資料放入req.user
             next();
 
         } else {
-            return next(ErrorService.appError(403, "只能修改本人姓名", next));
+            return next(ErrorService.appError(403, "非本人帳號，請重新登入！", next));
         };
     });
 

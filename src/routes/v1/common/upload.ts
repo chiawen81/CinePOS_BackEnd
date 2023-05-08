@@ -3,9 +3,6 @@ const router = express.Router();
 import firebaseAdmin from '../../../service/firebase-admin';
 import multer from 'multer';
 import uuid from 'uuid';
-// import User from '../../../models/common/usersModels';
-
-
 
 const bucket = firebaseAdmin.storage().bucket();
 

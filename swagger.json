@@ -5,6 +5,11 @@
         "description": "CinePOS 後端API",
         "version": "1.0.0"
     },
+    "servers": [
+        {
+            "url": "/"
+        }
+    ],
     "tags": [
         {
             "name": "Staff"
@@ -63,7 +68,7 @@
                 "tags": [
                     "Staff"
                 ],
-                "summary": "修改會員名字",
+                "summary": "修改員工姓名",
                 "requestBody": {
                     "description": "資料格式",
                     "content": {
@@ -92,6 +97,76 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/CommonResFailedFieldInvalid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/staff/user/profile/:satffId": {
+            "get": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "取得櫃台人員資料",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserProfileRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailedNoFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/staff/user/profile/:staffId": {
+            "post": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "上傳櫃台人員大頭貼",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/profile_staffId_body"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserPostStickerRes"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "上傳失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserPostStickerReFailed"
                                 }
                             }
                         }
@@ -145,7 +220,7 @@
                 "tags": [
                     "Manager"
                 ],
-                "summary": "修改會員名字",
+                "summary": "修改員工姓名",
                 "requestBody": {
                     "description": "資料格式",
                     "content": {
@@ -180,6 +255,76 @@
                     }
                 }
             }
+        },
+        "/v1/manager/user/profile/:satffId": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "取得管理人員資料",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserProfileRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailedNoFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/managerf/user/profile/:staffId": {
+            "post": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "上傳管理人員大頭貼",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/profile_staffId_body_1"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserPostStickerRes"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "上傳失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserPostStickerReFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -203,11 +348,6 @@
                 }
             },
             "LoginRes": {
-                "required": [
-                    "code",
-                    "data",
-                    "message"
-                ],
                 "properties": {
                     "code": {
                         "type": "number",
@@ -289,10 +429,6 @@
                 }
             },
             "InfoUpdateRes": {
-                "required": [
-                    "code",
-                    "message"
-                ],
                 "properties": {
                     "code": {
                         "type": "number",
@@ -334,6 +470,106 @@
                     "newName": {
                         "type": "string",
                         "example": "文文2"
+                    }
+                }
+            },
+            "UserProfileRes": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功取得使用者資料!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/UserProfileResData"
+                    }
+                }
+            },
+            "UserProfileResData": {
+                "properties": {
+                    "staffId": {
+                        "type": "string",
+                        "example": "A0001"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "文文"
+                    },
+                    "role": {
+                        "type": "string",
+                        "example": "staff"
+                    },
+                    "status": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "stickerUrl": {
+                        "type": "string",
+                        "example": "https://storage.googleapis.com/test0421-f01d7.appspot.com/4338350b-1cf6-48e7-ae4a-aff3df960573-%E8%83%96%E8%99%8E.jpg?GoogleAccessId=firebase-adminsdk-udl5c%40test0421-f01d7.iam.gserviceaccount.com&Expires=1924876800&Signature=DMb2sECe5IEMdjeG3dgiNbz6DfA36Rr4nSoK71RU5LmOHAfN%2BhIeqMdF0tM5XGCQj4JCdy6bHek%2F%2BgeU%2FREWuQZsa057MAS%2FmW4z5qN5Vri%2BFPA2GP6XXZM2v0e3CBahBmyGEyASwqSWCU3jz5YOuMMpl4CzZdmI7DwjaWSRL%2FwiXrq185JJsT8WOKmM1S5YeJEYkHT1Z0tYxrJmOmEAz6r7Y4gVioAUTw5u0YdujG04g%2ByYNMYHMT3Nd7tLST8RNqYIVEDXWGNBPM3epRuVxHQdWtenK4MsCTVfzVsRvJKpcSABVAExwUl8qWUKhxaeLI%2BSf2gt39rdUqo8RTV6Gg%3D%3D"
+                    },
+                    "stickerFileName": {
+                        "type": "string",
+                        "example": "4338350b-1cf6-48e7-ae4a-aff3df960573-胖虎.jpg"
+                    }
+                }
+            },
+            "UserPostStickerRes": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功取得使用者資料!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/UserPostStickerResData"
+                    }
+                }
+            },
+            "UserPostStickerResData": {
+                "properties": {
+                    "stickerFileName": {
+                        "type": "string",
+                        "example": "19cf8d9d-dce0-4f37-b097-1acfdacb9279-胖虎.jpg"
+                    },
+                    "stickerUrl": {
+                        "type": "string",
+                        "example": "https://storage.googleapis.com/test0421-f01d7.appspot.com/19cf8d9d-dce0-4f37-b097-1acfdacb9279-%E8%83%96%E8%99%8E.jpg?GoogleAccessId=firebase-adminsdk-udl5c%40test0421-f01d7.iam.gserviceaccount.com&Expires=1924876800&Signature=Ymql5WiOBMc%2FZDHpU5wzKEk%2Fa8I5vMCZCWJJwfgego7SfjaRoVu48tvjVy3QxoqX8vhmpvIKeaYZpAHtSwJCQO3gZD1i0w%2B%2BoAINLzmJkUsaA2AVckV%2B5eUIex%2FB7Rd%2BELeHErYBUcDlNrLU5MDPG4OpPyx5qp7tmpT6aD99zppvyvtT%2FSQOzYhBu7xgFyQ1a1SdKO8J%2F7vnbf6PRb83Ysrq3pQqiRL%2BXZD8DeA2GV7yrTovHzbi%2BtftMcF%2BKBDBs1yHkL2e8yUK594VXltObHAUoXTA1R6LNmkXCtp1m6D48ibymYhdJKJVhxBcSTsYuFF00JAc%2BR%2FDdgR9xit4fw%3D%3D"
+                    }
+                }
+            },
+            "UserPostStickerReFailed": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "上傳失敗(系統報錯)"
+                    }
+                }
+            },
+            "profile_staffId_body": {
+                "type": "object",
+                "properties": {
+                    "image": {
+                        "type": "string",
+                        "format": "binary"
+                    }
+                }
+            },
+            "profile_staffId_body_1": {
+                "type": "object",
+                "properties": {
+                    "image": {
+                        "type": "string",
+                        "format": "binary"
                     }
                 }
             }
