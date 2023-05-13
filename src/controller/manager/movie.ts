@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Movie from '../../models/manager/moviesModels';
+import ErrorService from './../../service/error';
 
 class MovieController {
     constructor() {
@@ -8,9 +9,14 @@ class MovieController {
 
     // ———————————————————————  取得資料  ———————————————————————
     getInfo = async (req, res: Response, next: NextFunction) => {
-        let movieId = req.query.movieId;
-        const movie = await Movie.findOne({ movieId });
+        let movieId = req.params.id;
+        console.log('movieId', movieId);
+        const movie = await Movie.findOne({ id: movieId });
         console.log('movie', movie);
+        if (!movie) {
+            return next(ErrorService.appError(404, "沒有這筆電影資料！", next));
+        };
+
 
         try {
             res.status(200).json({
