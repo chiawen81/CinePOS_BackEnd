@@ -14,6 +14,7 @@ import { StaffIndexRouter } from './routes/v1/staff/index';
 import { ManagerIndexRouter } from './routes/v1/manager/index';
 import { CommonUserRouter } from './routes/v1/common/user';
 import { CommonLogInRouter } from './routes/v1/common/login';
+import { ManagerMovieRouter } from "./routes/v1/manager/movie";
 
 // 其它
 import "./service/connection";                        // 資料庫設定
@@ -41,6 +42,7 @@ app.use('/v1/staff/login', CommonLogInRouter);
 app.use('/v1/manager/', ManagerIndexRouter);
 app.use('/v1/manager/user', CommonUserRouter);
 app.use('/v1/manager/login', CommonLogInRouter);
+app.use('/v1/manager/movie', ManagerMovieRouter);
 
 
 
