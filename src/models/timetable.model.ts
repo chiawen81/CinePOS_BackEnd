@@ -3,8 +3,8 @@ import mongoose = require('mongoose');
 
 
 const timetableSchema = new mongoose.Schema({
-  // movie: { type: Schema.Types.ObjectId, ref: 'Movie' },
-  theater: { type: Schema.Types.ObjectId, ref: 'Theater' },
+  movieId: { type: Schema.Types.ObjectId, ref: 'Movie' },
+  theaterId: { type: Schema.Types.ObjectId, ref: 'Theater' },
   startTime: {
     type: Date,
     required: true
