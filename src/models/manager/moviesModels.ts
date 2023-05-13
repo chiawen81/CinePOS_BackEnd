@@ -16,7 +16,7 @@ const moviesSchema = new mongoose.Schema({
     },
     enTitle: {
         type: String,
-        required: true,
+        required: false,
     },
     genre: {
         type: [{
@@ -86,7 +86,7 @@ const moviesSchema = new mongoose.Schema({
     },
     posterUrl: {
         type: String,
-        required: false,
+        required: true,
         match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/i
     },
     createdAt: {

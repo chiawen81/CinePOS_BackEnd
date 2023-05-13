@@ -830,8 +830,6 @@
             },
             "MovieDetailCreateParameter": {
                 "required": [
-                    "createdAt",
-                    "distributor",
                     "genre",
                     "id",
                     "posterUrl",
