@@ -180,7 +180,155 @@
                     }
                 }
             }
-        }
+        },
+		"/v1/manager/timetable/list": {
+			"get": {
+				"operationId": "GetList",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/TimetableResponse"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "取得時刻表",
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "startDate",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "endDate",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/v1/manager/timetable/create": {
+			"post": {
+				"operationId": "CreateTimetable",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/TimetableResponse"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "新增時刻表",
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/TimetableRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/manager/timetable/update": {
+			"patch": {
+				"operationId": "UpdateTimetable",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/TimetableResponse"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "更新時刻表",
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/TimetableRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v1/manager/timetable/{timetableId}": {
+			"delete": {
+				"operationId": "DeleteItem",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/TimetableResponse"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "刪除時刻表",
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "timetableId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		}
     },
     "components": {
         "schemas": {
