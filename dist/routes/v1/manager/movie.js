@@ -11,5 +11,5 @@ const error_1 = __importDefault(require("../../../service/error"));
 const auth_1 = __importDefault(require("../../../service/auth"));
 router.get('/:id', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(movie_1.default.getInfo));
 router.post('/', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(movie_1.default.createInfo));
-router.patch('/:id', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(movie_1.default.updateInfo));
+router.patch('/', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(movie_1.default.updateInfo));
 exports.ManagerMovieRouter = router;
