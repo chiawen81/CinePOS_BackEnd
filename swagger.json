@@ -399,7 +399,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/MovieDetail"
+                                    "$ref": "#/components/schemas/MovieDetailGetInfoSuccess"
                                 }
                             }
                         }
@@ -709,6 +709,21 @@
                     }
                 }
             },
+            "MovieDetailGetInfoSuccess": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功查詢電影資訊!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MovieDetailRes"
+                    }
+                }
+            },
             "MovieDetailGetInfoFailed": {
                 "properties": {
                     "code": {
@@ -721,7 +736,7 @@
                     }
                 }
             },
-            "MovieDetail": {
+            "MovieDetailRes": {
                 "type": "object",
                 "properties": {
                     "id": {
