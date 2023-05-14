@@ -321,7 +321,9 @@
                         }
                     }
                 }
-            },
+            }
+        },
+        "/v1/manager/user/profile/sticker/{staffId}": {
             "post": {
                 "tags": [
                     "Manager"
