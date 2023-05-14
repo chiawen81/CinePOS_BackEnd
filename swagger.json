@@ -198,6 +198,74 @@
                 }
             }
         },
+        "/v1/staff/ticketType": {
+            "get": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "取得票種",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ticketTypeRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "新增票種",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ticketTypeReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ticketTypeRes"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v1/manager/login": {
             "post": {
                 "tags": [
@@ -491,6 +559,18 @@
                     },
                     "data": {
                         "$ref": "#/components/schemas/LoginRes_data"
+                    }
+                }
+            },
+            "CommonResFailed": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "錯誤訊息"
                     }
                 }
             },
@@ -945,6 +1025,66 @@
                     "message": {
                         "type": "string",
                         "example": "請重新檢查資料格式是否正確！"
+                    }
+                }
+            },
+            "ticketTypeReq": {
+                "required": [
+                    "type",
+                    "price"
+                ],
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "票種名稱",
+                        "example": "全票"
+                    },
+                    "price": {
+                        "type": "number",
+                        "description": "票價",
+                        "example": 280
+                    }
+                }
+            },
+            "ticketTypeRes": {
+                "required": [
+                    "code",
+                    "message",
+                    "data"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ticketTypeResData"
+                    }
+                }
+            },
+            "ticketTypeResData": {
+                "required": [
+                    "_id",
+                    "type",
+                    "price"
+                ],
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "id"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "票種名稱",
+                        "example": "全票"
+                    },
+                    "price": {
+                        "type": "number",
+                        "description": "票價",
+                        "example": 280
                     }
                 }
             }
