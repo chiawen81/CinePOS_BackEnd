@@ -16,6 +16,9 @@ import { CommonUserRouter } from './routes/v1/common/user';
 import { CommonLogInRouter } from './routes/v1/common/login';
 import { ManagerMovieRouter } from "./routes/v1/manager/movie";
 
+import { StaffSeatCheckLockRouter } from './routes/v1/staff/seatCheckLock';
+
+
 // 其它
 import "./service/connection";                        // 資料庫設定
 import ErrorService from './service/error';           // 錯誤處理 
@@ -37,6 +40,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/v1/staff', StaffIndexRouter);
 app.use('/v1/staff/user', CommonUserRouter);
 app.use('/v1/staff/login', CommonLogInRouter);
+
+app.use('/v1/staff/seat/checkLock', StaffSeatCheckLockRouter);
+
 
 // 後台
 app.use('/v1/manager/', ManagerIndexRouter);
