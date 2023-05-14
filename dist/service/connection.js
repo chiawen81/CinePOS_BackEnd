@@ -10,8 +10,9 @@ const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true
 };
-mongoose_1.default.connect(process.env.DATABASE, options).then(() => {
-    console.log('MongoDB Atlas connected');
+const databaseUrl = (process.env.NODE_ENV === 'production') ? process.env.DATABASE_REMOTE : process.env.DATABASE_LOCAL;
+mongoose_1.default.connect(databaseUrl, options).then(() => {
+    console.log(`MongoDB connected: ${databaseUrl}`);
 }).catch(err => {
-    console.log('MongoDB Atlas connection error:', err);
+    console.log(`ERROR connecting to MongoDB: ${databaseUrl}`, err);
 });
