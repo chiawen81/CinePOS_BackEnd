@@ -11,6 +11,6 @@ router.get('/:id', AuthService.isEmpAuth, ErrorService.handleErrorAsync(MovieCon
 router.post('/', AuthService.isEmpAuth, ErrorService.handleErrorAsync(MovieController.createInfo));
 
 // 更新電影資訊
-router.patch('/:id', AuthService.isEmpAuth, ErrorService.handleErrorAsync(MovieController.updateInfo));
+router.patch('/', AuthService.isEmpAuth, ErrorService.handleErrorAsync(MovieController.updateInfo));
 
 export const ManagerMovieRouter = router;
