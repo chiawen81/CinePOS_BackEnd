@@ -58,10 +58,8 @@ const moviesSchema = new mongoose.Schema({
         maxlength: 300,
     },
     status: {
-        type: [{
-            type: Number,
-            enum: [-1, 0, 1]
-        }],
+        type: Number,
+        enum: [-1, 0, 1],
         required: true
     },
     releaseDate: {

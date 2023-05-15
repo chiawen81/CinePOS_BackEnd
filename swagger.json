@@ -528,6 +528,45 @@
                         }
                     }
                 }
+            },
+            "patch": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "更新單一電影資訊",
+                "requestBody": {
+                    "description": "更新單一電影資訊參數",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovieDetailCreateParameter"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailUpdateSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailUpdateFaild"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     },
@@ -1044,6 +1083,35 @@
                     "message": {
                         "type": "string",
                         "example": "請重新檢查資料格式是否正確！"
+                    }
+                }
+            },
+            "MovieDetailUpdateSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功更新電影資訊!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MovieDetailCreateParameter"
+                    }
+                }
+            },
+            "MovieDetailUpdateFaild": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "更新電影資料失敗，請重新檢查資料格式是否正確！"
                     }
                 }
             },
