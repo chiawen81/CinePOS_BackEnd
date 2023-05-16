@@ -25,6 +25,13 @@ const moviesSchema = new mongoose.Schema({
         }],
         required: true
     },
+    genreName: {
+        type: [{
+            type: String,
+            // enum: [1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 10, 11, 12]
+        }],
+        required: false
+    },
     runTime: {
         type: Number,
         required: true,
@@ -38,10 +45,21 @@ const moviesSchema = new mongoose.Schema({
         }],
         required: true
     },
+    provideVersionName: {
+        type: [{
+            type: String,
+            // enum: [1, 2, 3, 4]
+        }],
+        required: true
+    },
     rate: {
         type: Number,
         enum: [0, 6, 12, 15, 18],
         required: true
+    },
+    rateName: {
+        type: String,
+        required: false
     },
     director: {
         type: String,
@@ -61,6 +79,10 @@ const moviesSchema = new mongoose.Schema({
         type: Number,
         enum: [-1, 0, 1],
         required: true
+    },
+    statusName: {
+        type: String,
+        required: false
     },
     releaseDate: {
         type: Date,

@@ -32,7 +32,7 @@
                     {
                         "name": "typeId",
                         "in": "path",
-                        "description": "欄位代碼",
+                        "description": "欄位代碼(1:劇情,2:支援設備,3:分級,4:上映狀態)",
                         "required": true,
                         "style": "simple",
                         "explode": false,
@@ -900,6 +900,17 @@
                         },
                         "description": "電影類型"
                     },
+                    "genreName": {
+                        "type": "array",
+                        "example": [
+                            "喜劇",
+                            "劇情"
+                        ],
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "電影類型文字"
+                    },
                     "runtime": {
                         "type": "number",
                         "example": 129,
@@ -918,10 +929,28 @@
                         },
                         "description": "支援設備"
                     },
+                    "provideVersionName": {
+                        "type": "array",
+                        "example": [
+                            "2D",
+                            "3D",
+                            "IMAX",
+                            "4DX"
+                        ],
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "支援設備文字"
+                    },
                     "rate": {
                         "type": "number",
                         "example": 12,
                         "description": "分級制度"
+                    },
+                    "rateName": {
+                        "type": "string",
+                        "example": 12,
+                        "description": "輔12"
                     },
                     "director": {
                         "type": "string",
@@ -949,6 +978,11 @@
                         "type": "number",
                         "example": 1,
                         "description": "上映狀態"
+                    },
+                    "statusName": {
+                        "type": "string",
+                        "example": "上映中",
+                        "description": "上映狀態文字"
                     },
                     "releaseDate": {
                         "type": "object",
