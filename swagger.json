@@ -22,6 +22,49 @@
         }
     ],
     "paths": {
+        "/v1/common/option/{typeId}": {
+            "get": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "取得選項資料",
+                "parameters": [
+                    {
+                        "name": "typeId",
+                        "in": "path",
+                        "description": "欄位代碼",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonOptionSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v1/staff/login": {
             "post": {
                 "tags": [
@@ -504,6 +547,55 @@
     },
     "components": {
         "schemas": {
+            "CommonResFailed": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "報錯啦!"
+                    }
+                }
+            },
+            "CommonOptionSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功取得選項資料!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/CommonOptionSuccessData"
+                    }
+                }
+            },
+            "CommonOptionSuccessData": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/CommonOptionSuccessDataItem"
+                }
+            },
+            "CommonOptionSuccessDataItem": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "選項文字",
+                        "example": "保護級"
+                    },
+                    "value": {
+                        "type": "number",
+                        "description": "選項值",
+                        "example": 6
+                    }
+                }
+            },
             "LoginReq": {
                 "required": [
                     "password",

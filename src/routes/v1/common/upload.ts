@@ -81,4 +81,4 @@ router.delete('/image', function (req, res) {
 
 
 
-export const UploadRouter = router;
+export const CommonUploadRouter = router;
