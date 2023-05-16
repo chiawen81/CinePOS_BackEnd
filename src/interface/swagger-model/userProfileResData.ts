@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface LoginResData { 
+export interface UserProfileResData { 
     /**
      * 員工編號
      */
@@ -20,7 +20,19 @@ export interface LoginResData {
      */
     name?: string;
     /**
-     * 令牌
+     * 角色
      */
-    token?: string;
+    role?: string;
+    /**
+     * 在職狀態(0:離職,1:在職)
+     */
+    status?: number;
+    /**
+     * 大頭貼圖片網址
+     */
+    stickerUrl?: string;
+    /**
+     * 大頭貼檔案名稱(firebase比對用)
+     */
+    stickerFileName?: string;
 }

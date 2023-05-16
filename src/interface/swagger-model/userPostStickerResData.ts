@@ -10,17 +10,13 @@
  * Do not edit the class manually.
  */
 
-export interface LoginResData { 
+export interface UserPostStickerResData { 
     /**
-     * 員工編號
+     * 大頭貼檔案名稱(firebase比對用)
      */
-    staffId?: string;
+    stickerFileName?: string;
     /**
-     * 姓名
+     * 大頭貼圖片網址
      */
-    name?: string;
-    /**
-     * 令牌
-     */
-    token?: string;
+    stickerUrl?: string;
 }

@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface CommonResFailed { 
+export interface CommonResFailedNoFound { 
     code?: number;
     message?: string;
 }

@@ -9,18 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { MovieDetailRes } from './movieDetailRes';
 
-export interface LoginResData { 
-    /**
-     * 員工編號
-     */
-    staffId?: string;
-    /**
-     * 姓名
-     */
-    name?: string;
-    /**
-     * 令牌
-     */
-    token?: string;
+export interface MovieDetailGetInfoSuccess { 
+    code?: number;
+    message?: string;
+    data?: MovieDetailRes;
 }

@@ -10,17 +10,9 @@
  * Do not edit the class manually.
  */
 
-export interface LoginResData { 
-    /**
-     * 員工編號
-     */
-    staffId?: string;
-    /**
-     * 姓名
-     */
-    name?: string;
-    /**
-     * 令牌
-     */
-    token?: string;
+/**
+ * 發行日期
+ */
+export interface MovieDetailResReleaseDate { 
+    date?: Date;
 }
