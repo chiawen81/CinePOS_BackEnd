@@ -41,8 +41,72 @@ class MovieController {
             ;
         });
         this.createInfo = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const movieData = req.body;
+                console.log('movieData', movieData);
+                const movie = new moviesModels_1.default(movieData);
+                const validationError = movie.validateSync();
+                if (validationError) {
+                    const errorMessage = Object.values(validationError.errors).map(err => err.message).join('\n');
+                    return res.status(422).json({
+                        code: -1,
+                        message: errorMessage || "新增電影資料錯誤(其它)!",
+                    });
+                }
+                ;
+                const savedMovie = yield movie.save();
+                res.status(201).json({
+                    code: 1,
+                    message: '電影資料新增成功！',
+                    data: savedMovie,
+                });
+            }
+            catch (error) {
+                res.status(500).json({
+                    code: -1,
+                    message: '電影資料新增失敗！'
+                });
+            }
+            ;
         });
         this.updateInfo = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const movieId = req.body.id;
+                const movieData = req.body;
+                console.log('movieId', movieId, 'movieData', movieData);
+                const movie = yield moviesModels_1.default.findById(movieId);
+                const validationError = movie.validateSync();
+                if (validationError) {
+                    const errorMessage = Object.values(validationError.errors).map(err => err.message).join('\n');
+                    return res.status(422).json({
+                        code: -1,
+                        message: errorMessage || '更新電影資料錯誤！',
+                    });
+                }
+                ;
+                const updatedMovie = yield moviesModels_1.default.findOneAndUpdate({ id: movieId }, { name: movieData }, { new: true });
+                if (!updatedMovie) {
+                    return res.status(401).json({
+                        code: -1,
+                        message: '找不到此電影資料！',
+                    });
+                }
+                else {
+                    res.status(200).json({
+                        code: 1,
+                        message: '電影資料更新成功！',
+                        data: updatedMovie,
+                    });
+                }
+                ;
+            }
+            catch (error) {
+                res.status(500).json({
+                    code: -1,
+                    message: '電影資料更新失敗(其它)！',
+                });
+            }
+            ;
         });
     }
 }

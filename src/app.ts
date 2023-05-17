@@ -10,14 +10,15 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../swagger.json');
 
 // 路由模組
-import { StaffIndexRouter } from './routes/v1/staff/index';
-import { ManagerIndexRouter } from './routes/v1/manager/index';
 import { CommonUserRouter } from './routes/v1/common/user';
 import { CommonLogInRouter } from './routes/v1/common/login';
+
+import { ManagerIndexRouter } from './routes/v1/manager/index';
 import { ManagerMovieRouter } from "./routes/v1/manager/movie";
 
+import { StaffIndexRouter } from './routes/v1/staff/index';
+import { StaffTicketTypeRouter } from './routes/v1/staff/ticketType';
 import { StaffSeatCheckLockRouter } from './routes/v1/staff/seatCheckLock';
-
 
 // 其它
 import "./service/connection";                        // 資料庫設定
@@ -41,9 +42,8 @@ app.use('/v1/staff', StaffIndexRouter);
 app.use('/v1/staff/user', CommonUserRouter);
 app.use('/v1/staff/login', CommonLogInRouter);
 
+app.use('/v1/staff/ticketType', StaffTicketTypeRouter);
 app.use('/v1/staff/seat/checkLock', StaffSeatCheckLockRouter);
-
-
 // 後台
 app.use('/v1/manager/', ManagerIndexRouter);
 app.use('/v1/manager/user', CommonUserRouter);

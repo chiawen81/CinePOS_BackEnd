@@ -39,10 +39,8 @@ const moviesSchema = new mongoose.Schema({
         required: true
     },
     rate: {
-        type: [{
-            type: Number,
-            enum: [0, 6, 12, 15, 18]
-        }],
+        type: Number,
+        enum: [0, 6, 12, 15, 18],
         required: true
     },
     director: {
@@ -60,10 +58,8 @@ const moviesSchema = new mongoose.Schema({
         maxlength: 300,
     },
     status: {
-        type: [{
-            type: Number,
-            enum: [-1, 0, 1]
-        }],
+        type: Number,
+        enum: [-1, 0, 1],
         required: true
     },
     releaseDate: {

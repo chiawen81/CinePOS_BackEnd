@@ -34,6 +34,12 @@
     "@types/node": "^18.15.11",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.2",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "multer": "^1.4.5-lts.1",
+    "mongoose": "^7.0.3",
+    "mongodb": "^5.2.0",
+    "jsonwebtoken": "^9.0.0",
+    "nodemon": "^2.0.22",
+    "jade": "~1.11.0"
   }
 }
