@@ -5,7 +5,7 @@ const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true
 };
-const databaseUrl = (process.env.NODE_ENV === 'production') ? process.env.DATABASE_REMOTE : process.env.DATABASE_LOCAL;
+const databaseUrl = process.env.DATABASE_LOCAL;
 
 mongoose.connect(databaseUrl, options as any).then(() => {
     console.log(`MongoDB connected: ${databaseUrl}`);
