@@ -3,6 +3,8 @@ import Movie from '../../models/manager/moviesModels';
 import ErrorService from './../../service/error';
 import Option from '../../models/common/optionsModels';
 
+
+
 class MovieController {
     constructor() {
 
@@ -16,8 +18,9 @@ class MovieController {
     getInfo = async (req, res: Response, next: NextFunction) => {
         let movieId = req.params.id;
         console.log('movieId', movieId);
-        const movieData = await Movie.findOne({ id: movieId });
-        console.log('movie', movieData);
+
+        const movieData = await Movie.findOne({ _id: movieId });
+        console.log('movieData', movieData);
 
         if (!movieData) {
             return next(ErrorService.appError(404, "沒有這筆電影資料！", next));
@@ -73,7 +76,7 @@ class MovieController {
             return optionNames;
         } catch (err) {
             return next(ErrorService.appError(422, "查詢選項代碼過程發生錯誤！", next));
-        }
+        };
     };
 
 

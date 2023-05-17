@@ -2,13 +2,9 @@ import mongoose from "mongoose";
 
 const moviesSchema = new mongoose.Schema({
     _id: {
-        type: String,
+        type: mongoose.Types.ObjectId,
         required: false,
-        select: false,
-    },
-    id: {
-        type: String,
-        required: true,
+        select: true,
     },
     title: {
         type: String,
@@ -27,8 +23,7 @@ const moviesSchema = new mongoose.Schema({
     },
     genreName: {
         type: [{
-            type: String,
-            // enum: [1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 10, 11, 12]
+            type: String
         }],
         required: false
     },
@@ -40,8 +35,7 @@ const moviesSchema = new mongoose.Schema({
     },
     provideVersion: {
         type: [{
-            type: Number,
-            enum: [1, 2, 3, 4]
+            type: Number
         }],
         required: true
     },

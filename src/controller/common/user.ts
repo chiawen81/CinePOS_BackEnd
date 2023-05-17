@@ -94,14 +94,14 @@ class UserController {
 
 
     // ———————————————————————  更新大頭貼  ———————————————————————
-    changeSticker = async function changeSticker(req, res, next) {
+    updateSticker = async function changeSticker(req, res, next) {
         console.log('自訂義程式(更新大頭貼) 之我接到囉～');
         console.log('req.fileData', req.fileData);
         console.log('req.user', req.user);
 
         try {
             let updateData = {
-                stickerUrl: req.fileData.imgUrl,
+                stickerUrl: req.fileData.fileUrl,
                 stickerFileName: req.fileData.fileName
             };
             let condition = { staffId: req.user.staffId };

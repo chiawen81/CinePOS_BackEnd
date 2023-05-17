@@ -65,6 +65,57 @@
                 }
             }
         },
+        "/v1/common/upload": {
+            "post": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "上傳檔案",
+                "parameters": [
+                    {
+                        "name": "fileType",
+                        "in": "query",
+                        "description": "上傳類型(image:圖檔,other:其它檔案)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/profile_staffId_body"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonUploadSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "上傳失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v1/staff/login": {
             "post": {
                 "tags": [
