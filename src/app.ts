@@ -18,7 +18,7 @@ import { ManagerMovieRouter } from "./routes/v1/manager/movie";
 
 import { StaffIndexRouter } from './routes/v1/staff/index';
 import { StaffTicketTypeRouter } from './routes/v1/staff/ticketType';
-
+import { StaffSeatCheckLockRouter } from './routes/v1/staff/seatCheckLock';
 
 // 其它
 import "./service/connection";                        // 資料庫設定
@@ -43,7 +43,7 @@ app.use('/v1/staff/user', CommonUserRouter);
 app.use('/v1/staff/login', CommonLogInRouter);
 
 app.use('/v1/staff/ticketType', StaffTicketTypeRouter);
-
+app.use('/v1/staff/seat/checkLock', StaffSeatCheckLockRouter);
 // 後台
 app.use('/v1/manager/', ManagerIndexRouter);
 app.use('/v1/manager/user', CommonUserRouter);
