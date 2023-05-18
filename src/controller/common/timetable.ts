@@ -12,8 +12,8 @@ class TimetableController {
   /** 取得時刻表 */
   getList = async (req, res, next: NextFunction) => {
     console.log("get timetable list");
-    const startTime = req.query.startTime; // timestamp
-    const endTime = req.query.endTime; // timestamp
+    const startTime:number = Number(req.query.startTime); // timestamp
+    const endTime:number = Number(req.query.endTime); // timestamp
 
 
     // 驗證欄位
@@ -23,7 +23,12 @@ class TimetableController {
 
     try {
       const timetable = await Timetable.find(
-        { startTime, endTime },        // 條件
+        {
+          startTime: {
+            $gte: new Date(startTime),
+            $lte: new Date(endTime),
+          },
+        }        // 條件
       )
         // .populate(
         //   {
@@ -60,8 +65,9 @@ class TimetableController {
     if (!request) {
       return next(ErrorService.appError(400, "缺少必要欄位或格式不正確", next));
     }
-    
-    try {      const timetable = await Timetable.create(request);
+
+    try {
+      const timetable = await Timetable.create(request);
       // await timetable.save();
       res.status(200).json({
         code: 1,
@@ -92,11 +98,11 @@ class TimetableController {
     }
 
     try {
-  
-          const updatedTimetable = await Timetable.findByIdAndUpdate(
-            id,timetable,
-            { new: true}
-          );
+
+      const updatedTimetable = await Timetable.findByIdAndUpdate(
+        id, timetable,
+        { new: true }
+      );
 
 
 
@@ -104,7 +110,7 @@ class TimetableController {
         code: 1,
         message: "成功",
         data: {
-          timetable:updatedTimetable,
+          timetable: updatedTimetable,
         },
       });
     } catch (err) {
