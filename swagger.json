@@ -5,6 +5,11 @@
         "description": "CinePOS 後端API",
         "version": "1.0.0"
     },
+    "servers": [
+        {
+            "url": "/"
+        }
+    ],
     "tags": [
         {
             "name": "Staff"
@@ -63,7 +68,7 @@
                 "tags": [
                     "Staff"
                 ],
-                "summary": "修改會員名字",
+                "summary": "修改員工姓名",
                 "requestBody": {
                     "description": "資料格式",
                     "content": {
@@ -92,6 +97,170 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/CommonResFailedFieldInvalid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/staff/user/profile/{staffId}": {
+            "get": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "取得櫃台人員資料",
+                "parameters": [
+                    {
+                        "name": "staffId",
+                        "in": "path",
+                        "description": "員編",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserProfileRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailedNoFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/staff/user/sticker/{staffId}": {
+            "post": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "上傳櫃台人員大頭貼",
+                "parameters": [
+                    {
+                        "name": "staffId",
+                        "in": "path",
+                        "description": "員編",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/profile_staffId_body"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserPostStickerRes"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "上傳失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserPostStickerReFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/staff/ticketType": {
+            "get": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "取得票種",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ticketTypeRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "新增票種",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ticketTypeReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ticketTypeRes"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
                                 }
                             }
                         }
@@ -145,7 +314,7 @@
                 "tags": [
                     "Manager"
                 ],
-                "summary": "修改會員名字",
+                "summary": "修改員工姓名",
                 "requestBody": {
                     "description": "資料格式",
                     "content": {
@@ -328,7 +497,226 @@
 					}
 				]
 			}
-		}
+		},
+        "/v1/manager/user/profile/{staffId}": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "取得管理人員資料",
+                "parameters": [
+                    {
+                        "name": "staffId",
+                        "in": "path",
+                        "description": "員編",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserProfileRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailedNoFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/user/sticker/{staffId}": {
+            "post": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "上傳管理人員大頭貼",
+                "parameters": [
+                    {
+                        "name": "staffId",
+                        "in": "path",
+                        "description": "員編",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/profile_staffId_body"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserPostStickerRes"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "上傳失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserPostStickerReFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/movie/{id}": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "取得單一電影資訊",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "電影id",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailGetInfoSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailGetInfoFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/movie": {
+            "post": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "新增單一電影資訊",
+                "requestBody": {
+                    "description": "新增單一電影資訊參數",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovieDetailCreateParameter"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailCreateSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailCreateFaild"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "更新單一電影資訊",
+                "requestBody": {
+                    "description": "更新單一電影資訊參數",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovieDetailCreateParameter"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailUpdateSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailUpdateFaild"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     },
     "components": {
         "schemas": {
@@ -351,11 +739,6 @@
                 }
             },
             "LoginRes": {
-                "required": [
-                    "code",
-                    "data",
-                    "message"
-                ],
                 "properties": {
                     "code": {
                         "type": "number",
@@ -367,6 +750,18 @@
                     },
                     "data": {
                         "$ref": "#/components/schemas/LoginRes_data"
+                    }
+                }
+            },
+            "CommonResFailed": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "錯誤訊息"
                     }
                 }
             },
@@ -437,10 +832,6 @@
                 }
             },
             "InfoUpdateRes": {
-                "required": [
-                    "code",
-                    "message"
-                ],
                 "properties": {
                     "code": {
                         "type": "number",
@@ -460,14 +851,17 @@
                 "properties": {
                     "staffId": {
                         "type": "string",
+                        "description": "員工編號",
                         "example": "A0001"
                     },
                     "name": {
                         "type": "string",
+                        "description": "姓名",
                         "example": "文文"
                     },
                     "token": {
                         "type": "string",
+                        "description": "令牌",
                         "example": "123234345"
                     }
                 }
@@ -477,11 +871,455 @@
                 "properties": {
                     "staffId": {
                         "type": "string",
+                        "description": "員工編號",
                         "example": "A0001"
                     },
                     "newName": {
                         "type": "string",
+                        "description": "姓名",
                         "example": "文文2"
+                    }
+                }
+            },
+            "UserProfileRes": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功取得使用者資料!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/UserProfileResData"
+                    }
+                }
+            },
+            "UserProfileResData": {
+                "properties": {
+                    "staffId": {
+                        "type": "string",
+                        "description": "員工編號",
+                        "example": "A0001"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "姓名",
+                        "example": "文文"
+                    },
+                    "role": {
+                        "type": "string",
+                        "description": "角色",
+                        "example": "staff"
+                    },
+                    "status": {
+                        "type": "number",
+                        "description": "在職狀態(0:離職,1:在職)",
+                        "example": 1
+                    },
+                    "stickerUrl": {
+                        "type": "string",
+                        "description": "大頭貼圖片網址",
+                        "example": "https://storage.googleapis.com/test0421-f01d7.appspot.com/4338350b-1cf6-48e7-ae4a-aff3df960573-%E8%83%96%E8%99%8E.jpg?GoogleAccessId=firebase-adminsdk-udl5c%40test0421-f01d7.iam.gserviceaccount.com&Expires=1924876800&Signature=DMb2sECe5IEMdjeG3dgiNbz6DfA36Rr4nSoK71RU5LmOHAfN%2BhIeqMdF0tM5XGCQj4JCdy6bHek%2F%2BgeU%2FREWuQZsa057MAS%2FmW4z5qN5Vri%2BFPA2GP6XXZM2v0e3CBahBmyGEyASwqSWCU3jz5YOuMMpl4CzZdmI7DwjaWSRL%2FwiXrq185JJsT8WOKmM1S5YeJEYkHT1Z0tYxrJmOmEAz6r7Y4gVioAUTw5u0YdujG04g%2ByYNMYHMT3Nd7tLST8RNqYIVEDXWGNBPM3epRuVxHQdWtenK4MsCTVfzVsRvJKpcSABVAExwUl8qWUKhxaeLI%2BSf2gt39rdUqo8RTV6Gg%3D%3D"
+                    },
+                    "stickerFileName": {
+                        "type": "string",
+                        "description": "大頭貼檔案名稱(firebase比對用)",
+                        "example": "4338350b-1cf6-48e7-ae4a-aff3df960573-胖虎.jpg"
+                    }
+                }
+            },
+            "UserPostStickerRes": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功取得使用者資料!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/UserPostStickerResData"
+                    }
+                }
+            },
+            "UserPostStickerResData": {
+                "properties": {
+                    "stickerFileName": {
+                        "type": "string",
+                        "description": "大頭貼檔案名稱(firebase比對用)",
+                        "example": "19cf8d9d-dce0-4f37-b097-1acfdacb9279-胖虎.jpg"
+                    },
+                    "stickerUrl": {
+                        "type": "string",
+                        "description": "大頭貼圖片網址",
+                        "example": "https://storage.googleapis.com/test0421-f01d7.appspot.com/19cf8d9d-dce0-4f37-b097-1acfdacb9279-%E8%83%96%E8%99%8E.jpg?GoogleAccessId=firebase-adminsdk-udl5c%40test0421-f01d7.iam.gserviceaccount.com&Expires=1924876800&Signature=Ymql5WiOBMc%2FZDHpU5wzKEk%2Fa8I5vMCZCWJJwfgego7SfjaRoVu48tvjVy3QxoqX8vhmpvIKeaYZpAHtSwJCQO3gZD1i0w%2B%2BoAINLzmJkUsaA2AVckV%2B5eUIex%2FB7Rd%2BELeHErYBUcDlNrLU5MDPG4OpPyx5qp7tmpT6aD99zppvyvtT%2FSQOzYhBu7xgFyQ1a1SdKO8J%2F7vnbf6PRb83Ysrq3pQqiRL%2BXZD8DeA2GV7yrTovHzbi%2BtftMcF%2BKBDBs1yHkL2e8yUK594VXltObHAUoXTA1R6LNmkXCtp1m6D48ibymYhdJKJVhxBcSTsYuFF00JAc%2BR%2FDdgR9xit4fw%3D%3D"
+                    }
+                }
+            },
+            "UserPostStickerReFailed": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "上傳失敗(系統報錯)"
+                    }
+                }
+            },
+            "profile_staffId_body": {
+                "type": "object",
+                "properties": {
+                    "image": {
+                        "type": "string",
+                        "format": "binary"
+                    }
+                }
+            },
+            "MovieDetailGetInfoSuccess": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功查詢電影資訊!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MovieDetailRes"
+                    }
+                }
+            },
+            "MovieDetailGetInfoFailed": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "查無此電影!"
+                    }
+                }
+            },
+            "MovieDetailRes": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "3B7D5B63-8EA3-449A-9E0E-6974BE9C3DB8",
+                        "description": "電影編號"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "關於我和鬼變成家人的那件事",
+                        "description": "電影中文名"
+                    },
+                    "enTitle": {
+                        "type": "string",
+                        "example": "Marry My Dead Body",
+                        "description": "電影英文名"
+                    },
+                    "genre": {
+                        "type": "array",
+                        "example": [
+                            3,
+                            4
+                        ],
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "電影類型"
+                    },
+                    "runtime": {
+                        "type": "number",
+                        "example": 129,
+                        "description": "片長"
+                    },
+                    "provideVersion": {
+                        "type": "array",
+                        "example": [
+                            1,
+                            2,
+                            3,
+                            4
+                        ],
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "支援設備"
+                    },
+                    "rate": {
+                        "type": "number",
+                        "example": 12,
+                        "description": "分級制度"
+                    },
+                    "director": {
+                        "type": "string",
+                        "example": "程偉豪",
+                        "description": "導演"
+                    },
+                    "cast": {
+                        "type": "array",
+                        "example": [
+                            "許光漢",
+                            "林柏宏",
+                            "王淨"
+                        ],
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "演員"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "恐同男警吳明翰（許光漢 飾演），誤撿地上紅包，沒想到紅包裡的對象是個男的（林柏宏 飾演）！被迫男男冥婚的明翰，一路衰到底，不但甩不掉冥婚對象，就連警花林子晴（王淨 飾演）埋線已久的緝毒案，都被他搞砸。為了挽救危機，恐同又怕鬼的明翰，別無選擇，即使人鬼殊途也要和鬼老公毛毛攜手跨界追兇，一場荒謬絕倫、笑中帶淚的旅程就此展開！",
+                        "description": "電影簡介"
+                    },
+                    "status": {
+                        "type": "number",
+                        "example": 1,
+                        "description": "上映狀態"
+                    },
+                    "releaseDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "發行日期",
+                        "example": "2023-05-08T00:00:00.000Z"
+                    },
+                    "trailerLink": {
+                        "type": "string",
+                        "description": "預告片連結",
+                        "example": ""
+                    },
+                    "distributor": {
+                        "type": "string",
+                        "description": "發行商",
+                        "example": "威視電影"
+                    },
+                    "posterUrl": {
+                        "type": "string",
+                        "description": "海報連結",
+                        "example": "https://firebasestorage.googleapis.com/v0/b/test0421-f01d7.appspot.com/o/%E9%97%9C%E6%96%BC%E6%88%91%E5%92%8C%E9%AC%BC%E8%AE%8A%E6%88%90%E5%AE%B6%E4%BA%BA%E7%9A%84%E9%82%A3%E4%BB%B6%E4%BA%8B.jpg?alt=media&token=582e6010-8d6b-4049-a31a-5ba2cfd7bd92"
+                    }
+                }
+            },
+            "MovieDetailCreateParameter": {
+                "required": [
+                    "genre",
+                    "id",
+                    "posterUrl",
+                    "provideVersion",
+                    "rate",
+                    "releaseDate",
+                    "runtime",
+                    "status",
+                    "title"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "電影編號"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "電影中文名"
+                    },
+                    "enTitle": {
+                        "type": "string",
+                        "description": "電影英文名"
+                    },
+                    "genre": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "電影類型(1：動作,2：冒險,3：喜劇,4：劇情,5：恐怖,6：科幻,7：浪漫愛情,8：動畫,9：紀錄片,10：音樂,11:懸疑,12:驚悚,13:犯罪)"
+                    },
+                    "runtime": {
+                        "type": "number",
+                        "description": "片長"
+                    },
+                    "provideVersion": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "支援設備(1:2D,2:3D,3:IMAX,4:4DX)"
+                    },
+                    "rate": {
+                        "type": "number",
+                        "description": "分級制度(0: 普通級,6: 保護級,12: 輔導十二級,15 : 輔導十五級,18: 限制級)"
+                    },
+                    "director": {
+                        "type": "string",
+                        "description": "導演"
+                    },
+                    "cast": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "演員"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "電影簡介"
+                    },
+                    "status": {
+                        "type": "number",
+                        "description": "上映狀態(-1: 已下檔(下線) / 0: 尚未發佈(籌備中) / 1: 已發佈(上映中))"
+                    },
+                    "releaseDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "發行日期"
+                    },
+                    "trailerLink": {
+                        "type": "string",
+                        "description": "預告片連結"
+                    },
+                    "distributor": {
+                        "type": "string",
+                        "description": "發行商"
+                    },
+                    "posterUrl": {
+                        "type": "string",
+                        "description": "海報連結"
+                    }
+                }
+            },
+            "MovieDetailCreateSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功新增電影資訊!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MovieDetailCreateParameter"
+                    }
+                }
+            },
+            "MovieDetailCreateFaild": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "請重新檢查資料格式是否正確！"
+                    }
+                }
+            },
+            "MovieDetailUpdateSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功更新電影資訊!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MovieDetailCreateParameter"
+                    }
+                }
+            },
+            "MovieDetailUpdateFaild": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "更新電影資料失敗，請重新檢查資料格式是否正確！"
+                    }
+                }
+            },
+            "ticketTypeReq": {
+                "required": [
+                    "type",
+                    "price"
+                ],
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "票種名稱",
+                        "example": "全票"
+                    },
+                    "price": {
+                        "type": "number",
+                        "description": "票價",
+                        "example": 280
+                    }
+                }
+            },
+            "ticketTypeRes": {
+                "required": [
+                    "code",
+                    "message",
+                    "data"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ticketTypeResData"
+                    }
+                }
+            },
+            "ticketTypeResData": {
+                "required": [
+                    "_id",
+                    "type",
+                    "price"
+                ],
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "id"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "票種名稱",
+                        "example": "全票"
+                    },
+                    "price": {
+                        "type": "number",
+                        "description": "票價",
+                        "example": 280
                     }
                 }
             }

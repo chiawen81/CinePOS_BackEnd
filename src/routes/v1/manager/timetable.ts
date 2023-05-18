@@ -5,12 +5,12 @@ const express = require('express');
 const router = express.Router();
 
 
-router.get('/list',AuthService.isAuth,ErrorService.handleErrorAsync(TimetableController.getList));
+router.get('/list',AuthService.isEmpAuth,ErrorService.handleErrorAsync(TimetableController.getList));
 // router.get('/list',ErrorService.handleErrorAsync(TimetableController.getList));
-router.post('/create',AuthService.isAuth,ErrorService.handleErrorAsync(TimetableController.create));
+router.post('/create',AuthService.isEmpAuth,ErrorService.handleErrorAsync(TimetableController.create));
 // router.patch('/update',AuthService.isAuth,ErrorService.handleErrorAsync(TimetableController.update));
-router.patch('/update',AuthService.isAuth,ErrorService.handleErrorAsync(TimetableController.update));
-router.delete('/:timetableId',AuthService.isAuth,ErrorService.handleErrorAsync(TimetableController.delete));
+router.patch('/update',AuthService.isEmpAuth,ErrorService.handleErrorAsync(TimetableController.update));
+router.delete('/:timetableId',AuthService.isEmpAuth,ErrorService.handleErrorAsync(TimetableController.delete));
 
 
 router.options('*', async (req, res) => {
