@@ -6,10 +6,10 @@ const router = express.Router();
 
 
 // router.get('/list',AuthService.isAuth,ErrorService.handleErrorAsync(TimetableController.getList));
-router.get('/list',ErrorService.handleErrorAsync(TimetableController.getList));
-// router.post('/create',AuthService.isAuth,ErrorService.handleErrorAsync(TimetableController.create));
+router.get('/list',AuthService.isAuth,ErrorService.handleErrorAsync(TimetableController.getList));
+router.post('/create',AuthService.isAuth,ErrorService.handleErrorAsync(TimetableController.create));
 // router.patch('/update',AuthService.isAuth,ErrorService.handleErrorAsync(TimetableController.update));
-router.patch('/update',ErrorService.handleErrorAsync(TimetableController.update));
+router.patch('/update',AuthService.isAuth,ErrorService.handleErrorAsync(TimetableController.update));
 router.delete('/:timetableId',AuthService.isAuth,ErrorService.handleErrorAsync(TimetableController.delete));
 
 // router.patch('/posts/:id', async (req, res) => {

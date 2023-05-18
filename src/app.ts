@@ -40,7 +40,7 @@ app.use('/v1/manager/', ManagerIndexRouter);
 app.use('/v1/manager/user', CommonUserRouter);
 app.use('/v1/manager/login', CommonLogInRouter);
 /** 時刻表 */
-app.use('/v1/manager/', TimetableIndexRouter);
+app.use('/v1/manager/timetable', TimetableIndexRouter);
 
 
 

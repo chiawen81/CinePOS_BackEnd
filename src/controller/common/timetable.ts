@@ -12,18 +12,18 @@ class TimetableController {
   /** 取得時刻表 */
   getList = async (req, res, next: NextFunction) => {
     console.log("get timetable list");
-    const startDate = req.query.startDate; // timestamp
-    const endDate = req.query.endDate; // timestamp
+    const startTime = req.query.startTime; // timestamp
+    const endTime = req.query.endTime; // timestamp
 
 
     // 驗證欄位
-    if (!startDate || !endDate) {
+    if (!startTime || !endTime) {
       return next(ErrorService.appError(400, "缺少必要欄位", next));
     };
 
     try {
       const timetable = await Timetable.find(
-        // { startDate, endDate },        // 條件
+        { startTime, endTime },        // 條件
       )
         // .populate(
         //   {
