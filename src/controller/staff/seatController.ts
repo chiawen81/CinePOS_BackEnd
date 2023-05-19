@@ -5,7 +5,7 @@ import Timetable from '../../models/common/timetable.model';
 import Theater from '../../models/common/theater.model';
 
 interface seat {
-    id: string;
+    cols: string;
     status: number;
     type: string
 }
@@ -45,7 +45,7 @@ class SeatController {
                     for (let i = scheduleTheaters.theaterId.col * rowIndex; i <= (scheduleTheaters.theaterId.col * (rowIndex + 1)) - 1; i++) {
                         j++;
                         seat.push({
-                            id: String(j),
+                            cols: String(j),
                             status: 0,
                             type: seatMap[i]
                         })
