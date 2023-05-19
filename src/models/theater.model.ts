@@ -38,7 +38,7 @@ const theaterSchema = new Schema({
   seatMap: {
     type: [Number],
     required: true,
-    validate: [(arr) => arr.length === this.row * (this.col + 1), 'Seat map size does not match with row and col values.']
+    // validate: [(arr) => arr.length === this.row * (this.col + 1), 'Seat map size does not match with row and col values.']
   },
   status: {
     type: Number,
@@ -54,4 +54,7 @@ const theaterSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('Theater', theaterSchema);
+// module.exports = mongoose.model('Theater', theaterSchema);
+const Theater = mongoose.model('Theater', theaterSchema);
+
+export default Theater;
