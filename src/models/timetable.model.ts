@@ -1,10 +1,12 @@
 import { Schema } from 'mongoose';
 import mongoose = require('mongoose');
+import Theater from './theater.model';
+import Movie from './manager/moviesModels';
 
 
 const timetableSchema = new mongoose.Schema({
-  movieId: { type: Schema.Types.ObjectId, ref: 'Movie' },
-  theaterId: { type: Schema.Types.ObjectId, ref: 'Theater' },
+  movieId: { type: Schema.Types.ObjectId, ref: Movie },
+  theaterId: { type: Schema.Types.ObjectId, ref: Theater },
   startTime: {
     type: Date,
     required: true
@@ -21,6 +23,8 @@ const timetableSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+}, {
+  versionKey: false
 });
 
 const Timetable = mongoose.model('Timetable', timetableSchema);
