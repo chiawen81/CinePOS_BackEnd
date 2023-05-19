@@ -26,17 +26,23 @@ class SeatController {
                 .findByIdAndUpdate(req.params.scheduleId)
                 .populate({
                     path: 'theaterId',
-                    select: 'name totalCapacity row col colLabel seatMap'
+                    select: 'name totalCapacity row col rowLabel seatMap'
                 })
+            if(!scheduleTheaters.theaterId){
+                return next(ErrorService.appError(404, "沒有這筆場次座位資料！", next));
+            }
             const seatMap = scheduleTheaters.theaterId.seatMap;
             const seats =  await Seat.find({ scheduleId: req.params.scheduleId ,status: {$ne:0}});
+            if(!seats){
+                return next(ErrorService.appError(404, "座位資料錯誤！", next));
+            }
             const seatsSold = seats.filter(item => item.status === 1);
             let list: list[] = [];
-            scheduleTheaters.theaterId.colLabel.forEach((row, rowIndex) => {
+            scheduleTheaters.theaterId.rowLabel.forEach((row, rowIndex) => {
                 let seat: seat[] = [];
                 let j = 0;
                 if (!!row) {
-                    for (let i = scheduleTheaters.theaterId.row * rowIndex; i <= (scheduleTheaters.theaterId.row * (rowIndex + 1)) - 1; i++) {
+                    for (let i = scheduleTheaters.theaterId.col * rowIndex; i <= (scheduleTheaters.theaterId.col * (rowIndex + 1)) - 1; i++) {
                         j++;
                         seat.push({
                             id: String(j),
@@ -65,8 +71,8 @@ class SeatController {
             const resData = {
                 sold: seatsSold.length,
                 free: scheduleTheaters.theaterId.totalCapacity - seatsSold.length,
-                maxRows: scheduleTheaters.theaterId.col,
-                maxColumns: scheduleTheaters.theaterId.row,
+                maxRows: scheduleTheaters.theaterId.row,
+                maxColumns: scheduleTheaters.theaterId.col,
                 list: list
             }
             res.status(200).json({
