@@ -9,8 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { CommonUploadSuccessData } from './commonUploadSuccessData';
 
-export interface UserPostStickerReFailed { 
+export interface CommonUploadSuccess { 
     code?: number;
     message?: string;
+    data?: CommonUploadSuccessData;
 }

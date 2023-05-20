@@ -29,6 +29,10 @@ export interface MovieDetailRes {
      */
     genre?: Array<number>;
     /**
+     * 電影類型文字
+     */
+    genreName?: Array<string>;
+    /**
      * 片長
      */
     runtime?: number;
@@ -37,9 +41,17 @@ export interface MovieDetailRes {
      */
     provideVersion?: Array<number>;
     /**
+     * 支援設備文字
+     */
+    provideVersionName?: Array<string>;
+    /**
      * 分級制度
      */
     rate?: number;
+    /**
+     * 輔12
+     */
+    rateName?: string;
     /**
      * 導演
      */
@@ -56,6 +68,10 @@ export interface MovieDetailRes {
      * 上映狀態
      */
     status?: number;
+    /**
+     * 上映狀態文字
+     */
+    statusName?: string;
     releaseDate?: MovieDetailResReleaseDate;
     /**
      * 預告片連結

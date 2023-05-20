@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface ProfileStaffIdBody { 
-    image?: Blob;
+export interface CommonResFailed { 
+    code?: number;
+    message?: string;
 }

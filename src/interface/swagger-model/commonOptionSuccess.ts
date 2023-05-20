@@ -9,14 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { CommonOptionSuccessData } from './commonOptionSuccessData';
 
-export interface UserPostStickerResData { 
-    /**
-     * 大頭貼檔案名稱(firebase比對用)
-     */
-    stickerFileName?: string;
-    /**
-     * 大頭貼圖片網址
-     */
-    stickerUrl?: string;
+export interface CommonOptionSuccess { 
+    code?: number;
+    message?: string;
+    data?: CommonOptionSuccessData;
 }

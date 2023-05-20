@@ -1,7 +1,9 @@
-import { NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import firebaseAdmin from '../../service/firebase-admin';
 import multer from 'multer';
 import ErrorService from "./../../service/error";
+import { CommonUploadSuccess } from 'src/interface/swagger-model/commonUploadSuccess';
+import { CommonUploadReqBody } from 'src/interface/swagger-model/commonUploadReqBody';
 const uuid = require('uuid');
 
 class UploadController {
@@ -14,11 +16,11 @@ class UploadController {
 
     // ———————————————————————  上傳檔案  ———————————————————————
     // 實作上傳功能
-    upload = async (req, res, next: NextFunction) => {
+    upload = async (req: Request<{}, CommonUploadSuccess, CommonUploadReqBody, string, {}>, res: Response, next: NextFunction) => {
         try {
-            console.log('req.file', req.file);
+            console.log('req.file', req["file"]);
             const bucket = firebaseAdmin.storage().bucket();
-            const file = req.file;                                              // 取得上傳的檔案資訊
+            const file = req["file"];                                              // 取得上傳的檔案資訊
             const uniqueId = uuid.v4();                                         // 產生唯一識別碼
             const fileName = uniqueId + '-' + file.originalname;
             const blob = bucket.file(fileName);                                 // 基於檔案的原始名稱建立一個 blob 物件
@@ -35,7 +37,7 @@ class UploadController {
                 // 取得檔案網址
                 blob.getSignedUrl(config, async (err, fileUrl) => {
                     console.log('檔案網址', fileUrl);
-                    req.fileData = { fileName, err, fileUrl, file };            // 整理相關資料
+                    req["fileData"] = { fileName, err, fileUrl, file };            // 整理相關資料
                     next();                                                     // 後續自訂義的處理
                 });
             });
@@ -60,15 +62,15 @@ class UploadController {
 
 
     // 取得上傳成功的通用檔案資訊
-    getUploadSuccessInfo = async (req, res, next: NextFunction) => {
+    getUploadSuccessInfo = async (req: Request<{}, CommonUploadSuccess, CommonUploadReqBody, string, {}>, res: Response, next: NextFunction) => {
         res.send({
             code: 1,
             message: '上傳成功！',
             data: {
                 // 這裡可自定義回傳格式
-                fileName: req.fileData.fileName,
-                fileUrl: req.fileData.fileUrl,
-                fileSize: req.fileData.file.size,
+                fileName: req["fileData"].fileName,
+                fileUrl: req["fileData"].fileUrl,
+                fileSize: req["fileData"].file.size,
             }
         });
     }
@@ -78,7 +80,7 @@ class UploadController {
 
 
     // ———————————————————————  刪除檔案  ———————————————————————
-    deleteFile = async function deleteFile(req, res, next, fileName: string) {
+    deleteFile = async function deleteFile(req: Request<{}, CommonUploadSuccess, CommonUploadReqBody, string, {}>, res: Response, next: NextFunction, fileName: string) {
 
         if (!fileName) {
             return next(ErrorService.appError(401, "請輸入要刪除的檔案名稱！", next));
@@ -111,8 +113,8 @@ class UploadController {
 
     // ———————————————————————  驗證  ———————————————————————
     // 驗證上傳檔案
-    uploadValidator = (req, res, next: NextFunction) => {
-        let fileType = req.query.fileType;
+    uploadValidator = (req: Request<{}, CommonUploadSuccess, CommonUploadReqBody, string, {}>, res: Response, next: NextFunction) => {
+        let fileType = req.query["fileType"];
         console.log('驗證上傳檔案- 檔案驗證fileType', fileType);
 
         try {
@@ -140,7 +142,7 @@ class UploadController {
 
 
     // 驗證上傳檔案- 照片
-    photoValidator(req, res, next) {
+    photoValidator(req: Request<{}, CommonUploadSuccess, CommonUploadReqBody, string, {}>, res: Response, next: NextFunction) {
         return multer({
             limits: { fileSize: 1 * 1024 * 1024 },                              // 限制上傳檔案的大小為 1 MB
             fileFilter: (req, file, callback) => {                              // 限制圖片格式
@@ -157,13 +159,13 @@ class UploadController {
                     callback(null, true);
                 };
             },
-        }).single("image")(req, res, next);
+        }).single("upload")(req, res, next);
     }
 
 
 
     // 驗證上傳檔案- 檔案
-    fileValidator(req, res, next) {
+    fileValidator(req: Request<{}, CommonUploadSuccess, CommonUploadReqBody, string, {}>, res: Response, next: NextFunction) {
         return multer({
             limits: { fileSize: 1 * 1024 * 1024 },                              // 限制上傳檔案的大小為 1 MB
             fileFilter: (req, file, callback) => {
@@ -176,7 +178,7 @@ class UploadController {
                     callback(null, true);
                 };
             },
-        }).single("other")(req, res, next);
+        }).single("upload")(req, res, next);
     }
 
 

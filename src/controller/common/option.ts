@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import Option from '../../models/common/optionsModels';
 import ErrorService from "./../../service/error";
+import { CommonOptionSuccessDataItem } from 'src/interface/swagger-model/commonOptionSuccessDataItem';
+import { CommonOptionSuccess } from 'src/interface/swagger-model/commonOptionSuccess';
 
 class OptionController {
     constructor() {
@@ -8,9 +10,9 @@ class OptionController {
     }
 
     // ———————————————————————  取得選項  ———————————————————————
-    getOptionData = async (req: Request<{}, {}, any>, res: Response, next: NextFunction) => {
+    getOptionData = async (req: Request<{}, CommonOptionSuccess, {}, number, {}>, res: Response<CommonOptionSuccess>, next: NextFunction) => {
         let typeId = Number(req.params['typeId']);
-        let optionData = [];
+        let optionData: CommonOptionSuccessDataItem[] = [];
         console.log('id', typeId);
 
         if (!typeId) {

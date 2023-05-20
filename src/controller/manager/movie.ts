@@ -2,6 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import Movie from '../../models/manager/moviesModels';
 import ErrorService from './../../service/error';
 import Option from '../../models/common/optionsModels';
+import { MovieDetailGetInfoSuccess } from 'src/interface/swagger-model/movieDetailGetInfoSuccess';
+import { MovieDetailCreateParameter } from 'src/interface/swagger-model/movieDetailCreateParameter';
+import { MovieDetailCreateSuccess } from 'src/interface/swagger-model/movieDetailCreateSuccess';
 
 
 
@@ -15,8 +18,8 @@ class MovieController {
 
 
     // ———————————————————————  取得資料  ———————————————————————
-    getInfo = async (req, res: Response, next: NextFunction) => {
-        let movieId = req.params.id;
+    getInfo = async (req: Request<{}, MovieDetailGetInfoSuccess, null, string, {}>, res: Response, next: NextFunction) => {
+        let movieId = req.params["id"];
         console.log('movieId', movieId);
 
         const movieData = await Movie.findOne({ _id: movieId });
@@ -27,10 +30,10 @@ class MovieController {
         };
 
         try {
-            movieData.genreName = (await this.getMultiOptionName(1, (movieData.genre as any), next)) as string[];
-            movieData.provideVersionName = (await this.getMultiOptionName(2, (movieData.provideVersion as any), next) as string[]);
-            movieData.rateName = await this.getSingleOptionName(3, (movieData.rate as any), next);
-            movieData.statusName = await this.getSingleOptionName(4, (movieData.status as any), next);
+            movieData.genreName = (await this.getMultiOptionName(1, (movieData.genre as number[]), next)) as string[];
+            movieData.provideVersionName = (await this.getMultiOptionName(2, (movieData.provideVersion as number[]), next) as string[]);
+            movieData.rateName = await this.getSingleOptionName(3, (movieData.rate as number), next);
+            movieData.statusName = await this.getSingleOptionName(4, (movieData.status as number), next);
         } catch (err) {
             return next(ErrorService.appError(422, "查詢選項代碼過程發生錯誤！", next));
         };
@@ -84,7 +87,7 @@ class MovieController {
 
 
     // ———————————————————————  新增資料  ———————————————————————
-    createInfo = async (req: Request<{}, {}, any>, res: Response, next: NextFunction) => {
+    createInfo = async (req: Request<{}, MovieDetailCreateSuccess, MovieDetailCreateParameter, null, {}>, res: Response, next: NextFunction) => {
         try {
             // 從請求中取得新增的電影資料
             const movieData = req.body;
@@ -125,7 +128,7 @@ class MovieController {
 
 
     // ———————————————————————  更新資料  ———————————————————————
-    updateInfo = async (req: Request<{}, {}, any>, res: Response, next: NextFunction) => {
+    updateInfo = async (req: Request<{}, MovieDetailCreateSuccess, MovieDetailCreateParameter, null, {}>, res: Response, next: NextFunction) => {
         try {
             const movieId = req.body.id;
             const movieData = req.body;

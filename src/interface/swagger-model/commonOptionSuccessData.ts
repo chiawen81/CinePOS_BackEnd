@@ -9,10 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { UserPostStickerResData } from './userPostStickerResData';
+import { CommonOptionSuccessDataItem } from './commonOptionSuccessDataItem';
 
-export interface UserPostStickerRes { 
-    code?: number;
-    message?: string;
-    data?: UserPostStickerResData;
+export interface CommonOptionSuccessData extends Array<CommonOptionSuccessDataItem> { 
 }
