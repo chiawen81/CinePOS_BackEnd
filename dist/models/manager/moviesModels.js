@@ -5,11 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const moviesSchema = new mongoose_1.default.Schema({
-    _id: {
-        type: mongoose_1.default.Types.ObjectId,
-        required: false,
-        select: true,
-    },
     title: {
         type: String,
         required: true,
@@ -31,7 +26,7 @@ const moviesSchema = new mongoose_1.default.Schema({
             }],
         required: false
     },
-    runTime: {
+    runtime: {
         type: Number,
         required: true,
         min: 60,
@@ -45,7 +40,7 @@ const moviesSchema = new mongoose_1.default.Schema({
     },
     provideVersionName: {
         type: [{
-                type: String,
+                type: String
             }],
         required: true
     },

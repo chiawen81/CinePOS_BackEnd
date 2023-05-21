@@ -540,6 +540,72 @@
                 }
             }
         },
+        "/v1/manager/movie/list": {
+            "get": {
+                "summary": "查詢電影資訊列表",
+                "tags": [
+                    "Manager"
+                ],
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "上映狀態",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "searchDateS",
+                        "in": "query",
+                        "description": "查詢起日",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "searchDateE",
+                        "in": "query",
+                        "description": "查詢迄日",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "電影中文名",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "查詢成功",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ManagerMovieListSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "查詢失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v1/manager/movie/{id}": {
             "get": {
                 "tags": [
@@ -633,7 +699,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/MovieDetailCreateParameter"
+                                "$ref": "#/components/schemas/MovieDetailUpdateParameter"
                             }
                         }
                     },
@@ -748,18 +814,6 @@
                         "type": "number",
                         "description": "檔案大小",
                         "example": 76458
-                    }
-                }
-            },
-            "CommonResFailed": {
-                "properties": {
-                    "code": {
-                        "type": "number",
-                        "example": -1
-                    },
-                    "message": {
-                        "type": "string",
-                        "example": "錯誤訊息"
                     }
                 }
             },
@@ -970,6 +1024,85 @@
                     }
                 }
             },
+            "ManagerMovieListSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功查詢電影列表!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ManagerMovieListSuccessData"
+                    }
+                }
+            },
+            "ManagerMovieListSuccessData": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "_id": {
+                            "type": "string",
+                            "example": "3B7D5B63-8EA3-449A-9E0E-6974BE9C3DB8",
+                            "description": "電影編號"
+                        },
+                        "statusName": {
+                            "type": "integer",
+                            "example": "已下線",
+                            "description": "上映狀態文字"
+                        },
+                        "title": {
+                            "type": "string",
+                            "example": "關於我和鬼變成家人的那件事",
+                            "description": "電影名稱"
+                        },
+                        "genreName": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "example": [
+                                "喜劇",
+                                "劇情"
+                            ],
+                            "description": "劇情類型文字"
+                        },
+                        "rateName": {
+                            "type": "string",
+                            "example": "輔12",
+                            "description": "分級制度文字"
+                        },
+                        "releaseDate": {
+                            "type": "object",
+                            "properties": {
+                                "$date": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                }
+                            },
+                            "description": "發行日期",
+                            "example": "2023-05-08T00:00:00.000Z"
+                        },
+                        "provideVersionName": {
+                            "type": "array",
+                            "example": [
+                                "2D",
+                                "3D",
+                                "IMAX",
+                                "4DX"
+                            ],
+                            "items": {
+                                "type": "string"
+                            },
+                            "description": "支援設備文字"
+                        }
+                    }
+                }
+            },
             "MovieDetailGetInfoSuccess": {
                 "properties": {
                     "code": {
@@ -1000,7 +1133,7 @@
             "MovieDetailRes": {
                 "type": "object",
                 "properties": {
-                    "id": {
+                    "_id": {
                         "type": "string",
                         "example": "3B7D5B63-8EA3-449A-9E0E-6974BE9C3DB8",
                         "description": "電影編號"
@@ -1075,8 +1208,8 @@
                     },
                     "rateName": {
                         "type": "string",
-                        "example": 12,
-                        "description": "輔12"
+                        "example": "輔12",
+                        "description": "分級制度文字"
                     },
                     "director": {
                         "type": "string",
@@ -1141,7 +1274,6 @@
             "MovieDetailCreateParameter": {
                 "required": [
                     "genre",
-                    "id",
                     "posterUrl",
                     "provideVersion",
                     "rate",
@@ -1152,9 +1284,97 @@
                 ],
                 "type": "object",
                 "properties": {
-                    "id": {
+                    "title": {
                         "type": "string",
-                        "description": "電影編號"
+                        "description": "電影中文名"
+                    },
+                    "enTitle": {
+                        "type": "string",
+                        "description": "電影英文名"
+                    },
+                    "genre": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "電影類型(1：動作,2：冒險,3：喜劇,4：劇情,5：恐怖,6：科幻,7：浪漫愛情,8：動畫,9：紀錄片,10：音樂,11:懸疑,12:驚悚,13:犯罪)"
+                    },
+                    "runtime": {
+                        "type": "number",
+                        "description": "片長"
+                    },
+                    "provideVersion": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "支援設備(1:2D,2:3D,3:IMAX,4:4DX)"
+                    },
+                    "rate": {
+                        "type": "number",
+                        "description": "分級制度(0: 普通級,6: 保護級,12: 輔導十二級,15 : 輔導十五級,18: 限制級)"
+                    },
+                    "director": {
+                        "type": "string",
+                        "description": "導演"
+                    },
+                    "cast": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "演員"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "電影簡介"
+                    },
+                    "status": {
+                        "type": "number",
+                        "description": "上映狀態(-1: 已下檔(下線) / 0: 尚未發佈(籌備中) / 1: 已發佈(上映中))"
+                    },
+                    "releaseDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "發行日期"
+                    },
+                    "trailerLink": {
+                        "type": "string",
+                        "description": "預告片連結"
+                    },
+                    "distributor": {
+                        "type": "string",
+                        "description": "發行商"
+                    },
+                    "posterUrl": {
+                        "type": "string",
+                        "description": "海報連結"
+                    }
+                }
+            },
+            "MovieDetailUpdateParameter": {
+                "required": [
+                    "_id",
+                    "genre",
+                    "posterUrl",
+                    "provideVersion",
+                    "rate",
+                    "releaseDate",
+                    "runtime",
+                    "status",
+                    "title"
+                ],
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "系統編號",
+                        "example": "3B7D5B63-8EA3-449A-9E0E-6974BE9C3DB8"
                     },
                     "title": {
                         "type": "string",
