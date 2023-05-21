@@ -12,10 +12,10 @@ const swaggerDocument = require('../swagger.json');
 // 路由模組
 import { CommonUserRouter } from './routes/v1/common/user';
 import { CommonLogInRouter } from './routes/v1/common/login';
-
+import { CommonOptionRouter } from "./routes/v1/common/option";
+import { CommonUploadRouter } from "./routes/v1/common/upload";
 import { ManagerIndexRouter } from './routes/v1/manager/index';
 import { ManagerMovieRouter } from "./routes/v1/manager/movie";
-
 import { StaffIndexRouter } from './routes/v1/staff/index';
 import { StaffTicketTypeRouter } from './routes/v1/staff/ticketType';
 import { StaffSeaRouter } from './routes/v1/staff/seat';
@@ -37,6 +37,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // ——————————  設定路由  ——————————
+// 共用
+app.use('/v1/common/option', CommonOptionRouter);
+app.use('/v1/common/upload', CommonUploadRouter);
+
 // 前台
 app.use('/v1/staff', StaffIndexRouter);
 app.use('/v1/staff/user', CommonUserRouter);

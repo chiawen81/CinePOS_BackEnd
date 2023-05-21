@@ -11,6 +11,12 @@
  */
 
 export interface InfoUpdateResData { 
+    /**
+     * 員工編號
+     */
     staffId?: string;
+    /**
+     * 姓名
+     */
     newName?: string;
 }

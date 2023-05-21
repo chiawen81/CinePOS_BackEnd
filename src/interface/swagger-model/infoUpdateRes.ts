@@ -12,7 +12,7 @@
 import { InfoUpdateResData } from './infoUpdateResData';
 
 export interface InfoUpdateRes { 
-    code: number;
-    message: string;
+    code?: number;
+    message?: string;
     data?: InfoUpdateResData;
 }
