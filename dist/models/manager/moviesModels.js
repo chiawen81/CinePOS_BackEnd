@@ -26,7 +26,7 @@ const moviesSchema = new mongoose_1.default.Schema({
             }],
         required: false
     },
-    runTime: {
+    runtime: {
         type: Number,
         required: true,
         min: 60,
@@ -40,7 +40,7 @@ const moviesSchema = new mongoose_1.default.Schema({
     },
     provideVersionName: {
         type: [{
-                type: String,
+                type: String
             }],
         required: true
     },
