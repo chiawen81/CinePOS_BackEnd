@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 
 const moviesSchema = new mongoose.Schema({
-    _id: {
-        type: mongoose.Types.ObjectId,
-        required: false,
-        select: true,
-    },
+    // // 培培說加_id他會關聯不到資料，所以先註解掉
+    // _id: {
+    //     type: mongoose.Types.ObjectId,
+    //     required: false,
+    //     select: true,
+    // },
     title: {
         type: String,
         required: true,
