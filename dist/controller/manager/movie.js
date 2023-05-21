@@ -159,30 +159,19 @@ class MovieController {
                     });
                 }
                 ;
-                let condition = {};
-                if (queryData.title) {
-                    condition["title"] = queryData.title;
-                }
-                ;
-                if (queryData.searchDateS && queryData.searchDateE) {
-                    condition["releaseDate"] = {
-                        $gte: queryData.searchDateS,
-                        $lte: queryData.searchDateE
-                    };
-                }
-                ;
-                if (queryData.status) {
-                    condition["status"] = queryData.status;
-                }
-                ;
-                console.log('condition', condition);
+                let condition = this.getListCondition(queryData);
                 let movieData = yield moviesModels_1.default.find(condition !== null && condition !== void 0 ? condition : {});
-                let resMsg = movieData.length ? "成功查詢資料！" : "沒有符合條件的資料！";
-                let listData = this.getlistData(movieData);
+                let optionsData = {
+                    genre: yield optionsModels_1.default.find({ typeId: 1 }),
+                    provideVersion: yield optionsModels_1.default.find({ typeId: 2 }),
+                    rate: yield optionsModels_1.default.find({ typeId: 3 }),
+                    status: yield optionsModels_1.default.find({ typeId: 4 }),
+                };
+                let listData = this.setListData(movieData, optionsData);
                 console.log('movieData', movieData, 'listData', listData);
                 res.status(200).json({
                     code: 1,
-                    message: resMsg,
+                    message: movieData.length ? "成功查詢資料！" : "沒有符合條件的資料！",
                     data: listData
                 });
             }
@@ -195,25 +184,6 @@ class MovieController {
             ;
         });
     }
-    getlistData(movieData) {
-        let listData = [];
-        if (movieData.length) {
-            movieData.forEach((movie) => {
-                let obj = {
-                    _id: movie._id,
-                    status: movie.status,
-                    title: movie.title,
-                    genreName: [],
-                    rateName: "",
-                    releaseDate: movie.releaseDate,
-                    provideVersionName: [],
-                };
-                listData.push(obj);
-            });
-        }
-        ;
-        return listData;
-    }
     getListQuery(data) {
         console.log('data', data);
         let condition = {
@@ -222,6 +192,7 @@ class MovieController {
             searchDateE: data.searchDateE,
             status: data.status ? Number(data.status) : null
         };
+        console.log('getListQuery', condition);
         return condition;
     }
     getListQueryValidatorErrMsg(data) {
@@ -234,6 +205,7 @@ class MovieController {
             errMsg = "請填寫完整的起訖範圍！";
         }
         ;
+        console.log('String(data.status) !== "null"', String(data.status) !== "null", String(data.status));
         if (String(data.status) !== "null") {
             console.log(String(data.status));
             if ((data.status !== -1) && (data.status !== 0) && (data.status !== 1)) {
@@ -243,6 +215,55 @@ class MovieController {
         }
         ;
         return errMsg;
+    }
+    getListCondition(queryData) {
+        console.log('queryData', queryData);
+        let condition = {};
+        if (queryData.title) {
+            condition["title"] = queryData.title;
+        }
+        ;
+        if (queryData.searchDateS && queryData.searchDateE) {
+            condition["releaseDate"] = {
+                $gte: queryData.searchDateS,
+                $lte: queryData.searchDateE
+            };
+        }
+        ;
+        if (queryData.status !== null) {
+            condition["status"] = queryData.status;
+        }
+        ;
+        console.log('condition- mapping資料庫前', condition);
+        return condition;
+    }
+    setListData(movieData, optionsData) {
+        let listData = [];
+        console.log('optionsData', optionsData);
+        if (movieData.length) {
+            movieData.forEach((movie) => {
+                let obj = {
+                    _id: movie._id,
+                    status: movie.status,
+                    title: movie.title,
+                    genreName: this.getOptionTransListName(movie.genre, optionsData.genre),
+                    rateName: (optionsData.rate.filter(val => val.value === movie.rate)[0]).name,
+                    releaseDate: movie.releaseDate,
+                    provideVersionName: this.getOptionTransListName(movie.provideVersion, optionsData.provideVersion),
+                };
+                listData.push(obj);
+            });
+        }
+        ;
+        return listData;
+    }
+    getOptionTransListName(valueList, optionData) {
+        let nameList = [];
+        valueList.forEach((value) => {
+            let name = (optionData.filter((option) => option.value === value)[0]).name;
+            nameList.push(name);
+        });
+        return nameList;
     }
 }
 exports.default = new MovieController();
