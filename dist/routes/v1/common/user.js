@@ -12,5 +12,5 @@ const error_1 = __importDefault(require("../../../service/error"));
 const auth_1 = __importDefault(require("../../../service/auth"));
 router.get('/profile/:staffId', auth_1.default.isEmpAuth, auth_1.default.isOwnerAuth, error_1.default.handleErrorAsync(user_1.default.getUserProfile));
 router.post('/profile', auth_1.default.isEmpAuth, auth_1.default.isOwnerAuth, error_1.default.handleErrorAsync(user_1.default.changeUserName));
-router.post('/sticker/:staffId', auth_1.default.isEmpAuth, auth_1.default.isOwnerAuth, upload_1.default.photoValidator, error_1.default.handleErrorAsync(upload_1.default.upload), error_1.default.handleErrorAsync(user_1.default.changeSticker));
+router.post('/sticker/:staffId', auth_1.default.isEmpAuth, auth_1.default.isOwnerAuth, upload_1.default.photoValidator, error_1.default.handleErrorAsync(upload_1.default.upload), error_1.default.handleErrorAsync(user_1.default.updateSticker));
 exports.CommonUserRouter = router;

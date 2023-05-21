@@ -14,22 +14,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const moviesModels_1 = __importDefault(require("../../models/manager/moviesModels"));
 const error_1 = __importDefault(require("./../../service/error"));
+const optionsModels_1 = __importDefault(require("../../models/common/optionsModels"));
 class MovieController {
     constructor() {
         this.getInfo = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-            let movieId = req.params.id;
+            let movieId = req.params["id"];
             console.log('movieId', movieId);
-            const movie = yield moviesModels_1.default.findOne({ id: movieId });
-            console.log('movie', movie);
-            if (!movie) {
+            const movieData = yield moviesModels_1.default.findOne({ _id: movieId });
+            console.log('movieData', movieData);
+            if (!movieData) {
                 return next(error_1.default.appError(404, "沒有這筆電影資料！", next));
+            }
+            ;
+            try {
+                movieData.genreName = (yield this.getMultiOptionName(1, movieData.genre, next));
+                movieData.provideVersionName = (yield this.getMultiOptionName(2, movieData.provideVersion, next));
+                movieData.rateName = yield this.getSingleOptionName(3, movieData.rate, next);
+                movieData.statusName = yield this.getSingleOptionName(4, movieData.status, next);
+            }
+            catch (err) {
+                return next(error_1.default.appError(422, "查詢選項代碼過程發生錯誤！", next));
             }
             ;
             try {
                 res.status(200).json({
                     code: 1,
                     message: "成功取得電影資料!",
-                    data: movie
+                    data: movieData
                 });
             }
             catch (err) {
@@ -37,6 +48,34 @@ class MovieController {
                     code: -1,
                     message: err.message || "取得電影資料錯誤(其它)!",
                 });
+            }
+            ;
+        });
+        this.getSingleOptionName = (typeId, value, next) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const optionData = yield optionsModels_1.default.findOne({ typeId, value });
+                if (optionData) {
+                    return optionData.name;
+                }
+                else {
+                    return next(error_1.default.appError(401, "請輸入要查詢的選項欄位代碼！", next));
+                }
+                ;
+            }
+            catch (err) {
+                return next(error_1.default.appError(422, "查詢選項代碼過程發生錯誤！", next));
+            }
+            ;
+        });
+        this.getMultiOptionName = (typeId, values, next) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const optionData = yield optionsModels_1.default.find({ typeId, value: { $in: values } });
+                const optionNames = optionData.map((option) => option.name);
+                console.log('optionNames', optionNames);
+                return optionNames;
+            }
+            catch (err) {
+                return next(error_1.default.appError(422, "查詢選項代碼過程發生錯誤！", next));
             }
             ;
         });

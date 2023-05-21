@@ -6,13 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const moviesSchema = new mongoose_1.default.Schema({
     _id: {
-        type: String,
+        type: mongoose_1.default.Types.ObjectId,
         required: false,
-        select: false,
-    },
-    id: {
-        type: String,
-        required: true,
+        select: true,
     },
     title: {
         type: String,
@@ -29,6 +25,12 @@ const moviesSchema = new mongoose_1.default.Schema({
             }],
         required: true
     },
+    genreName: {
+        type: [{
+                type: String
+            }],
+        required: false
+    },
     runTime: {
         type: Number,
         required: true,
@@ -37,8 +39,13 @@ const moviesSchema = new mongoose_1.default.Schema({
     },
     provideVersion: {
         type: [{
-                type: Number,
-                enum: [1, 2, 3, 4]
+                type: Number
+            }],
+        required: true
+    },
+    provideVersionName: {
+        type: [{
+                type: String,
             }],
         required: true
     },
@@ -46,6 +53,10 @@ const moviesSchema = new mongoose_1.default.Schema({
         type: Number,
         enum: [0, 6, 12, 15, 18],
         required: true
+    },
+    rateName: {
+        type: String,
+        required: false
     },
     director: {
         type: String,
@@ -65,6 +76,10 @@ const moviesSchema = new mongoose_1.default.Schema({
         type: Number,
         enum: [-1, 0, 1],
         required: true
+    },
+    statusName: {
+        type: String,
+        required: false
     },
     releaseDate: {
         type: Date,

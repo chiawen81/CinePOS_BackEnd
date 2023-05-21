@@ -2,13 +2,9 @@ import mongoose from "mongoose";
 
 const moviesSchema = new mongoose.Schema({
     _id: {
-        type: String,
+        type: mongoose.Types.ObjectId,
         required: false,
-        select: false,
-    },
-    id: {
-        type: String,
-        required: true,
+        select: true,
     },
     title: {
         type: String,
@@ -25,6 +21,12 @@ const moviesSchema = new mongoose.Schema({
         }],
         required: true
     },
+    genreName: {
+        type: [{
+            type: String
+        }],
+        required: false
+    },
     runTime: {
         type: Number,
         required: true,
@@ -33,8 +35,14 @@ const moviesSchema = new mongoose.Schema({
     },
     provideVersion: {
         type: [{
-            type: Number,
-            enum: [1, 2, 3, 4]
+            type: Number
+        }],
+        required: true
+    },
+    provideVersionName: {
+        type: [{
+            type: String,
+            // enum: [1, 2, 3, 4]
         }],
         required: true
     },
@@ -42,6 +50,10 @@ const moviesSchema = new mongoose.Schema({
         type: Number,
         enum: [0, 6, 12, 15, 18],
         required: true
+    },
+    rateName: {
+        type: String,
+        required: false
     },
     director: {
         type: String,
@@ -61,6 +73,10 @@ const moviesSchema = new mongoose.Schema({
         type: Number,
         enum: [-1, 0, 1],
         required: true
+    },
+    statusName: {
+        type: String,
+        required: false
     },
     releaseDate: {
         type: Date,

@@ -1,10 +1,13 @@
 const jwt = require('jsonwebtoken');
 import ErrorService from '../service/error';
 import User from '../models/common/usersModels';
+import { NextFunction, Request, Response } from 'express';
+import { LoginReq } from '../interface/swagger-model/loginReq';
+import { LoginRes } from '../interface/swagger-model/loginRes';
 
 class AuthService {
     // ——————————  產生JWT token——————————
-    sendBackJWT = (reqData, res, statusCode) => {
+    sendBackJWT = (reqData, res: Response, statusCode: number) => {
         console.log(reqData._id)
         let data = {
             id: reqData._id,
@@ -33,7 +36,7 @@ class AuthService {
 
 
     // ——————————  JWT驗證  ——————————
-    isEmpAuth = ErrorService.handleErrorAsync(async (req, res, next) => {
+    isEmpAuth = ErrorService.handleErrorAsync(async (req: Request<{}, LoginRes, LoginReq, null, {}>, res: Response, next: NextFunction) => {
         // 取得Client端的JWT token   
         console.log('req', req);
         let token;
@@ -59,7 +62,7 @@ class AuthService {
         console.log('decodedClientData', decodedClientData);
 
         if (decodedClientData.staffId) {
-            req.JWTInfo = decodedClientData;        // 將JWT解碼後的資料放入req.JWTBody
+            req["JWTInfo"] = decodedClientData;        // 將JWT解碼後的資料放入req.JWTBody
             next();
 
         } else {

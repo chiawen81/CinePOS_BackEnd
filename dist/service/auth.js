@@ -61,7 +61,7 @@ class AuthService {
             });
             console.log('decodedClientData', decodedClientData);
             if (decodedClientData.staffId) {
-                req.JWTInfo = decodedClientData;
+                req["JWTInfo"] = decodedClientData;
                 next();
             }
             else {
