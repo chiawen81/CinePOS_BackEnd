@@ -2,8 +2,8 @@ const jwt = require('jsonwebtoken');
 import ErrorService from '../service/error';
 import User from '../models/common/usersModels';
 import { NextFunction, Request, Response } from 'express';
-import { LoginReq } from 'src/interface/swagger-model/loginReq';
-import { LoginRes } from 'src/interface/swagger-model/loginRes';
+import { LoginReq } from '../interface/swagger-model/loginReq';
+import { LoginRes } from '../interface/swagger-model/loginRes';
 
 class AuthService {
     // ——————————  產生JWT token——————————
