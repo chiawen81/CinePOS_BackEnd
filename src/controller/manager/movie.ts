@@ -5,6 +5,7 @@ import Option from '../../models/common/optionsModels';
 import { MovieDetailGetInfoSuccess } from 'src/interface/swagger-model/movieDetailGetInfoSuccess';
 import { MovieDetailCreateParameter } from 'src/interface/swagger-model/movieDetailCreateParameter';
 import { MovieDetailCreateSuccess } from 'src/interface/swagger-model/movieDetailCreateSuccess';
+import { CommonOptionSuccessDataItem } from 'src/interface/swagger-model/commonOptionSuccessDataItem';
 
 
 
@@ -182,6 +183,7 @@ class MovieController {
     // 列表- 取得資訊
     getList = async (req: Request<{}, any, any, any, {}>, res: Response, next: NextFunction) => {
         console.log('抓到路由- list');
+
         try {
             // 驗證前端參數
             let queryData = this.getListQuery(req.query);
@@ -193,32 +195,21 @@ class MovieController {
                 });
             };
 
-            // let isNoCondition = !query.title && !query.searchDateS && !query.searchDateE && !query.status;
-            let condition = {};
-            if (queryData.title) {
-                condition["title"] = queryData.title;
-            };
-
-            if (queryData.searchDateS && queryData.searchDateE) {
-                condition["releaseDate"] = {
-                    $gte: queryData.searchDateS,
-                    $lte: queryData.searchDateE
-                };
-            };
-
-            if (queryData.status) {
-                condition["status"] = queryData.status;
-            };
-            console.log('condition', condition);
-
+            // 取得電影列表資料
+            let condition = this.getListCondition(queryData);
             let movieData = await Movie.find(condition ?? {});
-            let resMsg = movieData.length ? "成功查詢資料！" : "沒有符合條件的資料！";
-            let listData = this.getlistData(movieData);
+            let optionsData = {
+                genre: await Option.find({ typeId: 1 }),
+                provideVersion: await Option.find({ typeId: 2 }),
+                rate: await Option.find({ typeId: 3 }),
+                status: await Option.find({ typeId: 4 }),
+            };
+            let listData = this.setListData(movieData, optionsData);
             console.log('movieData', movieData, 'listData', listData);
 
             res.status(200).json({
                 code: 1,
-                message: resMsg,
+                message: movieData.length ? "成功查詢資料！" : "沒有符合條件的資料！",
                 data: listData
             });
 
@@ -231,27 +222,6 @@ class MovieController {
     }
 
 
-    // 列表- 整理列表資料
-    getlistData(movieData: any) {
-        let listData: any[] = [];
-        if (movieData.length) {
-            movieData.forEach((movie) => {
-                let obj = {
-                    _id: movie._id,
-                    status: movie.status,
-                    title: movie.title,
-                    genreName: [],// ====待處理====
-                    rateName: "",// ====待處理====
-                    releaseDate: movie.releaseDate,
-                    provideVersionName: [],// ====待處理====
-                };
-                listData.push(obj);
-            });
-        };
-
-        return listData;
-    }
-
 
     // 列表- 取得查詢條件
     getListQuery(data: any) {
@@ -262,7 +232,7 @@ class MovieController {
             searchDateE: data.searchDateE,
             status: data.status ? Number(data.status) : null
         };
-
+        console.log('getListQuery', condition);
         return condition;
     }
 
@@ -283,6 +253,7 @@ class MovieController {
         };
 
         // 狀態驗證
+        console.log('String(data.status) !== "null"', String(data.status) !== "null", String(data.status));
         if (String(data.status) !== "null") {
             console.log(String(data.status))
             if ((data.status !== -1) && (data.status !== 0) && (data.status !== 1)) {
@@ -295,8 +266,68 @@ class MovieController {
     }
 
 
+    // 列表- 取得查詢條件（準備和資料庫比對）
+    getListCondition(queryData: any) {
+        console.log('queryData', queryData);
+        let condition = {};
+
+        if (queryData.title) {
+            condition["title"] = queryData.title;
+        };
+
+        if (queryData.searchDateS && queryData.searchDateE) {
+            condition["releaseDate"] = {
+                $gte: queryData.searchDateS,
+                $lte: queryData.searchDateE
+            };
+        };
+
+        if (queryData.status !== null) {
+            condition["status"] = queryData.status;
+        };
+
+        console.log('condition- mapping資料庫前', condition);
+        return condition;
+    }
 
 
+
+    // 列表- 整理列表資料   // ====待優化====
+    setListData(movieData: any, optionsData: any) {
+        let listData: any[] = [];
+        console.log('optionsData', optionsData);
+
+        if (movieData.length) {
+            movieData.forEach((movie) => {
+                let obj = {
+                    _id: movie._id,
+                    status: movie.status,
+                    title: movie.title,
+                    genreName: this.getOptionTransListName(movie.genre, optionsData.genre),
+                    rateName: (optionsData.rate.filter(val => val.value === movie.rate)[0]).name,
+                    releaseDate: movie.releaseDate,
+                    provideVersionName: this.getOptionTransListName(movie.provideVersion, optionsData.provideVersion),
+                };
+                listData.push(obj);
+            });
+        };
+
+        return listData;
+    }
+
+
+
+    // 取得選項中文名稱（多個）
+    getOptionTransListName(valueList: number[], optionData: CommonOptionSuccessDataItem[]): string[] {
+        let nameList: string[] = [];
+
+        valueList.forEach((value) => {
+            let name = (optionData.filter((option) => option.value === value)[0]).name;
+            nameList.push(name);
+        });
+
+        return nameList;
+    }
 
 
 }

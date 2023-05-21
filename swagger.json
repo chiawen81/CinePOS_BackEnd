@@ -1045,7 +1045,7 @@
                 "items": {
                     "type": "object",
                     "properties": {
-                        "id": {
+                        "_id": {
                             "type": "string",
                             "example": "3B7D5B63-8EA3-449A-9E0E-6974BE9C3DB8",
                             "description": "電影編號"
