@@ -7,11 +7,11 @@ import Movie from './manager/moviesModels';
 const timetableSchema = new mongoose.Schema({
   movieId: { type: Schema.Types.ObjectId, ref: Movie },
   theaterId: { type: Schema.Types.ObjectId, ref: Theater },
-  startTime: {
+  startDate: {
     type: Date,
     required: true
   },
-  endTime: {
+  endDate: {
     type: Date,
     required: true
   },

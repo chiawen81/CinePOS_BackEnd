@@ -10,21 +10,21 @@ class TimetableController {
   /** 取得時刻表 */
   getList = async (req, res, next: NextFunction) => {
     console.log("get timetable list");
-    const startTime:number = Number(req.query.startTime); // timestamp
-    const endTime:number = Number(req.query.endTime); // timestamp
+    const startDate: number = Number(req.query.startDate); // timestamp
+    const endDate: number = Number(req.query.endDate); // timestamp
 
 
     // 驗證欄位
-    if (!startTime || !endTime) {
+    if (!startDate || !endDate) {
       return next(ErrorService.appError(400, "缺少必要欄位", next));
     };
 
     try {
       const timetable = await Timetable.find(
         {
-          startTime: {
-            $gte: new Date(startTime),
-            $lte: new Date(endTime),
+          startDate: {
+            $gte: new Date(startDate),
+            $lte: new Date(endDate),
           },
         }        // 條件
       )
@@ -38,8 +38,8 @@ class TimetableController {
           path: 'theaterId',
           select: 'name'
         })
-        // .sort('startDate') //照時間排序
-        // .exec();
+      // .sort('startDate') //照時間排序
+      // .exec();
       console.log('timetable', timetable);
       res.status(200).json({
         code: 1,
@@ -54,9 +54,9 @@ class TimetableController {
   }
 
   /** 更新時刻表 */
-  create = async (req, res, next) => {
+  create = async (req: { body: TimetableCreateRequest }, res, next) => {
     console.log("create timetable entry");
-    const request = req.body;
+    const request: TimetableCreateRequest = req.body;
     console.log(request);
 
     // 驗證欄位
@@ -65,7 +65,14 @@ class TimetableController {
     }
 
     try {
-      const timetable = await Timetable.create(request);
+      const timetable = await Timetable.create(
+        {
+          movieId: request.movieId,
+          theaterId: request.theaterId,
+          startDate: new Date(request.startDate),
+          endDate: new Date(request.endDate),
+        }
+      );
       await timetable.save();
       res.status(200).json({
         code: 1,
@@ -80,14 +87,11 @@ class TimetableController {
   };
 
   /** 更新時刻表 */
-  update = async (req, res, next: NextFunction) => {
+  update = async (req: { body: TimetableUpdateRequest }, res, next: NextFunction) => {
     console.log("update all timetable entries");
     const timetable = req.body;
     const id = timetable._id;
-    // update 的日期範圍
-    // const startDate = req.body.startDate;
-    // update 的日期範圍
-    // const endDate = req.body.endDate;
+
     console.log(timetable);
 
     // 驗證欄位
@@ -98,11 +102,14 @@ class TimetableController {
     try {
 
       const updatedTimetable = await Timetable.findByIdAndUpdate(
-        id, timetable,
+        id, {
+          movieId: timetable.movieId,
+          theaterId: timetable.theaterId,
+          startDate: new Date(timetable.startDate),
+          endDate: new Date(timetable.endDate),
+        },
         { new: true }
       );
-
-
 
       res.status(200).json({
         code: 1,
@@ -148,3 +155,18 @@ class TimetableController {
 
 
 export default new TimetableController();
+
+export interface TimetableCreateRequest {
+  movieId: string,
+  theaterId: string,
+  startDate: Date,
+  endDate: Date
+}
+
+export interface TimetableUpdateRequest {
+  _id: string,
+  movieId: string,
+  theaterId: string,
+  startDate: Date,
+  endDate: Date
+}
