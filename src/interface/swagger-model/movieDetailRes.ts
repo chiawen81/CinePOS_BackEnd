@@ -49,7 +49,7 @@ export interface MovieDetailRes {
      */
     rate?: number;
     /**
-     * 輔12
+     * 分級制度文字
      */
     rateName?: string;
     /**

@@ -699,7 +699,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/MovieDetailCreateParameter"
+                                "$ref": "#/components/schemas/MovieDetailUpdateParameter"
                             }
                         }
                     },
@@ -1284,6 +1284,98 @@
                 ],
                 "type": "object",
                 "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "電影中文名"
+                    },
+                    "enTitle": {
+                        "type": "string",
+                        "description": "電影英文名"
+                    },
+                    "genre": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "電影類型(1：動作,2：冒險,3：喜劇,4：劇情,5：恐怖,6：科幻,7：浪漫愛情,8：動畫,9：紀錄片,10：音樂,11:懸疑,12:驚悚,13:犯罪)"
+                    },
+                    "runtime": {
+                        "type": "number",
+                        "description": "片長"
+                    },
+                    "provideVersion": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "支援設備(1:2D,2:3D,3:IMAX,4:4DX)"
+                    },
+                    "rate": {
+                        "type": "number",
+                        "description": "分級制度(0: 普通級,6: 保護級,12: 輔導十二級,15 : 輔導十五級,18: 限制級)"
+                    },
+                    "director": {
+                        "type": "string",
+                        "description": "導演"
+                    },
+                    "cast": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "演員"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "電影簡介"
+                    },
+                    "status": {
+                        "type": "number",
+                        "description": "上映狀態(-1: 已下檔(下線) / 0: 尚未發佈(籌備中) / 1: 已發佈(上映中))"
+                    },
+                    "releaseDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "發行日期"
+                    },
+                    "trailerLink": {
+                        "type": "string",
+                        "description": "預告片連結"
+                    },
+                    "distributor": {
+                        "type": "string",
+                        "description": "發行商"
+                    },
+                    "posterUrl": {
+                        "type": "string",
+                        "description": "海報連結"
+                    }
+                }
+            },
+            "MovieDetailUpdateParameter": {
+                "required": [
+                    "_id",
+                    "genre",
+                    "posterUrl",
+                    "provideVersion",
+                    "rate",
+                    "releaseDate",
+                    "runtime",
+                    "status",
+                    "title"
+                ],
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "系統編號",
+                        "example": "3B7D5B63-8EA3-449A-9E0E-6974BE9C3DB8"
+                    },
                     "title": {
                         "type": "string",
                         "description": "電影中文名"

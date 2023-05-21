@@ -6,6 +6,9 @@ import { MovieDetailGetInfoSuccess } from 'src/interface/swagger-model/movieDeta
 import { MovieDetailCreateParameter } from 'src/interface/swagger-model/movieDetailCreateParameter';
 import { MovieDetailCreateSuccess } from 'src/interface/swagger-model/movieDetailCreateSuccess';
 import { CommonOptionSuccessDataItem } from 'src/interface/swagger-model/commonOptionSuccessDataItem';
+import { ManagerMovieListSuccess } from 'src/interface/swagger-model/managerMovieListSuccess';
+import { ManagerMovieListPara } from 'src/interface/manager';
+import { ManagerMovieListSuccessDataInner } from 'src/interface/swagger-model/models';
 
 
 
@@ -181,7 +184,7 @@ class MovieController {
 
     // ———————————————————————  查詢電影列表  ———————————————————————
     // 列表- 取得資訊
-    getList = async (req: Request<{}, any, any, any, {}>, res: Response, next: NextFunction) => {
+    getList = async (req: Request<{}, ManagerMovieListSuccess, {}, {}, {}>, res: Response, next: NextFunction) => {
         console.log('抓到路由- list');
 
         try {
@@ -224,7 +227,7 @@ class MovieController {
 
 
     // 列表- 取得查詢條件
-    getListQuery(data: any) {
+    getListQuery(data: any): ManagerMovieListPara {
         console.log('data', data);
         let condition = {
             title: data.title,
@@ -239,7 +242,7 @@ class MovieController {
 
 
     // 列表- 取得驗證錯誤的訊息
-    getListQueryValidatorErrMsg(data: any): string {
+    getListQueryValidatorErrMsg(data: ManagerMovieListPara): string {
         let errMsg: string = "";
 
         // 日期驗證（比大小）
@@ -261,13 +264,13 @@ class MovieController {
             };
         };
 
-
         return errMsg;
     }
 
 
+
     // 列表- 取得查詢條件（準備和資料庫比對）
-    getListCondition(queryData: any) {
+    getListCondition(queryData: ManagerMovieListPara): ManagerMovieListPara {
         console.log('queryData', queryData);
         let condition = {};
 
@@ -293,15 +296,15 @@ class MovieController {
 
 
     // 列表- 整理列表資料   // ====待優化====
-    setListData(movieData: any, optionsData: any) {
-        let listData: any[] = [];
+    setListData(movieData: any, optionsData: any): ManagerMovieListSuccessDataInner[] {
+        let listData: ManagerMovieListSuccessDataInner[] = [];
         console.log('optionsData', optionsData);
 
         if (movieData.length) {
             movieData.forEach((movie) => {
-                let obj = {
-                    _id: movie._id,
-                    status: (optionsData.status.filter(val => val.value === movie.status))[0].name,
+                let obj: ManagerMovieListSuccessDataInner = {
+                    _id: movie.id,
+                    statusName: (optionsData.status.filter(val => val.value === movie.status))[0].name,
                     title: movie.title,
                     genreName: this.getOptionTransListName(movie.genre, optionsData.genre),
                     rateName: (optionsData.rate.filter(val => val.value === movie.rate))[0].name,

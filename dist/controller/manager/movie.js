@@ -243,8 +243,8 @@ class MovieController {
         if (movieData.length) {
             movieData.forEach((movie) => {
                 let obj = {
-                    _id: movie._id,
-                    status: (optionsData.status.filter(val => val.value === movie.status))[0].name,
+                    _id: movie.id,
+                    statusName: (optionsData.status.filter(val => val.value === movie.status))[0].name,
                     title: movie.title,
                     genreName: this.getOptionTransListName(movie.genre, optionsData.genre),
                     rateName: (optionsData.rate.filter(val => val.value === movie.rate))[0].name,

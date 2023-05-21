@@ -9,7 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ManagerMovieListSuccessDataInner } from './managerMovieListSuccessDataInner';
 
-export interface CommonUploadReqBody { 
-    upload?: Blob;
+export interface ManagerMovieListSuccessData extends Array<ManagerMovieListSuccessDataInner> { 
 }
