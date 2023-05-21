@@ -21,7 +21,7 @@ class UserController {
         this.getUserProfile = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             console.log("getUserProfile");
             try {
-                const { staffId } = req.user;
+                const { staffId } = req["user"];
                 let role = (req.originalUrl.split('/')[2] === "manager") ? "manager" : "staff";
                 const user = yield usersModels_1.default.findOne({ staffId, role }).select('+password');
                 res.status(200).json({
@@ -48,8 +48,8 @@ class UserController {
         });
         this.changeUserName = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             console.log("抓到路由- profile");
-            const { newName } = req.body;
-            const { staffId } = req.user;
+            let newName = req.body["newName"];
+            let staffId = req["user"].staffId;
             console.log('newName', newName, 'staffId', staffId);
             if (!validator_1.default.isLength(newName, { min: 2 })) {
                 return next(error_1.default.appError(401, "姓名欄位驗證錯誤！", next));
@@ -85,28 +85,25 @@ class UserController {
             }
             ;
         });
-        this.changeSticker = function changeSticker(req, res, next) {
+        this.updateSticker = function changeSticker(req, res, next) {
             return __awaiter(this, void 0, void 0, function* () {
                 console.log('自訂義程式(更新大頭貼) 之我接到囉～');
-                console.log('req.fileData', req.fileData);
-                console.log('req.user', req.user);
+                console.log('req.fileData', req["fileData"]);
+                console.log('req.user', req["user"]);
                 try {
                     let updateData = {
-                        stickerUrl: req.fileData.imgUrl,
-                        stickerFileName: req.fileData.fileName
+                        fileName: req["fileData"].fileName,
+                        fileUrl: req["fileData"].fileUrl,
                     };
-                    let condition = { staffId: req.user.staffId };
+                    let condition = { staffId: req["user"].staffId };
                     const updatedUser = yield usersModels_1.default.findOneAndUpdate(condition, updateData, { new: true });
                     console.log('updatedUser ', updatedUser);
                     res.send({
                         code: 1,
                         message: '上傳成功！',
-                        data: {
-                            stickerFileName: updateData.stickerFileName,
-                            stickerUrl: updateData.stickerUrl,
-                        }
+                        data: updateData
                     });
-                    upload_1.default.deleteFile(req, res, next, req.user.stickerFileName);
+                    upload_1.default.deleteFile(req, res, next, req["user."].stickerFileName);
                 }
                 catch (err) {
                     res.status(500).json({ error: err.message });
