@@ -28,7 +28,7 @@ const moviesSchema = new mongoose.Schema({
         }],
         required: false
     },
-    runTime: {
+    runtime: {
         type: Number,
         required: true,
         min: 60,
@@ -42,8 +42,7 @@ const moviesSchema = new mongoose.Schema({
     },
     provideVersionName: {
         type: [{
-            type: String,
-            // enum: [1, 2, 3, 4]
+            type: String
         }],
         required: true
     },
