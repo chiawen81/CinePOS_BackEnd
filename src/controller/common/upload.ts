@@ -2,8 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 import firebaseAdmin from '../../service/firebase-admin';
 import multer from 'multer';
 import ErrorService from "./../../service/error";
-import { CommonUploadSuccess } from 'src/interface/swagger-model/commonUploadSuccess';
-import { CommonUploadReqBody } from 'src/interface/swagger-model/commonUploadReqBody';
+import { CommonUploadSuccess } from '../../interface/swagger-model/commonUploadSuccess';
+import { CommonUploadReqBody } from '../../interface/swagger-model/commonUploadReqBody';
+
 const uuid = require('uuid');
 
 class UploadController {
