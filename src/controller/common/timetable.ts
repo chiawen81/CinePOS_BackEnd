@@ -1,6 +1,4 @@
 import Timetable from '../../models/timetable.model';
-// import Theater from '../../models/theater.model';
-// import Movie from '../../models/movie.model';
 import ErrorService from './../../service/error';
 import { NextFunction } from "express";
 
@@ -30,19 +28,19 @@ class TimetableController {
           },
         }        // 條件
       )
-        // .populate(
-        //   {
-        //     path: 'movie',
-        //     select: '_id title rate runtime'
-        //   }
-        // )
-        // .populate({
-        //   path: 'theater',
-        //   select: '_id'
-        // })
-        .sort('startDate') //照時間排序
-        .exec();
-      console.log('timetable ', timetable);
+        .populate(
+          {
+            path: 'movieId',
+            select: 'title rate runtime'
+          }
+        )
+        .populate({
+          path: 'theaterId',
+          select: 'name'
+        })
+        // .sort('startDate') //照時間排序
+        // .exec();
+      console.log('timetable', timetable);
       res.status(200).json({
         code: 1,
         message: "成功",
@@ -68,7 +66,7 @@ class TimetableController {
 
     try {
       const timetable = await Timetable.create(request);
-      // await timetable.save();
+      await timetable.save();
       res.status(200).json({
         code: 1,
         message: "成功",

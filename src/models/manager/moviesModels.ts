@@ -1,15 +1,17 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const moviesSchema = new mongoose.Schema({
-    _id: {
-        type: String,
-        required: false,
-        select: false,
-    },
-    id: {
-        type: String,
-        required: true,
-    },
+const moviesSchema = new Schema({
+    // _id: {
+    //     type: String,
+    //     required: false,
+    //     select: false,
+    // },
+    // id: {
+    //     type: String,
+    //     required: true,
+    // },
     title: {
         type: String,
         required: true,
@@ -97,6 +99,6 @@ const moviesSchema = new mongoose.Schema({
     }
 });
 
-var Movie = mongoose.model('Movie', moviesSchema);
+const Movie = mongoose.model('Movie', moviesSchema);
 
 export default Movie;
