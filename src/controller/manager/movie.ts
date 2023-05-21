@@ -301,10 +301,10 @@ class MovieController {
             movieData.forEach((movie) => {
                 let obj = {
                     _id: movie._id,
-                    status: movie.status,
+                    status: (optionsData.status.filter(val => val.value === movie.status))[0].name,
                     title: movie.title,
                     genreName: this.getOptionTransListName(movie.genre, optionsData.genre),
-                    rateName: (optionsData.rate.filter(val => val.value === movie.rate)[0]).name,
+                    rateName: (optionsData.rate.filter(val => val.value === movie.rate))[0].name,
                     releaseDate: movie.releaseDate,
                     provideVersionName: this.getOptionTransListName(movie.provideVersion, optionsData.provideVersion),
                 };
