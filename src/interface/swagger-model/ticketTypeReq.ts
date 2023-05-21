@@ -10,6 +10,13 @@
  * Do not edit the class manually.
  */
 
-export interface CommonUploadReqBody { 
-    upload?: Blob;
+export interface TicketTypeReq { 
+    /**
+     * 票種名稱
+     */
+    type: string;
+    /**
+     * 票價
+     */
+    price: number;
 }
