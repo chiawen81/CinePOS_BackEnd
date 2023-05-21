@@ -1133,7 +1133,7 @@
             "MovieDetailRes": {
                 "type": "object",
                 "properties": {
-                    "id": {
+                    "_id": {
                         "type": "string",
                         "example": "3B7D5B63-8EA3-449A-9E0E-6974BE9C3DB8",
                         "description": "電影編號"
@@ -1274,7 +1274,6 @@
             "MovieDetailCreateParameter": {
                 "required": [
                     "genre",
-                    "id",
                     "posterUrl",
                     "provideVersion",
                     "rate",
@@ -1285,10 +1284,6 @@
                 ],
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "string",
-                        "description": "電影編號"
-                    },
                     "title": {
                         "type": "string",
                         "description": "電影中文名"
