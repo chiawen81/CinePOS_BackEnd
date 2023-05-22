@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-import TicketTypeController from '../../../controller/staff/ticketTypeController';
+import TicketTypeController from '../../../controller/staff/ticketType.controller';
 import ErrorService from '../../../service/error';
 import AuthService from '../../../service/auth';
 

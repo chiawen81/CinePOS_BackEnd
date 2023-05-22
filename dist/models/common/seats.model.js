@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
-const SeatsSchema = new mongoose_1.default.Schema({
+const mongoose = require('mongoose');
+const SeatsSchema = new mongoose.Schema({
     scheduleId: {
         type: String,
         required: [true, '場次ID必填']
@@ -38,5 +35,5 @@ const SeatsSchema = new mongoose_1.default.Schema({
 }, {
     versionKey: false
 });
-var Seat = mongoose_1.default.model('seats', SeatsSchema);
+var Seat = mongoose.model('seats', SeatsSchema);
 exports.default = Seat;
