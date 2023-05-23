@@ -10,7 +10,7 @@ const theaterSchema = new Schema({
         type: Number,
         default: null
     },
-    type: String,
+    type: Number,
     totalCapacity: {
         type: Number,
         required: true
