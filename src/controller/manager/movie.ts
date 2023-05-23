@@ -17,10 +17,6 @@ class MovieController {
 
     }
 
-
-
-
-
     // ———————————————————————  取得資料  ———————————————————————
     getInfo = async (req: Request<{}, MovieDetailGetInfoSuccess, null, string, {}>, res: Response, next: NextFunction) => {
         let movieId = req.params["id"];
