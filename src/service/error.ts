@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ErrorInfo } from "../interface/common/error-info";
+import { ErrorResErrorDev } from "src/interface/common/error-resErrorDev";
 
 class ErrorService {
 
@@ -37,9 +38,10 @@ class ErrorService {
 
     // ——————————  設定錯誤訊息  ——————————
     appError = (httpStatus: number, errMessage: string, next: NextFunction) => {
-        const error: any = new Error(errMessage);
+        const error: ErrorInfo = new Error(errMessage);
         error.statusCode = httpStatus;
         error.isOperational = true;
+        error.errMessage = errMessage;
         console.log('appError', httpStatus, errMessage);
         next(error);
     }
@@ -61,7 +63,7 @@ class ErrorService {
             // 送出罐頭預設訊息
             res.status(500).json({
                 code: -1,
-                message: '系統錯誤，請恰系統管理員'
+                message: err.message || '系統錯誤，請恰系統管理員'
             });
         }
     };
@@ -71,7 +73,7 @@ class ErrorService {
     // ——————————  開發環境錯誤  ——————————
     resErrorDev = (err: ErrorInfo, res: Response, req: Request) => {
         console.log('resErrorDev');
-        let error = {
+        let error: ErrorResErrorDev = {
             statusCode: err.statusCode,
             status: err.statusCode,
             body: req.body,

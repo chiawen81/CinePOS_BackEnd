@@ -14,6 +14,7 @@ class ErrorService {
             const error = new Error(errMessage);
             error.statusCode = httpStatus;
             error.isOperational = true;
+            error.errMessage = errMessage;
             console.log('appError', httpStatus, errMessage);
             next(error);
         };
@@ -29,7 +30,7 @@ class ErrorService {
                 console.error('出現重大錯誤', err);
                 res.status(500).json({
                     code: -1,
-                    message: '系統錯誤，請恰系統管理員'
+                    message: err.message || '系統錯誤，請恰系統管理員'
                 });
             }
         };

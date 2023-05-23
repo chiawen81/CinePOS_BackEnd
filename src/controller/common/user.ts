@@ -1,25 +1,64 @@
 import validator from "validator";
 import User from '../../models/common/usersModels';
 import ErrorService from './../../service/error';
-import { NextFunction } from "express";
+import UploadController from "./../../controller/common/upload";
+import { InfoUpdateReq } from "src/interface/swagger-model/infoUpdateReq";
+import { InfoUpdateRes } from "src/interface/swagger-model/infoUpdateRes";
+import { Request, NextFunction, Response } from 'express';
+import { CommonUploadSuccess } from "src/interface/swagger-model/commonUploadSuccess";
+import { CommonUploadReqBody } from "src/interface/swagger-model/commonUploadReqBody";
+import { UserProfileRes } from "src/interface/swagger-model/userProfileRes";
 
 class UserController {
     constructor() {
 
     }
 
-    // 更新使用者姓名
-    changeUserName = async (req, res, next: NextFunction) => {
+    // ———————————————————————  取得使用者資料  ———————————————————————
+    getUserProfile = async (req: Request<{}, UserProfileRes, {}, string, {}>, res, next: NextFunction) => {
+        console.log("getUserProfile");
+        try {
+            const { staffId } = req["user"];
+            let role = (req.originalUrl.split('/')[2] === "manager") ? "manager" : "staff";
+            const user = await User.findOne({ staffId, role }).select('+password');
+            res.status(200).json({
+                code: 1,
+                message: "成功取得使用者資料!",
+                data: {
+                    staffId: user.staffId,
+                    name: user.name,
+                    role: user.role,
+                    status: user.status,
+                    stickerUrl: user.stickerUrl,
+                    stickerFileName: user.stickerFileName,
+                    createdAt: user.createdAt,
+                }
+            });
+
+        } catch (err) {
+            res.status(500).json({
+                code: -1,
+                message: err.message || "取得使用者資料(其它)!",
+            });
+        };
+    }
+
+
+
+
+
+    // ———————————————————————  更新使用者姓名  ———————————————————————
+    changeUserName = async (req: Request<{}, InfoUpdateRes, InfoUpdateReq, null, {}>, res: Response, next: NextFunction) => {
         console.log("抓到路由- profile");
-        const { newName } = req.body;
-        const { staffId } = req.user;
+        let newName = req.body["newName"];
+        let staffId = req["user"].staffId;
         console.log('newName', newName, 'staffId', staffId);
 
         // 驗證欄位
         if (!validator.isLength(newName, { min: 2 })) {
             return next(ErrorService.appError(401, "姓名欄位驗證錯誤！", next));
         };
-        console.log(req.originalUrl.split('/'));
+
         let role = (req.originalUrl.split('/')[2] === "manager") ? "manager" : "staff";
         const user = await User.findOne({ staffId, role }).select('+password');
 
@@ -48,18 +87,69 @@ class UserController {
                 }
             });
         } catch (err) {
+            res.status(500).json({
+                code: -1,
+                message: err.message || "更新姓名錯誤(其它)!",
+            });
+        };
+    }
+
+
+
+
+
+    // ———————————————————————  更新大頭貼  ———————————————————————
+    updateSticker = async function changeSticker(req: Request<{}, CommonUploadSuccess, CommonUploadReqBody, string, {}>, res: Response, next: NextFunction) {
+        console.log('自訂義程式(更新大頭貼) 之我接到囉～');
+        console.log('req.fileData', req["fileData"]);
+        console.log('req.user', req["user"]);
+
+        try {
+            let updateData = {
+                fileName: req["fileData"].fileName,
+                fileUrl: req["fileData"].fileUrl,
+            };
+            let condition = { staffId: req["user"].staffId };
+
+            const updatedUser = await User.findOneAndUpdate(
+                condition,          // 條件
+                updateData,         // 更新的內容
+                { new: true }       // 參數(表示返回更新後的文檔。如果沒有設置這個參數，則返回更新前的文檔。)
+            );
+            console.log('updatedUser ', updatedUser);
+
+            // 回傳client端成功訊息
+            res.send({
+                code: 1,
+                message: '上傳成功！',
+                data: updateData
+            });
+
+            // 刪除舊大頭貼
+            UploadController.deleteFile(req, res, next, req["user."].stickerFileName);
+
+        } catch (err) {
             res.status(500).json({ error: err.message });
         };
     }
 
 
 
-    // ————————————  更新大頭貼照片  ————————————
-    changeSticker = async (req, res, next: NextFunction) => {
 
 
+    // ———————————————————————  其它  ———————————————————————
+    // 比對使用者
+    async filterTargetUser(condition: any, next: NextFunction) {
+        const user = await User.findOne(condition).select('+password');
+        console.log('比對使用者:', user);
 
+        if (!user) {
+            return next(ErrorService.appError(401, "查無此人！", next));
+        } else {
+            return user;
+        };
     }
+
 
 
 }

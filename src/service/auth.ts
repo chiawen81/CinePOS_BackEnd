@@ -1,16 +1,17 @@
 const jwt = require('jsonwebtoken');
 import ErrorService from '../service/error';
 import User from '../models/common/usersModels';
+import { NextFunction, Request, Response } from 'express';
+import { LoginReq } from '../interface/swagger-model/loginReq';
+import { LoginRes } from '../interface/swagger-model/loginRes';
 
 class AuthService {
     // ——————————  產生JWT token——————————
-    sendBackJWT = (reqData, res, statusCode) => {
+    sendBackJWT = (reqData, res: Response, statusCode: number) => {
         console.log(reqData._id)
         let data = {
             id: reqData._id,
-            name: reqData.name,
             staffId: reqData.staffId,
-            stickerUrl: ""    // ====待補大頭貼照片====
         };
 
         // 產生 JWT token
@@ -32,13 +33,13 @@ class AuthService {
 
 
 
+
+
     // ——————————  JWT驗證  ——————————
-    isAuth = ErrorService.handleErrorAsync(async (req, res, next) => {
+    isEmpAuth = ErrorService.handleErrorAsync(async (req: Request<{}, LoginRes, LoginReq, null, {}>, res: Response, next: NextFunction) => {
         // 取得Client端的JWT token   
+        console.log('req', req);
         let token;
-        let { staffId } = req.body;
-        staffId = staffId ?? req.query.staffId;
-        console.log('登入者- staffId', staffId);
 
         if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
             token = req.headers.authorization.split(' ')[1];
@@ -60,17 +61,39 @@ class AuthService {
         });
         console.log('decodedClientData', decodedClientData);
 
-        if (decodedClientData.staffId === staffId) {
-            // 抓出資料庫中的使用者資料
-            const currentUser = await User.findOne({ staffId: decodedClientData.staffId });
-            console.log('currentUser', currentUser);
-            req.user = currentUser;
+        if (decodedClientData.staffId) {
+            req["JWTInfo"] = decodedClientData;        // 將JWT解碼後的資料放入req.JWTBody
             next();
 
         } else {
-            return next(ErrorService.appError(403, "只能修改本人姓名", next));
+            return next(ErrorService.appError(403, "請重新登入！", next));
         };
     });
+
+
+
+
+
+    // ——————————  驗證是否為本人  ——————————
+    isOwnerAuth = ErrorService.handleErrorAsync(async (req, res, next) => {
+        let { staffId } = req.body;
+        staffId = staffId ?? (req.params.staffId || req.query.staffId);         // 員編可以放在body或網址參數
+        console.log('staffId', staffId, 'req.JWTInfo', req.JWTInfo);
+
+        if (req.JWTInfo.staffId === staffId) {
+            // 抓出資料庫中的使用者資料
+            const currentUser = await User.findOne({ staffId: req.JWTInfo.staffId });
+            console.log('currentUser', currentUser);
+            req.user = currentUser;                 // 將使用者資料放入req.user
+            next();
+
+        } else {
+            return next(ErrorService.appError(403, "非本人帳號，請重新登入！", next));
+        };
+    });
+
+
+
 
 }
 

@@ -5,16 +5,20 @@ import AuthService from '../../service/auth';
 import User from '../../models/common/usersModels';
 import { Request, Response, NextFunction } from 'express';
 import { LoginReq } from "src/interface/swagger-model/loginReq";
+import { LoginRes } from "src/interface/swagger-model/loginRes";
 
 class LogInController {
     constructor() {
 
     }
 
+
     // ———————————————————————  登入系統  ———————————————————————
-    logIn = async (req: Request<{}, {}, LoginReq>, res: Response, next: NextFunction) => {
+    logIn = async (req: Request<{}, LoginRes, LoginReq, {}, {}>, res: Response<LoginRes>, next: NextFunction) => {
+        console.log('req', req);
         console.log('進來登入了～', req.originalUrl.split('/')[1]);
-        let { staffId, password } = req.body;
+        let staffId = req.body.staffId;
+        let password = req.body.password;
         console.log('staffId', staffId, 'password', password);
 
         let passwordValidator = validator.isLength(password, { min: 8 });
