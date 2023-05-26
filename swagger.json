@@ -362,7 +362,6 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
                                     "$ref": "#/components/schemas/timetableListRes"
                                 }
                             }
