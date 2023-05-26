@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
+const mongoose = require('mongoose');
 
 const moviesSchema = new mongoose.Schema({
     // // 培培說加_id他會關聯不到資料，所以先註解掉
@@ -113,6 +114,6 @@ const moviesSchema = new mongoose.Schema({
     }
 });
 
-var Movie = mongoose.model('Movie', moviesSchema);
+const Movie = mongoose.model('Movie', moviesSchema);
 
 export default Movie;
