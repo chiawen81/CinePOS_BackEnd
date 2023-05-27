@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface StaffOrderCreateReqTicketList { 
+export interface StaffOrderCreateReqTicketList {
     /**
      * 票券ID
      */
@@ -31,4 +31,8 @@ export interface StaffOrderCreateReqTicketList {
      * 場次ID
      */
     scheduleId?: string;
+
+    // 以下為新增欄位
+    // 座位號
+    seatName?: string;
 }

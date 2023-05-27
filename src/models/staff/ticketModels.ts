@@ -1,13 +1,12 @@
-import mongoose, { Schema } from "mongoose";
-import Order from "./orderModels";
+import { Schema } from 'mongoose';
+import mongoose = require('mongoose');
 import Movie from "../manager/moviesModels";
 import Seat from "../common/seats.model";
 
 const ticketsSchema = new mongoose.Schema(
     {
         orderId: {
-            type: Schema.Types.ObjectId,
-            ref: Order,
+            type: String,   // 此處不可關聯到order model，因為order model會關聯到ticket model，會造成循環關聯
             required: false
         },
         movieId: {
