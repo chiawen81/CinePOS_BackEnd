@@ -11,7 +11,11 @@
  */
 import { MovieDetailCreateParameterReleaseDate } from './movieDetailCreateParameterReleaseDate';
 
-export interface MovieDetailCreateParameter { 
+export interface MovieDetailUpdateParameter { 
+    /**
+     * 系統編號
+     */
+    id: string;
     /**
      * 電影中文名
      */
