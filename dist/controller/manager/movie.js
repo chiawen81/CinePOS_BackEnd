@@ -110,7 +110,7 @@ class MovieController {
         });
         this.updateInfo = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const movieId = req.body.id;
+                const movieId = req.body._id;
                 const movieData = req.body;
                 console.log('movieId', movieId, 'movieData', movieData);
                 const movie = yield moviesModels_1.default.findById(movieId);
