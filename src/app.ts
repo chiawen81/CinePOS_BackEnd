@@ -20,6 +20,7 @@ import { StaffIndexRouter } from './routes/v1/staff/index';
 import { StaffTicketTypeRouter } from './routes/v1/staff/ticketType';
 import { StaffSeatRouter } from './routes/v1/staff/seat';
 import { StaffScheduleRouter } from './routes/v1/staff/schedule';
+import { OrderRouter } from "./routes/v1/staff/order";
 
 // 其它
 import "./service/connection";                        // 資料庫設定
@@ -46,16 +47,18 @@ app.use('/v1/common/upload', CommonUploadRouter);
 app.use('/v1/staff', StaffIndexRouter);
 app.use('/v1/staff/user', CommonUserRouter);
 app.use('/v1/staff/login', CommonLogInRouter);
-
 app.use('/v1/staff/ticketType', StaffTicketTypeRouter);
 app.use('/v1/staff/seat', StaffSeatRouter);
 app.use('/v1/staff/schedule', StaffScheduleRouter);
+app.use('/v1/staff/order', OrderRouter);
+
 
 // 後台
 app.use('/v1/manager/', ManagerIndexRouter);
 app.use('/v1/manager/user', CommonUserRouter);
 app.use('/v1/manager/login', CommonLogInRouter);
 app.use('/v1/manager/movie', ManagerMovieRouter);
+
 
 
 
