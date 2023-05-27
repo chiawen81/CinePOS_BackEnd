@@ -15,7 +15,6 @@ import { CommonLogInRouter } from './routes/v1/common/login';
 import { CommonOptionRouter } from "./routes/v1/common/option";
 import { CommonUploadRouter } from "./routes/v1/common/upload";
 import { TimetableIndexRouter } from './routes/v1/manager/timetable';
-
 import { ManagerIndexRouter } from './routes/v1/manager/index';
 import { ManagerMovieRouter } from "./routes/v1/manager/movie";
 import { StaffIndexRouter } from './routes/v1/staff/index';
