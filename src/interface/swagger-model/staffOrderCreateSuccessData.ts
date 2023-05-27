@@ -13,6 +13,10 @@ import { StaffOrderCreateSuccessDataTicketList } from './staffOrderCreateSuccess
 
 export interface StaffOrderCreateSuccessData { 
     /**
+     * 付款狀態(-1:付款失敗,0:未付款,1:已付款,2:付款中,3:退款)
+     */
+    status?: number;
+    /**
      * 訂單ID
      */
     orderId?: string;
@@ -21,7 +25,7 @@ export interface StaffOrderCreateSuccessData {
      */
     paymentMethod?: number;
     /**
-     *  訂單總金額
+     * 訂單總金額
      */
     amount?: number;
     ticketList?: Array<StaffOrderCreateSuccessDataTicketList>;

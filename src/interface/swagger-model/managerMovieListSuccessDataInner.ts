@@ -10,11 +10,11 @@
  * Do not edit the class manually.
  */
 
-export interface ManagerMovieListSuccessDataInner {
+export interface ManagerMovieListSuccessDataInner { 
     /**
      * 電影編號
      */
-    _id?: string;
+    id?: string;
     /**
      * 上映狀態文字
      */
