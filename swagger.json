@@ -444,6 +444,146 @@
                 }
             }
         },
+        "/v1/manager/timetable/list": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "取得時刻列表",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/timetableListRes"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "取得時刻表",
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "startDate",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "endDate",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            }
+        },
+        "/v1/manager/timetable/create": {
+            "post": {
+                "tags": [
+                    "Manager"
+                ],
+                "operationId": "CreateTimetable",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/timetableRes"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "新增時刻表",
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/timetableCreateReq"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/timetable/update": {
+            "patch": {
+                "tags": [
+                    "Manager"
+                ],
+                "operationId": "UpdateTimetable",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/timetableRes"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "更新時刻表",
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TimetableRequest"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/timetable/{timetableId}": {
+            "delete": {
+                "tags": [
+                    "Manager"
+                ],
+                "operationId": "DeleteItem",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/timetableRes"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "刪除時刻表",
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "timetableId",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            }
+        },
         "/v1/manager/user/profile/{staffId}": {
             "get": {
                 "tags": [
@@ -1564,6 +1704,203 @@
                         "type": "number",
                         "description": "票價",
                         "example": 280
+                    }
+                }
+            },
+            "timetableListRes": {
+                "required": [
+                    "code",
+                    "message",
+                    "data"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/timetableListResData"
+                    }
+                }
+            },
+            "timetableListResData": {
+                "required": [
+                    "_id",
+                    "movieId",
+                    "theaterId",
+                    "startDate",
+                    "endDate",
+                    "createdAt",
+                    "updatedAt"
+                ],
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "id"
+                    },
+                    "movieId": {
+                        "type": "object",
+                        "description": "電影資料",
+                        "example": ""
+                    },
+                    "theaterId": {
+                        "type": "object",
+                        "description": "廳院資訊",
+                        "example": ""
+                    },
+                    "startDate": {
+                        "type": "Date",
+                        "description": "開始時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "endDate": {
+                        "type": "Date",
+                        "description": "結束時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "createdAt": {
+                        "type": "Date",
+                        "description": "新增時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "updatedAt": {
+                        "type": "Date",
+                        "description": "更新時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    }
+                }
+            },
+            "timetableRes": {
+                "required": [
+                    "code",
+                    "message",
+                    "data"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/timetableResData"
+                    }
+                }
+            },
+            "timetableResData": {
+                "required": [
+                    "_id",
+                    "movieId",
+                    "theaterId",
+                    "startDate",
+                    "endDate",
+                    "createdAt",
+                    "updatedAt"
+                ],
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "id"
+                    },
+                    "movieId": {
+                        "type": "string",
+                        "description": "電影ID",
+                        "example": "645869f668d71390eba143d3"
+                    },
+                    "theaterId": {
+                        "type": "string",
+                        "description": "廳院ID",
+                        "example": "645a210ad658869fb83b1b8b"
+                    },
+                    "startDate": {
+                        "type": "Date",
+                        "description": "開始時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "endDate": {
+                        "type": "Date",
+                        "description": "結束時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "createdAt": {
+                        "type": "Date",
+                        "description": "新增時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "updatedAt": {
+                        "type": "Date",
+                        "description": "更新時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    }
+                }
+            },
+            "timetableCreateReq": {
+                "required": [
+                    "movieId",
+                    "theaterId",
+                    "startDate",
+                    "endDate"
+                ],
+                "properties": {
+                    "movieId": {
+                        "type": "string",
+                        "description": "電影ID",
+                        "example": "645869f668d71390eba143d3"
+                    },
+                    "theaterId": {
+                        "type": "string",
+                        "description": "廳院ID",
+                        "example": "645a210ad658869fb83b1b8b"
+                    },
+                    "startDate": {
+                        "type": "Date",
+                        "description": "開始時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "endDate": {
+                        "type": "Date",
+                        "description": "結束時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    }
+                }
+            },
+            "timetableUpdateReq": {
+                "required": [
+                    "_id",
+                    "movieId",
+                    "theaterId",
+                    "startDate",
+                    "endDate"
+                ],
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "id"
+                    },
+                    "movieId": {
+                        "type": "string",
+                        "description": "電影ID",
+                        "example": "645869f668d71390eba143d3"
+                    },
+                    "theaterId": {
+                        "type": "string",
+                        "description": "廳院ID",
+                        "example": "645a210ad658869fb83b1b8b"
+                    },
+                    "startDate": {
+                        "type": "Date",
+                        "description": "開始時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "endDate": {
+                        "type": "Date",
+                        "description": "結束時間",
+                        "example": "2023-05-21T12:15:01.972Z"
                     }
                 }
             }
