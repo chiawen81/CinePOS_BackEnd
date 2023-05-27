@@ -1,8 +1,8 @@
 import { Response, NextFunction } from 'express';
-import Seat from '../../models/common/seatsModels';
+import Seat from '../../models/common/seats.model';
 import ErrorService from '../../service/error';
 import Timetable from '../../models/common/timetable.model';
-import Theater from '../../models/common/theater.model';
+// import Theater from '../../models/common/theater.model';
 
 interface seat {
     cols: string;
@@ -21,7 +21,7 @@ class SeatController {
     // ———————————————————————  取得場次座位表  ———————————————————————
     getScheduleIdSeat = async (req, res: Response, next: NextFunction) => {
         try {
-            console.log(Theater);
+
             const scheduleTheaters = await Timetable
                 .findByIdAndUpdate(req.params.scheduleId)
                 .populate({
@@ -31,18 +31,19 @@ class SeatController {
             if(!scheduleTheaters.theaterId){
                 return next(ErrorService.appError(404, "沒有這筆場次座位資料！", next));
             }
-            const seatMap = scheduleTheaters.theaterId.seatMap;
+            console.log('scheduleTheaters',scheduleTheaters);
+            const seatMap = scheduleTheaters.theaterId['seatMap'];
             const seats =  await Seat.find({ scheduleId: req.params.scheduleId ,status: {$ne:0}});
             if(!seats){
                 return next(ErrorService.appError(404, "座位資料錯誤！", next));
             }
             const seatsSold = seats.filter(item => item.status === 1);
             let list: list[] = [];
-            scheduleTheaters.theaterId.rowLabel.forEach((row, rowIndex) => {
+            scheduleTheaters.theaterId['rowLabel'].forEach((row, rowIndex) => {
                 let seat: seat[] = [];
                 let j = 0;
                 if (!!row) {
-                    for (let i = scheduleTheaters.theaterId.col * rowIndex; i <= (scheduleTheaters.theaterId.col * (rowIndex + 1)) - 1; i++) {
+                    for (let i = scheduleTheaters.theaterId['col'] * rowIndex; i <= (scheduleTheaters.theaterId['col'] * (rowIndex + 1)) - 1; i++) {
                         j++;
                         seat.push({
                             cols: String(j),
@@ -70,9 +71,9 @@ class SeatController {
             });
             const resData = {
                 sold: seatsSold.length,
-                free: scheduleTheaters.theaterId.totalCapacity - seatsSold.length,
-                maxRows: scheduleTheaters.theaterId.row,
-                maxColumns: scheduleTheaters.theaterId.col,
+                free: scheduleTheaters.theaterId['totalCapacity'] - seatsSold.length,
+                maxRows: scheduleTheaters.theaterId['row'],
+                maxColumns: scheduleTheaters.theaterId['col'],
                 list: list
             }
             res.status(200).json({
@@ -80,7 +81,6 @@ class SeatController {
                 message: "OK",
                 data: resData
             });
-            return;
         } catch (err) {
             res.status(500).json({
                 code: -1,

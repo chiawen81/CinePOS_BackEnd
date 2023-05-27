@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-import SeatController from '../../../controller/staff/seatController';
+import SeatController from '../../../controller/staff/seat.controller';
 import ErrorService from '../../../service/error';
 import AuthService from '../../../service/auth';
 
@@ -9,4 +9,4 @@ router.post('/checkLock', AuthService.isEmpAuth, ErrorService.handleErrorAsync(S
 
 router.get('/:scheduleId', AuthService.isEmpAuth, ErrorService.handleErrorAsync(SeatController.getScheduleIdSeat));
 
-export const StaffSeaRouter = router;
+export const StaffSeatRouter = router;

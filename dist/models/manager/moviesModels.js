@@ -110,5 +110,5 @@ const moviesSchema = new mongoose_1.default.Schema({
         select: false,
     }
 });
-var Movie = mongoose_1.default.model('Movie', moviesSchema);
+const Movie = mongoose_1.default.model('Movie', moviesSchema);
 exports.default = Movie;

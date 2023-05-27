@@ -12,15 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const seatsModels_1 = __importDefault(require("../../models/common/seatsModels"));
+const seats_model_1 = __importDefault(require("../../models/common/seats.model"));
 const error_1 = __importDefault(require("../../service/error"));
 const timetable_model_1 = __importDefault(require("../../models/common/timetable.model"));
-const theater_model_1 = __importDefault(require("../../models/common/theater.model"));
 class SeatController {
     constructor() {
         this.getScheduleIdSeat = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log(theater_model_1.default);
                 const scheduleTheaters = yield timetable_model_1.default
                     .findByIdAndUpdate(req.params.scheduleId)
                     .populate({
@@ -30,18 +28,19 @@ class SeatController {
                 if (!scheduleTheaters.theaterId) {
                     return next(error_1.default.appError(404, "沒有這筆場次座位資料！", next));
                 }
-                const seatMap = scheduleTheaters.theaterId.seatMap;
-                const seats = yield seatsModels_1.default.find({ scheduleId: req.params.scheduleId, status: { $ne: 0 } });
+                console.log('scheduleTheaters', scheduleTheaters);
+                const seatMap = scheduleTheaters.theaterId['seatMap'];
+                const seats = yield seats_model_1.default.find({ scheduleId: req.params.scheduleId, status: { $ne: 0 } });
                 if (!seats) {
                     return next(error_1.default.appError(404, "座位資料錯誤！", next));
                 }
                 const seatsSold = seats.filter(item => item.status === 1);
                 let list = [];
-                scheduleTheaters.theaterId.rowLabel.forEach((row, rowIndex) => {
+                scheduleTheaters.theaterId['rowLabel'].forEach((row, rowIndex) => {
                     let seat = [];
                     let j = 0;
                     if (!!row) {
-                        for (let i = scheduleTheaters.theaterId.col * rowIndex; i <= (scheduleTheaters.theaterId.col * (rowIndex + 1)) - 1; i++) {
+                        for (let i = scheduleTheaters.theaterId['col'] * rowIndex; i <= (scheduleTheaters.theaterId['col'] * (rowIndex + 1)) - 1; i++) {
                             j++;
                             seat.push({
                                 cols: String(j),
@@ -69,9 +68,9 @@ class SeatController {
                 });
                 const resData = {
                     sold: seatsSold.length,
-                    free: scheduleTheaters.theaterId.totalCapacity - seatsSold.length,
-                    maxRows: scheduleTheaters.theaterId.row,
-                    maxColumns: scheduleTheaters.theaterId.col,
+                    free: scheduleTheaters.theaterId['totalCapacity'] - seatsSold.length,
+                    maxRows: scheduleTheaters.theaterId['row'],
+                    maxColumns: scheduleTheaters.theaterId['col'],
                     list: list
                 };
                 res.status(200).json({
@@ -79,7 +78,6 @@ class SeatController {
                     message: "OK",
                     data: resData
                 });
-                return;
             }
             catch (err) {
                 res.status(500).json({
@@ -91,7 +89,7 @@ class SeatController {
         });
         this.seatCheckLock = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const seats = yield seatsModels_1.default.find({ scheduleId: req.body.scheduleId });
+                const seats = yield seats_model_1.default.find({ scheduleId: req.body.scheduleId });
                 if (!seats) {
                     return next(error_1.default.appError(404, "沒有這筆場次資料！", next));
                 }
@@ -110,7 +108,7 @@ class SeatController {
                 if (seatFail.length > 0) {
                     return next(error_1.default.appError(400, `${seatFail} 無法選取請重新選擇座位`, next));
                 }
-                yield seatsModels_1.default.updateMany({ seatName: { $in: reqSeats } }, { $set: { status: 2 } });
+                yield seats_model_1.default.updateMany({ seatName: { $in: reqSeats } }, { $set: { status: 2 } });
                 res.status(200).json({
                     code: 1,
                     message: "成功鎖定座位!",
