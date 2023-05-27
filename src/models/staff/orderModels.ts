@@ -1,21 +1,29 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import Movie from '../manager/moviesModels';
+import timetableSchema from '../common/timetable.model';
+import Seat from "../common/seats.model";
+import Ticket from "./ticketModels";
 
 const ordersSchema = new mongoose.Schema(
     {
         ticketId: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: Ticket,
             required: [true, '票券編號必填'],
         },
         seatId: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: Seat,
             required: [true, '場次座位ID必填'],
         },
         movieId: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: Movie,
             required: [true, '電影ID必填'],
         },
         scheduleId: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: timetableSchema,
             required: [true, '場次ID必填'],
         },
         paymentMethod: {
@@ -27,7 +35,7 @@ const ordersSchema = new mongoose.Schema(
             required: [true, '訂單總金額必填'],
         },
         status: {
-            type: String,
+            type: Number,
             required: [true, '訂單狀態必填'],
         },
         createdAt: {
@@ -46,7 +54,6 @@ const ordersSchema = new mongoose.Schema(
         versionKey: false
     }
 );
-
-var Order = mongoose.model('Order', ordersSchema);
+const Order = mongoose.model('Order', ordersSchema);
 
 export default Order;

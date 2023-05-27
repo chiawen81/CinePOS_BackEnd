@@ -12,4 +12,4 @@ router.get('/:orderId', AuthService.isEmpAuth, ErrorService.handleErrorAsync(Ord
 
 
 
-export const OrderRouter = router;
+export const StaffOrderRouter = router;

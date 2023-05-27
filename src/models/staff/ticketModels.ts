@@ -1,17 +1,23 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import Order from "./orderModels";
+import Movie from "../manager/moviesModels";
+import Seat from "../common/seats.model";
 
 const ticketsSchema = new mongoose.Schema(
     {
         orderId: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: Order,
             required: false
         },
         movieId: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: Movie,
             required: [true, '電影ID必填'],
         },
         seatId: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: Seat,
             required: [true, '座位ID必填'],
         },
         price: {
@@ -47,6 +53,6 @@ const ticketsSchema = new mongoose.Schema(
     }
 );
 
-var Ticket = mongoose.model('Ticket', ticketsSchema);
+const Ticket = mongoose.model('Ticket', ticketsSchema);
 
 export default Ticket;
