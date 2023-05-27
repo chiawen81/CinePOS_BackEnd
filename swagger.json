@@ -369,8 +369,9 @@
                 ],
                 "summary": "結帳",
                 "requestBody": {
+                    "description": "結帳資料",
                     "content": {
-                        "multipart/form-data": {
+                        "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/StaffOrderCreateReq"
                             }
