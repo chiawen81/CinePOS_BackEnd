@@ -362,6 +362,89 @@
                 }
             }
         },
+        "/v1/staff/order": {
+            "post": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "結帳",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StaffOrderCreateReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "結帳成功",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StaffOrderCreateSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "結帳失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/staff/order/{orderId}": {
+            "get": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "查詢訂單",
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "description": "訂單編號",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "查詢成功",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StaffOrderSearchSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "查詢失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v1/manager/login": {
             "post": {
                 "tags": [
@@ -442,6 +525,146 @@
                         }
                     }
                 }
+            }
+        },
+        "/v1/manager/timetable/list": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "取得時刻列表",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/timetableListRes"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "取得時刻表",
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "startDate",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "endDate",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            }
+        },
+        "/v1/manager/timetable/create": {
+            "post": {
+                "tags": [
+                    "Manager"
+                ],
+                "operationId": "CreateTimetable",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/timetableRes"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "新增時刻表",
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/timetableCreateReq"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/timetable/update": {
+            "patch": {
+                "tags": [
+                    "Manager"
+                ],
+                "operationId": "UpdateTimetable",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/timetableRes"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "更新時刻表",
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/timetableUpdateReq"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/timetable/{timetableId}": {
+            "delete": {
+                "tags": [
+                    "Manager"
+                ],
+                "operationId": "DeleteItem",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/timetableRes"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "刪除時刻表",
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "timetableId",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
             }
         },
         "/v1/manager/user/profile/{staffId}": {
@@ -1564,6 +1787,460 @@
                         "type": "number",
                         "description": "票價",
                         "example": 280
+                    }
+                }
+            },
+            "timetableListRes": {
+                "required": [
+                    "code",
+                    "message",
+                    "data"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/timetableListResData"
+                    }
+                }
+            },
+            "timetableListResData": {
+                "required": [
+                    "_id",
+                    "movieId",
+                    "theaterId",
+                    "startDate",
+                    "endDate",
+                    "createdAt",
+                    "updatedAt"
+                ],
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "id"
+                    },
+                    "movieId": {
+                        "type": "object",
+                        "description": "電影資料",
+                        "example": ""
+                    },
+                    "theaterId": {
+                        "type": "object",
+                        "description": "廳院資訊",
+                        "example": ""
+                    },
+                    "startDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "開始時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "endDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "結束時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "createdAt": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "新增時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "updatedAt": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "更新時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    }
+                }
+            },
+            "timetableRes": {
+                "required": [
+                    "code",
+                    "message",
+                    "data"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/timetableResData"
+                    }
+                }
+            },
+            "timetableResData": {
+                "required": [
+                    "_id",
+                    "movieId",
+                    "theaterId",
+                    "startDate",
+                    "endDate",
+                    "createdAt",
+                    "updatedAt"
+                ],
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "id"
+                    },
+                    "movieId": {
+                        "type": "string",
+                        "description": "電影ID",
+                        "example": "645869f668d71390eba143d3"
+                    },
+                    "theaterId": {
+                        "type": "string",
+                        "description": "廳院ID",
+                        "example": "645a210ad658869fb83b1b8b"
+                    },
+                    "startDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "開始時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "endDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "結束時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "createdAt": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "新增時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "updatedAt": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "更新時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    }
+                }
+            },
+            "timetableCreateReq": {
+                "required": [
+                    "movieId",
+                    "theaterId",
+                    "startDate",
+                    "endDate"
+                ],
+                "properties": {
+                    "movieId": {
+                        "type": "string",
+                        "description": "電影ID",
+                        "example": "645869f668d71390eba143d3"
+                    },
+                    "theaterId": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "廳院ID",
+                        "example": "645a210ad658869fb83b1b8b"
+                    },
+                    "startDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "開始時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "endDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "結束時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    }
+                }
+            },
+            "timetableUpdateReq": {
+                "required": [
+                    "_id",
+                    "movieId",
+                    "theaterId",
+                    "startDate",
+                    "endDate"
+                ],
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "id"
+                    },
+                    "movieId": {
+                        "type": "string",
+                        "description": "電影ID",
+                        "example": "645869f668d71390eba143d3"
+                    },
+                    "theaterId": {
+                        "type": "string",
+                        "description": "廳院ID",
+                        "example": "645a210ad658869fb83b1b8b"
+                    },
+                    "startDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "開始時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "endDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "結束時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    }
+                }
+            },
+            "StaffOrderCreateReq": {
+                "required": [
+                    "paymentMethod",
+                    "amount",
+                    "ticketList"
+                ],
+                "properties": {
+                    "paymentMethod": {
+                        "type": "number",
+                        "description": "付款方式(1:現金,2:Line Pay)",
+                        "example": 1
+                    },
+                    "amount": {
+                        "type": "number",
+                        "description": " 訂單總金額",
+                        "example": 280
+                    },
+                    "ticketList": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "ticketId": {
+                                    "type": "string",
+                                    "example": "202305172236200001",
+                                    "description": "票券ID"
+                                },
+                                "price": {
+                                    "type": "number",
+                                    "example": 280,
+                                    "description": "票價"
+                                },
+                                "ticketTypeId": {
+                                    "type": "string",
+                                    "example": "6460a7626b1ed843a113b9b6",
+                                    "description": "票種ID"
+                                },
+                                "movieId": {
+                                    "type": "string",
+                                    "example": "6458680f68d71390eb9fe56b",
+                                    "description": "電影ID"
+                                },
+                                "scheduleId": {
+                                    "type": "string",
+                                    "example": "645cf11f2e05063973b5f9ed",
+                                    "description": "場次ID"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "StaffOrderCreateSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功結帳!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/StaffOrderCreateSuccessData"
+                    }
+                }
+            },
+            "StaffOrderCreateSuccessData": {
+                "properties": {
+                    "transactionId": {
+                        "type": "string",
+                        "example": "202305172236200001",
+                        "description": "訂單ID"
+                    },
+                    "paymentMethod": {
+                        "type": "number",
+                        "description": "付款方式(1:現金,2:Line Pay)",
+                        "example": 1
+                    },
+                    "amount": {
+                        "type": "number",
+                        "description": " 訂單總金額",
+                        "example": 280
+                    },
+                    "ticketList": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "ticketId": {
+                                    "type": "string",
+                                    "example": "202305172236200001",
+                                    "description": "票券ID"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "example": "全票",
+                                    "description": "票種名稱"
+                                },
+                                "seatName": {
+                                    "type": "string",
+                                    "example": "A17",
+                                    "description": "座位號"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "StaffOrderSearchSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "查詢訂單成功!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/StaffOrderSearchSuccessData"
+                    }
+                }
+            },
+            "StaffOrderSearchSuccessData": {
+                "properties": {
+                    "transactionId": {
+                        "type": "string",
+                        "example": "202305172236200001",
+                        "description": "訂單ID"
+                    },
+                    "amount": {
+                        "type": "number",
+                        "description": " 訂單總金額",
+                        "example": 280
+                    },
+                    "ticketList": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "ticketId": {
+                                    "type": "string",
+                                    "example": "202305172236200001",
+                                    "description": "票券ID"
+                                },
+                                "time": {
+                                    "type": "object",
+                                    "properties": {
+                                        "$date": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "example": "2023-04-31 14:00",
+                                    "description": "場次時間"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "example": "全票",
+                                    "description": "票種名稱"
+                                },
+                                "price": {
+                                    "type": "number",
+                                    "example": 280,
+                                    "description": "票價"
+                                },
+                                "seatName": {
+                                    "type": "string",
+                                    "example": "A17",
+                                    "description": "座位號"
+                                }
+                            }
+                        }
                     }
                 }
             }
