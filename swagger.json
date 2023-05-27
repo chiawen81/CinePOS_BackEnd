@@ -2135,7 +2135,7 @@
             },
             "StaffOrderCreateSuccessData": {
                 "properties": {
-                    "transactionId": {
+                    "orderId": {
                         "type": "string",
                         "example": "202305172236200001",
                         "description": "訂單ID"
@@ -2193,7 +2193,7 @@
             },
             "StaffOrderSearchSuccessData": {
                 "properties": {
-                    "transactionId": {
+                    "orderId": {
                         "type": "string",
                         "example": "202305172236200001",
                         "description": "訂單ID"
