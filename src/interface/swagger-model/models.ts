@@ -22,6 +22,7 @@ export * from './movieDetailCreateFaild';
 export * from './movieDetailCreateParameter';
 export * from './movieDetailCreateParameterReleaseDate';
 export * from './movieDetailCreateSuccess';
+export * from './movieDetailCreateSuccessData';
 export * from './movieDetailGetInfoFailed';
 export * from './movieDetailGetInfoSuccess';
 export * from './movieDetailRes';

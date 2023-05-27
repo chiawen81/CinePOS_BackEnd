@@ -31,27 +31,44 @@ const moviesModels_1 = __importDefault(require("../manager/moviesModels"));
 const timetable_model_1 = __importDefault(require("../common/timetable.model"));
 const seats_model_1 = __importDefault(require("../common/seats.model"));
 const ticketModels_1 = __importDefault(require("./ticketModels"));
+const ticketTypeModels_1 = __importDefault(require("./ticketTypeModels"));
 const ordersSchema = new mongoose_1.default.Schema({
-    ticketId: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: ticketModels_1.default,
-        required: [true, '票券編號必填'],
+    orderId: {
+        type: String,
+        required: true,
+        unique: true
     },
-    seatId: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: seats_model_1.default,
-        required: [true, '場次座位ID必填'],
-    },
-    movieId: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: moviesModels_1.default,
-        required: [true, '電影ID必填'],
-    },
-    scheduleId: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: timetable_model_1.default,
-        required: [true, '場次ID必填'],
-    },
+    ticketList: [{
+            ticketId: {
+                type: mongoose_1.Schema.Types.ObjectId,
+                ref: ticketModels_1.default,
+                required: [true, '票券編號必填'],
+            },
+            seatId: {
+                type: mongoose_1.Schema.Types.ObjectId,
+                ref: seats_model_1.default,
+                required: [true, '場次座位ID必填'],
+            },
+            movieId: {
+                type: mongoose_1.Schema.Types.ObjectId,
+                ref: moviesModels_1.default,
+                required: [true, '電影ID必填'],
+            },
+            scheduleId: {
+                type: mongoose_1.Schema.Types.ObjectId,
+                ref: timetable_model_1.default,
+                required: [true, '場次ID必填2'],
+            },
+            price: {
+                type: Number,
+                required: [true, '票券價格必填'],
+            },
+            ticketTypeId: {
+                type: mongoose_1.Schema.Types.ObjectId,
+                ref: ticketTypeModels_1.default,
+                required: [true, '票券類型ID必填'],
+            }
+        }],
     paymentMethod: {
         type: Number,
         required: [true, '付款方法必填'],

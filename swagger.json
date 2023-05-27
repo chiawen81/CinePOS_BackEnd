@@ -2187,6 +2187,11 @@
                                     "type": "string",
                                     "example": "645cf11f2e05063973b5f9ed",
                                     "description": "場次ID"
+                                },
+                                "seatName": {
+                                    "type": "string",
+                                    "example": "A17",
+                                    "description": "座位號"
                                 }
                             }
                         }
@@ -2211,6 +2216,11 @@
             },
             "StaffOrderCreateSuccessData": {
                 "properties": {
+                    "status": {
+                        "type": "number",
+                        "example": 1,
+                        "description": "付款狀態(-1:付款失敗,0:未付款,1:已付款,2:付款中,3:退款)"
+                    },
                     "orderId": {
                         "type": "string",
                         "example": "202305172236200001",
@@ -2223,7 +2233,7 @@
                     },
                     "amount": {
                         "type": "number",
-                        "description": " 訂單總金額",
+                        "description": "訂單總金額",
                         "example": 280
                     },
                     "ticketList": {

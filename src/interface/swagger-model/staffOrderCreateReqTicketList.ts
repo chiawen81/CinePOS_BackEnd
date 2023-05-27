@@ -31,4 +31,8 @@ export interface StaffOrderCreateReqTicketList {
      * 場次ID
      */
     scheduleId?: string;
+    /**
+     * 座位號
+     */
+    seatName?: string;
 }

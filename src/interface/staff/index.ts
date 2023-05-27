@@ -1,0 +1,1 @@
+export { TicketTypeResDataCustomer } from "./ticketTypeResDataCustomer";
