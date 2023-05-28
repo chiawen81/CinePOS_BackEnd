@@ -8,7 +8,8 @@ import { MovieDetailCreateSuccess } from 'src/interface/swagger-model/movieDetai
 import { CommonOptionSuccessDataItem } from 'src/interface/swagger-model/commonOptionSuccessDataItem';
 import { ManagerMovieListSuccess } from 'src/interface/swagger-model/managerMovieListSuccess';
 import { ManagerMovieListPara } from 'src/interface/manager';
-import { ManagerMovieListSuccessDataInner } from 'src/interface/swagger-model/models';
+import { ManagerMovieListSuccessDataInnerCustomer, MovieDetailUpdateParameterCustomer } from 'src/interface/manager';
+import { MovieDetailUpdateSuccess } from 'src/interface/swagger-model/movieDetailUpdateSuccess';
 
 
 
@@ -103,7 +104,7 @@ class MovieController {
             // 驗證資料格式
             const validationError = movie.validateSync();
             if (validationError) {
-                const errorMessage = Object.values(validationError.errors).map(err => err.message).join('\n');
+                const errorMessage = Object.values(validationError.errors).map(err => err).join('\n');
                 return res.status(422).json({
                     code: -1,
                     message: errorMessage || "新增電影資料錯誤(其它)!",
@@ -132,9 +133,9 @@ class MovieController {
 
 
     // ———————————————————————  更新資料  ———————————————————————
-    updateInfo = async (req: Request<{}, MovieDetailCreateSuccess, MovieDetailCreateParameter, null, {}>, res: Response, next: NextFunction) => {
+    updateInfo = async (req: Request<{}, MovieDetailUpdateSuccess, MovieDetailUpdateParameterCustomer, null, {}>, res: Response, next: NextFunction) => {
         try {
-            const movieId = req.body.id;
+            const movieId = req.body._id;
             const movieData = req.body;
             console.log('movieId', movieId, 'movieData', movieData);
 
@@ -142,7 +143,7 @@ class MovieController {
             const movie = await Movie.findById(movieId);
             const validationError = movie.validateSync();
             if (validationError) {
-                const errorMessage = Object.values(validationError.errors).map(err => err.message).join('\n');
+                const errorMessage = Object.values(validationError.errors).map(err => err).join('\n');
                 return res.status(422).json({
                     code: -1,
                     message: errorMessage || '更新電影資料錯誤！',
@@ -227,7 +228,7 @@ class MovieController {
 
 
     // 列表- 取得查詢條件
-    getListQuery(data: any): ManagerMovieListPara {
+    getListQuery(data: ManagerMovieListPara): ManagerMovieListPara {
         console.log('data', data);
         let condition = {
             title: data.title,
@@ -296,13 +297,13 @@ class MovieController {
 
 
     // 列表- 整理列表資料   // ====待優化====
-    setListData(movieData: any, optionsData: any): ManagerMovieListSuccessDataInner[] {
-        let listData: ManagerMovieListSuccessDataInner[] = [];
+    setListData(movieData: any, optionsData: any): ManagerMovieListSuccessDataInnerCustomer[] {
+        let listData: ManagerMovieListSuccessDataInnerCustomer[] = [];
         console.log('optionsData', optionsData);
 
         if (movieData.length) {
             movieData.forEach((movie) => {
-                let obj: ManagerMovieListSuccessDataInner = {
+                let obj: ManagerMovieListSuccessDataInnerCustomer = {
                     _id: movie.id,
                     statusName: (optionsData.status.filter(val => val.value === movie.status))[0].name,
                     title: movie.title,

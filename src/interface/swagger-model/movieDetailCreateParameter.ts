@@ -13,10 +13,6 @@ import { MovieDetailCreateParameterReleaseDate } from './movieDetailCreateParame
 
 export interface MovieDetailCreateParameter { 
     /**
-     * 電影編號
-     */
-    id: string;
-    /**
      * 電影中文名
      */
     title: string;

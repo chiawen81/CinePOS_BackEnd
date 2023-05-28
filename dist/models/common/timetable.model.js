@@ -1,13 +1,20 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose = require('mongoose');
+const mongoose_1 = require("mongoose");
+const mongoose = require("mongoose");
+const theater_model_1 = __importDefault(require("../theater.model"));
+const moviesModels_1 = __importDefault(require("../manager/moviesModels"));
 const timetableSchema = new mongoose.Schema({
-    theaterId: { type: mongoose.Schema.ObjectId, ref: 'theaters' },
-    startTime: {
+    movieId: { type: mongoose_1.Schema.Types.ObjectId, ref: moviesModels_1.default },
+    theaterId: { type: mongoose_1.Schema.Types.ObjectId, ref: theater_model_1.default },
+    startDate: {
         type: Date,
         required: true
     },
-    endTime: {
+    endDate: {
         type: Date,
         required: true
     },
@@ -19,6 +26,8 @@ const timetableSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
+}, {
+    versionKey: false
 });
 const Timetable = mongoose.model('Timetable', timetableSchema);
 exports.default = Timetable;
