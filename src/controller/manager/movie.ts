@@ -320,7 +320,10 @@ class MovieController {
         let condition = {};
 
         if (queryData.title) {
-            condition["title"] = queryData.title;
+            condition["title"] = { $regex: `.*${queryData.title}.*`, $options: 'i' };
+            // note: 
+            // $options: "i" => 不分大小寫
+            // .*放在字串前後 => 可以模糊查詢
         };
 
         if (queryData.searchDateS && queryData.searchDateE) {
