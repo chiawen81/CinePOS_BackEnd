@@ -1,2462 +1,2490 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-      "title": "CinePOS_BackEnd",
-      "description": "CinePOS 後端API",
-      "version": "1.0.0"
-  },
-  "servers": [
-      {
-          "url": "/"
-      }
-  ],
-  "tags": [
-      {
-          "name": "Staff"
-      },
-      {
-          "name": "Manager"
-      },
-      {
-          "name": "Common"
-      }
-  ],
-  "paths": {
-      "/v1/common/option/{typeId}": {
-          "get": {
-              "tags": [
-                  "Common"
-              ],
-              "summary": "取得選項資料",
-              "parameters": [
-                  {
-                      "name": "typeId",
-                      "in": "path",
-                      "description": "欄位代碼(1:劇情,2:支援設備,3:分級,4:上映狀態)",
-                      "required": true,
-                      "style": "simple",
-                      "explode": false,
-                      "schema": {
-                          "type": "number"
-                      }
-                  }
-              ],
-              "responses": {
-                  "200": {
-                      "description": "Success",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonOptionSuccess"
-                              }
-                          }
-                      }
-                  },
-                  "401": {
-                      "description": "Failed",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonResFailed"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/common/upload": {
-          "post": {
-              "tags": [
-                  "Common"
-              ],
-              "summary": "上傳檔案",
-              "parameters": [
-                  {
-                      "name": "fileType",
-                      "in": "query",
-                      "description": "上傳類型(image:圖檔,other:其它檔案)",
-                      "required": true,
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              ],
-              "requestBody": {
-                  "content": {
-                      "multipart/form-data": {
-                          "schema": {
-                              "$ref": "#/components/schemas/CommonUploadReqBody"
-                          }
-                      }
-                  },
-                  "required": true
-              },
-              "responses": {
-                  "200": {
-                      "description": "上傳成功",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonUploadSuccess"
-                              }
-                          }
-                      }
-                  },
-                  "401": {
-                      "description": "上傳失敗",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonResFailed"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/staff/login": {
-          "post": {
-              "tags": [
-                  "Staff"
-              ],
-              "summary": "登入請求",
-              "requestBody": {
-                  "description": "資料格式",
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "$ref": "#/components/schemas/LoginReq"
-                          }
-                      }
-                  },
-                  "required": true
-              },
-              "responses": {
-                  "200": {
-                      "description": "Success",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/LoginRes"
-                              }
-                          }
-                      }
-                  },
-                  "401": {
-                      "description": "Failed",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonResFailedWrongPassword"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/staff/user/profile": {
-          "post": {
-              "tags": [
-                  "Staff"
-              ],
-              "summary": "修改員工姓名",
-              "requestBody": {
-                  "description": "資料格式",
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "$ref": "#/components/schemas/InfoUpdateReq"
-                          }
-                      }
-                  },
-                  "required": true
-              },
-              "responses": {
-                  "200": {
-                      "description": "Success",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/InfoUpdateRes"
-                              }
-                          }
-                      }
-                  },
-                  "401": {
-                      "description": "Failed",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonResFailedFieldInvalid"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/staff/user/profile/{staffId}": {
-          "get": {
-              "tags": [
-                  "Staff"
-              ],
-              "summary": "取得櫃台人員資料",
-              "parameters": [
-                  {
-                      "name": "staffId",
-                      "in": "path",
-                      "description": "員編",
-                      "required": true,
-                      "style": "simple",
-                      "explode": false,
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              ],
-              "responses": {
-                  "200": {
-                      "description": "Success",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/UserProfileRes"
-                              }
-                          }
-                      }
-                  },
-                  "401": {
-                      "description": "Failed",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonResFailedNoFound"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/staff/user/sticker/{staffId}": {
-          "post": {
-              "tags": [
-                  "Staff"
-              ],
-              "summary": "上傳櫃台人員大頭貼",
-              "parameters": [
-                  {
-                      "name": "staffId",
-                      "in": "path",
-                      "description": "員編",
-                      "required": true,
-                      "style": "simple",
-                      "explode": false,
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              ],
-              "requestBody": {
-                  "content": {
-                      "multipart/form-data": {
-                          "schema": {
-                              "$ref": "#/components/schemas/CommonUploadReqBody"
-                          }
-                      }
-                  },
-                  "required": true
-              },
-              "responses": {
-                  "200": {
-                      "description": "上傳成功",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonUploadSuccess"
-                              }
-                          }
-                      }
-                  },
-                  "500": {
-                      "description": "上傳失敗",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonResFailed"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/staff/ticketType": {
-          "get": {
-              "tags": [
-                  "Staff"
-              ],
-              "summary": "取得票種",
-              "responses": {
-                  "200": {
-                      "description": "Success",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/ticketTypeRes"
-                              }
-                          }
-                      }
-                  },
-                  "401": {
-                      "description": "Failed",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonResFailed"
-                              }
-                          }
-                      }
-                  }
-              }
-          },
-          "post": {
-              "tags": [
-                  "Staff"
-              ],
-              "summary": "新增票種",
-              "requestBody": {
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "$ref": "#/components/schemas/ticketTypeReq"
-                          }
-                      }
-                  },
-                  "required": true
-              },
-              "responses": {
-                  "200": {
-                      "description": "Success",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/ticketTypeRes"
-                              }
-                          }
-                      }
-                  },
-                  "400": {
-                      "description": "Failed",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonResFailed"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/staff/order": {
-          "post": {
-              "tags": [
-                  "Staff"
-              ],
-              "summary": "結帳",
-              "requestBody": {
-                  "description": "結帳資料",
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "$ref": "#/components/schemas/StaffOrderCreateReq"
-                          }
-                      }
-                  },
-                  "required": true
-              },
-              "responses": {
-                  "200": {
-                      "description": "結帳成功",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/StaffOrderCreateSuccess"
-                              }
-                          }
-                      }
-                  },
-                  "400": {
-                      "description": "結帳失敗",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonResFailed"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/staff/order/{orderId}": {
-          "get": {
-              "tags": [
-                  "Staff"
-              ],
-              "summary": "查詢訂單",
-              "parameters": [
-                  {
-                      "name": "orderId",
-                      "in": "path",
-                      "description": "訂單編號",
-                      "required": true,
-                      "style": "simple",
-                      "explode": false,
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              ],
-              "responses": {
-                  "200": {
-                      "description": "查詢成功",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/StaffOrderSearchSuccess"
-                              }
-                          }
-                      }
-                  },
-                  "401": {
-                      "description": "查詢失敗",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonResFailed"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/staff/schedule/list" : {
-        "get" : {
-          "tags" : [ "Staff" ],
-          "summary" : "場次查詢",
-          "parameters" : [ {
-            "in" : "query",
-            "name" : "startDate",
-            "schema" : {
-              "type" : "string"
-            },
-            "required" : true,
-            "description" : "開始時間"
-          }, {
-            "in" : "query",
-            "name" : "endDate",
-            "schema" : {
-              "type" : "string"
-            },
-            "required" : true,
-            "description" : "結束時間"
-          } ],
-          "responses" : {
-            "200" : {
-              "description" : "Success",
-              "content" : {
-                "application/json" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/scheduleListRes"
-                  }
-                }
-              }
-            },
-            "401" : {
-              "description" : "Failed",
-              "content" : {
-                "application/json" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/CommonResFailed"
-                  }
-                }
-              }
-            }
-          }
+    "openapi": "3.0.0",
+    "info": {
+        "title": "CinePOS_BackEnd",
+        "description": "CinePOS 後端API",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/"
         }
-      },
-      "/v1/manager/login": {
-          "post": {
-              "tags": [
-                  "Manager"
-              ],
-              "summary": "登入請求",
-              "requestBody": {
-                  "description": "資料格式",
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "$ref": "#/components/schemas/LoginReq"
-                          }
-                      }
-                  },
-                  "required": true
-              },
-              "responses": {
-                  "200": {
-                      "description": "Success",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/LoginRes"
-                              }
-                          }
-                      }
-                  },
-                  "401": {
-                      "description": "Failed",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonResFailedNoFound"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/manager/user/profile": {
-          "post": {
-              "tags": [
-                  "Manager"
-              ],
-              "summary": "修改員工姓名",
-              "requestBody": {
-                  "description": "資料格式",
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "$ref": "#/components/schemas/InfoUpdateReq"
-                          }
-                      }
-                  },
-                  "required": true
-              },
-              "responses": {
-                  "200": {
-                      "description": "Success",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/InfoUpdateRes"
-                              }
-                          }
-                      }
-                  },
-                  "401": {
-                      "description": "Failed",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonResFailedAuthInvalid"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/manager/timetable/list": {
-          "get": {
-              "tags": [
-                  "Manager"
-              ],
-              "summary": "取得時刻列表",
-              "responses": {
-                  "200": {
-                      "description": "Success",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/timetableListRes"
-                              }
-                          }
-                      }
-                  }
-              },
-              "description": "取得時刻表",
-              "security": [],
-              "parameters": [
-                  {
-                      "in": "query",
-                      "name": "startDate",
-                      "required": true,
-                      "schema": {
-                          "format": "double",
-                          "type": "number"
-                      }
-                  },
-                  {
-                      "in": "query",
-                      "name": "endDate",
-                      "required": true,
-                      "schema": {
-                          "format": "double",
-                          "type": "number"
-                      }
-                  }
-              ]
-          }
-      },
-      "/v1/manager/timetable/create": {
-          "post": {
-              "tags": [
-                  "Manager"
-              ],
-              "operationId": "CreateTimetable",
-              "responses": {
-                  "200": {
-                      "description": "Success",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/timetableRes"
-                              }
-                          }
-                      }
-                  }
-              },
-              "description": "新增時刻表",
-              "security": [],
-              "parameters": [],
-              "requestBody": {
-                  "required": true,
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "$ref": "#/components/schemas/timetableCreateReq"
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/manager/timetable/update": {
-          "patch": {
-              "tags": [
-                  "Manager"
-              ],
-              "operationId": "UpdateTimetable",
-              "responses": {
-                  "200": {
-                      "description": "Success",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/timetableRes"
-                              }
-                          }
-                      }
-                  }
-              },
-              "description": "更新時刻表",
-              "security": [],
-              "parameters": [],
-              "requestBody": {
-                  "required": true,
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "$ref": "#/components/schemas/timetableUpdateReq"
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/manager/timetable/{timetableId}": {
-          "delete": {
-              "tags": [
-                  "Manager"
-              ],
-              "operationId": "DeleteItem",
-              "responses": {
-                  "200": {
-                      "description": "Success",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/timetableRes"
-                              }
-                          }
-                      }
-                  }
-              },
-              "description": "刪除時刻表",
-              "security": [],
-              "parameters": [
-                  {
-                      "in": "path",
-                      "name": "timetableId",
-                      "required": true,
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              ]
-          }
-      },
-      "/v1/manager/user/profile/{staffId}": {
-          "get": {
-              "tags": [
-                  "Manager"
-              ],
-              "summary": "取得管理人員資料",
-              "parameters": [
-                  {
-                      "name": "staffId",
-                      "in": "path",
-                      "description": "員編",
-                      "required": true,
-                      "style": "simple",
-                      "explode": false,
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              ],
-              "responses": {
-                  "200": {
-                      "description": "Success",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/UserProfileRes"
-                              }
-                          }
-                      }
-                  },
-                  "401": {
-                      "description": "Failed",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonResFailedNoFound"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/manager/user/sticker/{staffId}": {
-          "post": {
-              "tags": [
-                  "Manager"
-              ],
-              "summary": "上傳管理人員大頭貼",
-              "parameters": [
-                  {
-                      "name": "staffId",
-                      "in": "path",
-                      "description": "員編",
-                      "required": true,
-                      "style": "simple",
-                      "explode": false,
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              ],
-              "requestBody": {
-                  "content": {
-                      "multipart/form-data": {
-                          "schema": {
-                              "$ref": "#/components/schemas/CommonUploadReqBody"
-                          }
-                      }
-                  },
-                  "required": true
-              },
-              "responses": {
-                  "200": {
-                      "description": "上傳成功！",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonUploadSuccess"
-                              }
-                          }
-                      }
-                  },
-                  "401": {
-                      "description": "上傳失敗",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonResFailed"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/manager/movie/list": {
-          "get": {
-              "summary": "查詢電影資訊列表",
-              "tags": [
-                  "Manager"
-              ],
-              "parameters": [
-                  {
-                      "name": "status",
-                      "in": "query",
-                      "description": "上映狀態",
-                      "schema": {
-                          "type": "integer"
-                      }
-                  },
-                  {
-                      "name": "searchDateS",
-                      "in": "query",
-                      "description": "查詢起日",
-                      "schema": {
-                          "type": "string",
-                          "format": "date"
-                      }
-                  },
-                  {
-                      "name": "searchDateE",
-                      "in": "query",
-                      "description": "查詢迄日",
-                      "schema": {
-                          "type": "string",
-                          "format": "date"
-                      }
-                  },
-                  {
-                      "name": "title",
-                      "in": "query",
-                      "description": "電影中文名",
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              ],
-              "responses": {
-                  "200": {
-                      "description": "查詢成功",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/ManagerMovieListSuccess"
-                              }
-                          }
-                      }
-                  },
-                  "401": {
-                      "description": "查詢失敗",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/CommonResFailed"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/manager/movie/{id}": {
-          "get": {
-              "tags": [
-                  "Manager"
-              ],
-              "summary": "取得單一電影資訊",
-              "parameters": [
-                  {
-                      "name": "id",
-                      "in": "path",
-                      "description": "電影id",
-                      "required": true,
-                      "style": "simple",
-                      "explode": false,
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              ],
-              "responses": {
-                  "200": {
-                      "description": "Success",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/MovieDetailGetInfoSuccess"
-                              }
-                          }
-                      }
-                  },
-                  "401": {
-                      "description": "Failed",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/MovieDetailGetInfoFailed"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/v1/manager/movie": {
-          "post": {
-              "tags": [
-                  "Manager"
-              ],
-              "summary": "新增單一電影資訊",
-              "requestBody": {
-                  "description": "新增單一電影資訊參數",
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "$ref": "#/components/schemas/MovieDetailCreateParameter"
-                          }
-                      }
-                  },
-                  "required": true
-              },
-              "responses": {
-                  "200": {
-                      "description": "Success",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/MovieDetailCreateSuccess"
-                              }
-                          }
-                      }
-                  },
-                  "401": {
-                      "description": "Failed",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/MovieDetailCreateFaild"
-                              }
-                          }
-                      }
-                  }
-              }
-          },
-          "patch": {
-              "tags": [
-                  "Manager"
-              ],
-              "summary": "更新單一電影資訊",
-              "requestBody": {
-                  "description": "更新單一電影資訊參數",
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "$ref": "#/components/schemas/MovieDetailUpdateParameter"
-                          }
-                      }
-                  },
-                  "required": true
-              },
-              "responses": {
-                  "200": {
-                      "description": "Success",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/MovieDetailUpdateSuccess"
-                              }
-                          }
-                      }
-                  },
-                  "401": {
-                      "description": "Failed",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/MovieDetailUpdateFaild"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      }
-  },
-  "components": {
-      "schemas": {
-          "CommonResFailed": {
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": -1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "系統發生錯誤!"
-                  }
-              }
-          },
-          "CommonOptionSuccess": {
-              "type": "object",
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": 1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "成功取得選項資料!"
-                  },
-                  "data": {
-                      "$ref": "#/components/schemas/CommonOptionSuccessData"
-                  }
-              }
-          },
-          "CommonOptionSuccessData": {
-              "type": "array",
-              "items": {
-                  "$ref": "#/components/schemas/CommonOptionSuccessDataItem"
-              }
-          },
-          "CommonOptionSuccessDataItem": {
-              "type": "object",
-              "properties": {
-                  "name": {
-                      "type": "string",
-                      "description": "選項文字",
-                      "example": "保護級"
-                  },
-                  "value": {
-                      "type": "number",
-                      "description": "選項值",
-                      "example": 6
-                  }
-              }
-          },
-          "CommonUploadSuccess": {
-              "type": "object",
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": 1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "成功取得上傳檔案資料!"
-                  },
-                  "data": {
-                      "$ref": "#/components/schemas/CommonUploadSuccessData"
-                  }
-              }
-          },
-          "CommonUploadSuccessData": {
-              "type": "object",
-              "properties": {
-                  "fileName": {
-                      "type": "string",
-                      "description": "檔案名稱(firebase比對用)",
-                      "example": "ab47d73-30db-4e3a-b3a6-c32621ed0cdf-大頭貼照片.jpeg"
-                  },
-                  "fileUrl": {
-                      "type": "string",
-                      "description": "檔案網址",
-                      "example": "https://firebasestorage.googleapis.com/v0/b/test0421-f01d7.appspot.com/o/0ab47d73-30db-4e3a-b3a6-c32621ed0cdf-%E8%A8%98%E6%86%B6%E9%AB%94%E7%A8%AE%E9%A1%9E.jpeg?alt=media&token=3ab1c84d-f82a-4cb9-af3c-7a8c71d8877e"
-                  },
-                  "fileSize": {
-                      "type": "number",
-                      "description": "檔案大小",
-                      "example": 76458
-                  }
-              }
-          },
-          "CommonResFailedWrongPassword": {
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": -1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "密碼錯誤!"
-                  }
-              }
-          },
-          "CommonResFailedNoFound": {
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": -1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "查無此人!"
-                  }
-              }
-          },
-          "CommonResFailedFieldInvalid": {
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": -1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "欄位驗證錯誤!"
-                  }
-              }
-          },
-          "CommonResFailedAuthInvalid": {
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": -1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "請重新登入!"
-                  }
-              }
-          },
-          "LoginReq": {
-              "required": [
-                  "password",
-                  "staffId"
-              ],
-              "properties": {
-                  "staffId": {
-                      "type": "string",
-                      "description": "員工編號",
-                      "example": "A0002"
-                  },
-                  "password": {
-                      "type": "string",
-                      "description": "密碼",
-                      "example": "asd123"
-                  }
-              }
-          },
-          "LoginRes": {
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": 1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "message"
-                  },
-                  "data": {
-                      "$ref": "#/components/schemas/LoginRes_data"
-                  }
-              }
-          },
-          "InfoUpdateReq": {
-              "required": [
-                  "newName",
-                  "staffId"
-              ],
-              "properties": {
-                  "newName": {
-                      "type": "string",
-                      "description": "名字",
-                      "example": "黃小狗"
-                  },
-                  "staffId": {
-                      "type": "string",
-                      "description": "員工編號",
-                      "example": "A0002"
-                  }
-              }
-          },
-          "InfoUpdateRes": {
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": 1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "message"
-                  },
-                  "data": {
-                      "$ref": "#/components/schemas/InfoUpdateRes_data"
-                  }
-              }
-          },
-          "LoginRes_data": {
-              "type": "object",
-              "properties": {
-                  "staffId": {
-                      "type": "string",
-                      "description": "員工編號",
-                      "example": "A0001"
-                  },
-                  "name": {
-                      "type": "string",
-                      "description": "姓名",
-                      "example": "文文"
-                  },
-                  "token": {
-                      "type": "string",
-                      "description": "令牌",
-                      "example": "123234345"
-                  }
-              }
-          },
-          "InfoUpdateRes_data": {
-              "type": "object",
-              "properties": {
-                  "staffId": {
-                      "type": "string",
-                      "description": "員工編號",
-                      "example": "A0001"
-                  },
-                  "newName": {
-                      "type": "string",
-                      "description": "姓名",
-                      "example": "文文2"
-                  }
-              }
-          },
-          "UserProfileRes": {
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": 1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "成功取得使用者資料!"
-                  },
-                  "data": {
-                      "$ref": "#/components/schemas/UserProfileResData"
-                  }
-              }
-          },
-          "UserProfileResData": {
-              "properties": {
-                  "staffId": {
-                      "type": "string",
-                      "description": "員工編號",
-                      "example": "A0001"
-                  },
-                  "name": {
-                      "type": "string",
-                      "description": "姓名",
-                      "example": "文文"
-                  },
-                  "role": {
-                      "type": "string",
-                      "description": "角色",
-                      "example": "staff"
-                  },
-                  "status": {
-                      "type": "number",
-                      "description": "在職狀態(0:離職,1:在職)",
-                      "example": 1
-                  },
-                  "stickerUrl": {
-                      "type": "string",
-                      "description": "大頭貼圖片網址",
-                      "example": "https://storage.googleapis.com/test0421-f01d7.appspot.com/4338350b-1cf6-48e7-ae4a-aff3df960573-%E8%83%96%E8%99%8E.jpg?GoogleAccessId=firebase-adminsdk-udl5c%40test0421-f01d7.iam.gserviceaccount.com&Expires=1924876800&Signature=DMb2sECe5IEMdjeG3dgiNbz6DfA36Rr4nSoK71RU5LmOHAfN%2BhIeqMdF0tM5XGCQj4JCdy6bHek%2F%2BgeU%2FREWuQZsa057MAS%2FmW4z5qN5Vri%2BFPA2GP6XXZM2v0e3CBahBmyGEyASwqSWCU3jz5YOuMMpl4CzZdmI7DwjaWSRL%2FwiXrq185JJsT8WOKmM1S5YeJEYkHT1Z0tYxrJmOmEAz6r7Y4gVioAUTw5u0YdujG04g%2ByYNMYHMT3Nd7tLST8RNqYIVEDXWGNBPM3epRuVxHQdWtenK4MsCTVfzVsRvJKpcSABVAExwUl8qWUKhxaeLI%2BSf2gt39rdUqo8RTV6Gg%3D%3D"
-                  },
-                  "stickerFileName": {
-                      "type": "string",
-                      "description": "大頭貼檔案名稱(firebase比對用)",
-                      "example": "4338350b-1cf6-48e7-ae4a-aff3df960573-胖虎.jpg"
-                  }
-              }
-          },
-          "CommonUploadReqBody": {
-              "type": "object",
-              "properties": {
-                  "upload": {
-                      "type": "string",
-                      "format": "binary"
-                  }
-              }
-          },
-          "ManagerMovieListSuccess": {
-              "type": "object",
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": 1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "成功查詢電影列表!"
-                  },
-                  "data": {
-                      "$ref": "#/components/schemas/ManagerMovieListSuccessData"
-                  }
-              }
-          },
-          "ManagerMovieListSuccessData": {
-              "type": "array",
-              "items": {
-                  "type": "object",
-                  "properties": {
-                      "_id": {
-                          "type": "string",
-                          "example": "3B7D5B63-8EA3-449A-9E0E-6974BE9C3DB8",
-                          "description": "電影編號"
-                      },
-                      "statusName": {
-                          "type": "integer",
-                          "example": "已下線",
-                          "description": "上映狀態文字"
-                      },
-                      "title": {
-                          "type": "string",
-                          "example": "關於我和鬼變成家人的那件事",
-                          "description": "電影名稱"
-                      },
-                      "genreName": {
-                          "type": "array",
-                          "items": {
-                              "type": "string"
-                          },
-                          "example": [
-                              "喜劇",
-                              "劇情"
-                          ],
-                          "description": "劇情類型文字"
-                      },
-                      "rateName": {
-                          "type": "string",
-                          "example": "輔12",
-                          "description": "分級制度文字"
-                      },
-                      "releaseDate": {
-                          "type": "object",
-                          "properties": {
-                              "$date": {
-                                  "type": "string",
-                                  "format": "date-time"
-                              }
-                          },
-                          "description": "發行日期",
-                          "example": "2023-05-08T00:00:00.000Z"
-                      },
-                      "provideVersionName": {
-                          "type": "array",
-                          "example": [
-                              "2D",
-                              "3D",
-                              "IMAX",
-                              "4DX"
-                          ],
-                          "items": {
-                              "type": "string"
-                          },
-                          "description": "支援設備文字"
-                      }
-                  }
-              }
-          },
-          "MovieDetailGetInfoSuccess": {
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": 1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "成功查詢電影資訊!"
-                  },
-                  "data": {
-                      "$ref": "#/components/schemas/MovieDetailRes"
-                  }
-              }
-          },
-          "MovieDetailGetInfoFailed": {
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": -1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "查無此電影!"
-                  }
-              }
-          },
-          "MovieDetailRes": {
-              "type": "object",
-              "properties": {
-                  "_id": {
-                      "type": "string",
-                      "example": "3B7D5B63-8EA3-449A-9E0E-6974BE9C3DB8",
-                      "description": "電影編號"
-                  },
-                  "title": {
-                      "type": "string",
-                      "example": "關於我和鬼變成家人的那件事",
-                      "description": "電影中文名"
-                  },
-                  "enTitle": {
-                      "type": "string",
-                      "example": "Marry My Dead Body",
-                      "description": "電影英文名"
-                  },
-                  "genre": {
-                      "type": "array",
-                      "example": [
-                          3,
-                          4
-                      ],
-                      "items": {
-                          "type": "number"
-                      },
-                      "description": "電影類型"
-                  },
-                  "genreName": {
-                      "type": "array",
-                      "example": [
-                          "喜劇",
-                          "劇情"
-                      ],
-                      "items": {
-                          "type": "string"
-                      },
-                      "description": "電影類型文字"
-                  },
-                  "runtime": {
-                      "type": "number",
-                      "example": 129,
-                      "description": "片長"
-                  },
-                  "provideVersion": {
-                      "type": "array",
-                      "example": [
-                          1,
-                          2,
-                          3,
-                          4
-                      ],
-                      "items": {
-                          "type": "number"
-                      },
-                      "description": "支援設備"
-                  },
-                  "provideVersionName": {
-                      "type": "array",
-                      "example": [
-                          "2D",
-                          "3D",
-                          "IMAX",
-                          "4DX"
-                      ],
-                      "items": {
-                          "type": "string"
-                      },
-                      "description": "支援設備文字"
-                  },
-                  "rate": {
-                      "type": "number",
-                      "example": 12,
-                      "description": "分級制度"
-                  },
-                  "rateName": {
-                      "type": "string",
-                      "example": "輔12",
-                      "description": "分級制度文字"
-                  },
-                  "director": {
-                      "type": "string",
-                      "example": "程偉豪",
-                      "description": "導演"
-                  },
-                  "cast": {
-                      "type": "array",
-                      "example": [
-                          "許光漢",
-                          "林柏宏",
-                          "王淨"
-                      ],
-                      "items": {
-                          "type": "string"
-                      },
-                      "description": "演員"
-                  },
-                  "description": {
-                      "type": "string",
-                      "example": "恐同男警吳明翰（許光漢 飾演），誤撿地上紅包，沒想到紅包裡的對象是個男的（林柏宏 飾演）！被迫男男冥婚的明翰，一路衰到底，不但甩不掉冥婚對象，就連警花林子晴（王淨 飾演）埋線已久的緝毒案，都被他搞砸。為了挽救危機，恐同又怕鬼的明翰，別無選擇，即使人鬼殊途也要和鬼老公毛毛攜手跨界追兇，一場荒謬絕倫、笑中帶淚的旅程就此展開！",
-                      "description": "電影簡介"
-                  },
-                  "status": {
-                      "type": "number",
-                      "example": 1,
-                      "description": "上映狀態"
-                  },
-                  "statusName": {
-                      "type": "string",
-                      "example": "上映中",
-                      "description": "上映狀態文字"
-                  },
-                  "releaseDate": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "發行日期",
-                      "example": "2023-05-08T00:00:00.000Z"
-                  },
-                  "trailerLink": {
-                      "type": "string",
-                      "description": "預告片連結",
-                      "example": ""
-                  },
-                  "distributor": {
-                      "type": "string",
-                      "description": "發行商",
-                      "example": "威視電影"
-                  },
-                  "posterUrl": {
-                      "type": "string",
-                      "description": "海報連結",
-                      "example": "https://firebasestorage.googleapis.com/v0/b/test0421-f01d7.appspot.com/o/%E9%97%9C%E6%96%BC%E6%88%91%E5%92%8C%E9%AC%BC%E8%AE%8A%E6%88%90%E5%AE%B6%E4%BA%BA%E7%9A%84%E9%82%A3%E4%BB%B6%E4%BA%8B.jpg?alt=media&token=582e6010-8d6b-4049-a31a-5ba2cfd7bd92"
-                  }
-              }
-          },
-          "MovieDetailCreateParameter": {
-              "required": [
-                  "genre",
-                  "posterUrl",
-                  "provideVersion",
-                  "rate",
-                  "releaseDate",
-                  "runtime",
-                  "status",
-                  "title"
-              ],
-              "type": "object",
-              "properties": {
-                  "title": {
-                      "type": "string",
-                      "description": "電影中文名"
-                  },
-                  "enTitle": {
-                      "type": "string",
-                      "description": "電影英文名"
-                  },
-                  "genre": {
-                      "type": "array",
-                      "items": {
-                          "type": "number"
-                      },
-                      "description": "電影類型(1：動作,2：冒險,3：喜劇,4：劇情,5：恐怖,6：科幻,7：浪漫愛情,8：動畫,9：紀錄片,10：音樂,11:懸疑,12:驚悚,13:犯罪)"
-                  },
-                  "runtime": {
-                      "type": "number",
-                      "description": "片長"
-                  },
-                  "provideVersion": {
-                      "type": "array",
-                      "items": {
-                          "type": "number"
-                      },
-                      "description": "支援設備(1:2D,2:3D,3:IMAX,4:4DX)"
-                  },
-                  "rate": {
-                      "type": "number",
-                      "description": "分級制度(0: 普通級,6: 保護級,12: 輔導十二級,15 : 輔導十五級,18: 限制級)"
-                  },
-                  "director": {
-                      "type": "string",
-                      "description": "導演"
-                  },
-                  "cast": {
-                      "type": "array",
-                      "items": {
-                          "type": "string"
-                      },
-                      "description": "演員"
-                  },
-                  "description": {
-                      "type": "string",
-                      "description": "電影簡介"
-                  },
-                  "status": {
-                      "type": "number",
-                      "description": "上映狀態(-1: 已下檔(下線) / 0: 尚未發佈(籌備中) / 1: 已發佈(上映中))"
-                  },
-                  "releaseDate": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "發行日期"
-                  },
-                  "trailerLink": {
-                      "type": "string",
-                      "description": "預告片連結"
-                  },
-                  "distributor": {
-                      "type": "string",
-                      "description": "發行商"
-                  },
-                  "posterUrl": {
-                      "type": "string",
-                      "description": "海報連結"
-                  }
-              }
-          },
-          "MovieDetailUpdateParameter": {
-              "required": [
-                  "_id",
-                  "genre",
-                  "posterUrl",
-                  "provideVersion",
-                  "rate",
-                  "releaseDate",
-                  "runtime",
-                  "status",
-                  "title"
-              ],
-              "type": "object",
-              "properties": {
-                  "_id": {
-                      "type": "string",
-                      "description": "系統編號",
-                      "example": "3B7D5B63-8EA3-449A-9E0E-6974BE9C3DB8"
-                  },
-                  "title": {
-                      "type": "string",
-                      "description": "電影中文名"
-                  },
-                  "enTitle": {
-                      "type": "string",
-                      "description": "電影英文名"
-                  },
-                  "genre": {
-                      "type": "array",
-                      "items": {
-                          "type": "number"
-                      },
-                      "description": "電影類型(1：動作,2：冒險,3：喜劇,4：劇情,5：恐怖,6：科幻,7：浪漫愛情,8：動畫,9：紀錄片,10：音樂,11:懸疑,12:驚悚,13:犯罪)"
-                  },
-                  "runtime": {
-                      "type": "number",
-                      "description": "片長"
-                  },
-                  "provideVersion": {
-                      "type": "array",
-                      "items": {
-                          "type": "number"
-                      },
-                      "description": "支援設備(1:2D,2:3D,3:IMAX,4:4DX)"
-                  },
-                  "rate": {
-                      "type": "number",
-                      "description": "分級制度(0: 普通級,6: 保護級,12: 輔導十二級,15 : 輔導十五級,18: 限制級)"
-                  },
-                  "director": {
-                      "type": "string",
-                      "description": "導演"
-                  },
-                  "cast": {
-                      "type": "array",
-                      "items": {
-                          "type": "string"
-                      },
-                      "description": "演員"
-                  },
-                  "description": {
-                      "type": "string",
-                      "description": "電影簡介"
-                  },
-                  "status": {
-                      "type": "number",
-                      "description": "上映狀態(-1: 已下檔(下線) / 0: 尚未發佈(籌備中) / 1: 已發佈(上映中))"
-                  },
-                  "releaseDate": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "發行日期"
-                  },
-                  "trailerLink": {
-                      "type": "string",
-                      "description": "預告片連結"
-                  },
-                  "distributor": {
-                      "type": "string",
-                      "description": "發行商"
-                  },
-                  "posterUrl": {
-                      "type": "string",
-                      "description": "海報連結"
-                  }
-              }
-          },
-          "MovieDetailCreateSuccess": {
-              "type": "object",
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": 1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "成功新增電影資訊!"
-                  },
-                  "data": {
-                      "$ref": "#/components/schemas/MovieDetailCreateSuccessData"
-                  }
-              }
-          },
-          "MovieDetailCreateSuccessData": {
-              "type": "object",
-              "properties": {
-                  "title": {
-                      "type": "string",
-                      "description": "電影中文名"
-                  },
-                  "enTitle": {
-                      "type": "string",
-                      "description": "電影英文名"
-                  },
-                  "genre": {
-                      "type": "array",
-                      "items": {
-                          "type": "number"
-                      },
-                      "description": "電影類型(1：動作,2：冒險,3：喜劇,4：劇情,5：恐怖,6：科幻,7：浪漫愛情,8：動畫,9：紀錄片,10：音樂,11:懸疑,12:驚悚,13:犯罪)"
-                  },
-                  "runtime": {
-                      "type": "number",
-                      "description": "片長"
-                  },
-                  "provideVersion": {
-                      "type": "array",
-                      "items": {
-                          "type": "number"
-                      },
-                      "description": "支援設備(1:2D,2:3D,3:IMAX,4:4DX)"
-                  },
-                  "rate": {
-                      "type": "number",
-                      "description": "分級制度(0: 普通級,6: 保護級,12: 輔導十二級,15 : 輔導十五級,18: 限制級)"
-                  },
-                  "director": {
-                      "type": "string",
-                      "description": "導演"
-                  },
-                  "cast": {
-                      "type": "array",
-                      "items": {
-                          "type": "string"
-                      },
-                      "description": "演員"
-                  },
-                  "description": {
-                      "type": "string",
-                      "description": "電影簡介"
-                  },
-                  "status": {
-                      "type": "number",
-                      "description": "上映狀態(-1: 已下檔(下線) / 0: 尚未發佈(籌備中) / 1: 已發佈(上映中))"
-                  },
-                  "releaseDate": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "發行日期"
-                  },
-                  "trailerLink": {
-                      "type": "string",
-                      "description": "預告片連結"
-                  },
-                  "distributor": {
-                      "type": "string",
-                      "description": "發行商"
-                  },
-                  "posterUrl": {
-                      "type": "string",
-                      "description": "海報連結"
-                  }
-              }
-          },
-          "MovieDetailCreateFaild": {
-              "type": "object",
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": -1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "請重新檢查資料格式是否正確！"
-                  }
-              }
-          },
-          "MovieDetailUpdateSuccess": {
-              "type": "object",
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": 1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "成功更新電影資訊!"
-                  },
-                  "data": {
-                      "$ref": "#/components/schemas/MovieDetailCreateParameter"
-                  }
-              }
-          },
-          "MovieDetailUpdateFaild": {
-              "type": "object",
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": -1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "更新電影資料失敗，請重新檢查資料格式是否正確！"
-                  }
-              }
-          },
-          "ticketTypeReq": {
-              "required": [
-                  "type",
-                  "price"
-              ],
-              "properties": {
-                  "type": {
-                      "type": "string",
-                      "description": "票種名稱",
-                      "example": "全票"
-                  },
-                  "price": {
-                      "type": "number",
-                      "description": "票價",
-                      "example": 280
-                  }
-              }
-          },
-          "ticketTypeRes": {
-              "required": [
-                  "code",
-                  "message",
-                  "data"
-              ],
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": 1
-                  },
-                  "message": {
-                      "type": "string"
-                  },
-                  "data": {
-                      "$ref": "#/components/schemas/ticketTypeResData"
-                  }
-              }
-          },
-          "ticketTypeResData": {
-              "required": [
-                  "_id",
-                  "type",
-                  "price"
-              ],
-              "properties": {
-                  "_id": {
-                      "type": "string",
-                      "description": "id"
-                  },
-                  "type": {
-                      "type": "string",
-                      "description": "票種名稱",
-                      "example": "全票"
-                  },
-                  "price": {
-                      "type": "number",
-                      "description": "票價",
-                      "example": 280
-                  }
-              }
-          },
-          "timetableListRes": {
-              "required": [
-                  "code",
-                  "message",
-                  "data"
-              ],
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": 1
-                  },
-                  "message": {
-                      "type": "string"
-                  },
-                  "data": {
-                      "$ref": "#/components/schemas/timetableListResData"
-                  }
-              }
-          },
-          "timetableListResData": {
-              "required": [
-                  "_id",
-                  "movieId",
-                  "theaterId",
-                  "startDate",
-                  "endDate",
-                  "createdAt",
-                  "updatedAt"
-              ],
-              "properties": {
-                  "_id": {
-                      "type": "string",
-                      "description": "id"
-                  },
-                  "movieId": {
-                      "type": "object",
-                      "description": "電影資料",
-                      "example": ""
-                  },
-                  "theaterId": {
-                      "type": "object",
-                      "description": "廳院資訊",
-                      "example": ""
-                  },
-                  "startDate": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "開始時間",
-                      "example": "2023-05-21T12:15:01.972Z"
-                  },
-                  "endDate": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "結束時間",
-                      "example": "2023-05-21T12:15:01.972Z"
-                  },
-                  "createdAt": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "新增時間",
-                      "example": "2023-05-21T12:15:01.972Z"
-                  },
-                  "updatedAt": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "更新時間",
-                      "example": "2023-05-21T12:15:01.972Z"
-                  }
-              }
-          },
-          "timetableRes": {
-              "required": [
-                  "code",
-                  "message",
-                  "data"
-              ],
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": 1
-                  },
-                  "message": {
-                      "type": "string"
-                  },
-                  "data": {
-                      "$ref": "#/components/schemas/timetableResData"
-                  }
-              }
-          },
-          "timetableResData": {
-              "required": [
-                  "_id",
-                  "movieId",
-                  "theaterId",
-                  "startDate",
-                  "endDate",
-                  "createdAt",
-                  "updatedAt"
-              ],
-              "properties": {
-                  "_id": {
-                      "type": "string",
-                      "description": "id"
-                  },
-                  "movieId": {
-                      "type": "string",
-                      "description": "電影ID",
-                      "example": "645869f668d71390eba143d3"
-                  },
-                  "theaterId": {
-                      "type": "string",
-                      "description": "廳院ID",
-                      "example": "645a210ad658869fb83b1b8b"
-                  },
-                  "startDate": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "開始時間",
-                      "example": "2023-05-21T12:15:01.972Z"
-                  },
-                  "endDate": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "結束時間",
-                      "example": "2023-05-21T12:15:01.972Z"
-                  },
-                  "createdAt": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "新增時間",
-                      "example": "2023-05-21T12:15:01.972Z"
-                  },
-                  "updatedAt": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "更新時間",
-                      "example": "2023-05-21T12:15:01.972Z"
-                  }
-              }
-          },
-          "timetableCreateReq": {
-              "required": [
-                  "movieId",
-                  "theaterId",
-                  "startDate",
-                  "endDate"
-              ],
-              "properties": {
-                  "movieId": {
-                      "type": "string",
-                      "description": "電影ID",
-                      "example": "645869f668d71390eba143d3"
-                  },
-                  "theaterId": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "廳院ID",
-                      "example": "645a210ad658869fb83b1b8b"
-                  },
-                  "startDate": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "開始時間",
-                      "example": "2023-05-21T12:15:01.972Z"
-                  },
-                  "endDate": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "結束時間",
-                      "example": "2023-05-21T12:15:01.972Z"
-                  }
-              }
-          },
-          "timetableUpdateReq": {
-              "required": [
-                  "_id",
-                  "movieId",
-                  "theaterId",
-                  "startDate",
-                  "endDate"
-              ],
-              "properties": {
-                  "_id": {
-                      "type": "string",
-                      "description": "id"
-                  },
-                  "movieId": {
-                      "type": "string",
-                      "description": "電影ID",
-                      "example": "645869f668d71390eba143d3"
-                  },
-                  "theaterId": {
-                      "type": "string",
-                      "description": "廳院ID",
-                      "example": "645a210ad658869fb83b1b8b"
-                  },
-                  "startDate": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "開始時間",
-                      "example": "2023-05-21T12:15:01.972Z"
-                  },
-                  "endDate": {
-                      "type": "object",
-                      "properties": {
-                          "$date": {
-                              "type": "string",
-                              "format": "date-time"
-                          }
-                      },
-                      "description": "結束時間",
-                      "example": "2023-05-21T12:15:01.972Z"
-                  }
-              }
-          },
-          "StaffOrderCreateReq": {
-              "required": [
-                  "paymentMethod",
-                  "amount",
-                  "ticketList"
-              ],
-              "properties": {
-                  "paymentMethod": {
-                      "type": "number",
-                      "description": "付款方式(1:現金,2:Line Pay)",
-                      "example": 1
-                  },
-                  "amount": {
-                      "type": "number",
-                      "description": " 訂單總金額",
-                      "example": 280
-                  },
-                  "ticketList": {
-                      "type": "array",
-                      "items": {
-                          "type": "object",
-                          "properties": {
-                              "ticketId": {
-                                  "type": "string",
-                                  "example": "202305172236200001",
-                                  "description": "票券ID"
-                              },
-                              "price": {
-                                  "type": "number",
-                                  "example": 280,
-                                  "description": "票價"
-                              },
-                              "ticketTypeId": {
-                                  "type": "string",
-                                  "example": "6460a7626b1ed843a113b9b6",
-                                  "description": "票種ID"
-                              },
-                              "movieId": {
-                                  "type": "string",
-                                  "example": "6458680f68d71390eb9fe56b",
-                                  "description": "電影ID"
-                              },
-                              "scheduleId": {
-                                  "type": "string",
-                                  "example": "645cf11f2e05063973b5f9ed",
-                                  "description": "場次ID"
-                              },
-                              "seatName": {
-                                  "type": "string",
-                                  "example": "A17",
-                                  "description": "座位號"
-                              }
-                          }
-                      }
-                  }
-              }
-          },
-          "StaffOrderCreateSuccess": {
-              "type": "object",
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": 1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "成功結帳!"
-                  },
-                  "data": {
-                      "$ref": "#/components/schemas/StaffOrderCreateSuccessData"
-                  }
-              }
-          },
-          "StaffOrderCreateSuccessData": {
-              "properties": {
-                  "status": {
-                      "type": "number",
-                      "example": 1,
-                      "description": "付款狀態(-1:付款失敗,0:未付款,1:已付款,2:付款中,3:退款)"
-                  },
-                  "orderId": {
-                      "type": "string",
-                      "example": "202305172236200001",
-                      "description": "訂單ID"
-                  },
-                  "paymentMethod": {
-                      "type": "number",
-                      "description": "付款方式(1:現金,2:Line Pay)",
-                      "example": 1
-                  },
-                  "amount": {
-                      "type": "number",
-                      "description": "訂單總金額",
-                      "example": 280
-                  },
-                  "ticketList": {
-                      "type": "array",
-                      "items": {
-                          "type": "object",
-                          "properties": {
-                              "ticketId": {
-                                  "type": "string",
-                                  "example": "202305172236200001",
-                                  "description": "票券ID"
-                              },
-                              "type": {
-                                  "type": "string",
-                                  "example": "全票",
-                                  "description": "票種名稱"
-                              },
-                              "seatName": {
-                                  "type": "string",
-                                  "example": "A17",
-                                  "description": "座位號"
-                              }
-                          }
-                      }
-                  }
-              }
-          },
-          "StaffOrderSearchSuccess": {
-              "type": "object",
-              "properties": {
-                  "code": {
-                      "type": "number",
-                      "example": 1
-                  },
-                  "message": {
-                      "type": "string",
-                      "example": "查詢訂單成功!"
-                  },
-                  "data": {
-                      "$ref": "#/components/schemas/StaffOrderSearchSuccessData"
-                  }
-              }
-          },
-          "StaffOrderSearchSuccessData": {
-              "properties": {
-                  "orderId": {
-                      "type": "string",
-                      "example": "202305172236200001",
-                      "description": "訂單ID"
-                  },
-                  "amount": {
-                      "type": "number",
-                      "description": " 訂單總金額",
-                      "example": 280
-                  },
-                  "ticketList": {
-                      "type": "array",
-                      "items": {
-                          "type": "object",
-                          "properties": {
-                              "ticketId": {
-                                  "type": "string",
-                                  "example": "202305172236200001",
-                                  "description": "票券ID"
-                              },
-                              "time": {
-                                  "type": "object",
-                                  "properties": {
-                                      "$date": {
-                                          "type": "string",
-                                          "format": "date-time"
-                                      }
-                                  },
-                                  "example": "2023-04-31 14:00",
-                                  "description": "場次時間"
-                              },
-                              "type": {
-                                  "type": "string",
-                                  "example": "全票",
-                                  "description": "票種名稱"
-                              },
-                              "price": {
-                                  "type": "number",
-                                  "example": 280,
-                                  "description": "票價"
-                              },
-                              "seatName": {
-                                  "type": "string",
-                                  "example": "A17",
-                                  "description": "座位號"
-                              }
-                          }
-                      }
-                  }
-              }
-          },
-          "scheduleListRes" : {
-            "required" : [ "code", "message", "data" ],
-            "properties" : {
-              "code" : {
-                "type" : "number",
-                "example" : 1
-              },
-              "message" : {
-                "type" : "string"
-              },
-              "data" : {
-                "$ref" : "#/components/schemas/scheduleListResData"
-              }
+    ],
+    "tags": [
+        {
+            "name": "Staff"
+        },
+        {
+            "name": "Manager"
+        },
+        {
+            "name": "Common"
+        }
+    ],
+    "paths": {
+        "/v1/common/option/{typeId}": {
+            "get": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "取得選項資料",
+                "parameters": [
+                    {
+                        "name": "typeId",
+                        "in": "path",
+                        "description": "欄位代碼(1:劇情,2:支援設備,3:分級,4:上映狀態)",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonOptionSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
             }
-          },
-          "scheduleListResData" : {
-            "required" : [ "movieId", "title", "posterUrl", "rate", "runtime", "scheduleList" ],
-            "properties" : {
-              "movieId" : {
-                "type" : "string",
-                "description" : "電影ID"
-              },
-              "title" : {
-                "type" : "string",
-                "description" : "電影名稱",
-                "example" : "全票"
-              },
-              "posterUrl" : {
-                "type" : "string",
-                "description" : "電影主視覺海報"
-              },
-              "rate" : {
-                "type" : "number",
-                "description" : "電影級別(0:普通級、6:保護級、12:輔導十二級、15 :輔導十五級、18:限制級)",
-                "example" : 0
-              },
-              "runtime" : {
-                "type" : "number",
-                "description" : "電影時長（以分鐘為單位）",
-                "example" : 180
-              },
-              "scheduleList" : {
-                "$ref" : "#/components/schemas/ScheduleItem"
-              }
+        },
+        "/v1/common/upload": {
+            "post": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "上傳檔案",
+                "parameters": [
+                    {
+                        "name": "fileType",
+                        "in": "query",
+                        "description": "上傳類型(image:圖檔,other:其它檔案)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CommonUploadReqBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "上傳成功",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonUploadSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "上傳失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
             }
-          },
-          "ScheduleItem" : {
-            "required" : [ "scheduleId", "time", "theater", "theaterType", "totalCapacity", "remainSeats" ],
-            "properties" : {
-              "scheduleId" : {
-                "type" : "string",
-                "description" : "場次ID"
-              },
-              "time" : {
-                "type" : "string",
-                "format" : "date",
-                "description" : "電影開始時間",
-                "example" : "2023-05-21T02:30:00.000Z"
-              },
-              "theater" : {
-                "type" : "string",
-                "description" : "幾廳",
-                "example" : "第5聽"
-              },
-              "theaterType" : {
-                "type" : "number",
-                "description" : "電影種類(1:2D、2:3D、3:iMAX、4:4DX)",
-                "example" : 1
-              },
-              "totalCapacity" : {
-                "type" : "number",
-                "description" : "總座位",
-                "example" : 200
-              },
-              "remainSeats" : {
-                "type" : "number",
-                "description" : "剩餘座位",
-                "example" : 10
-              }
+        },
+        "/v1/staff/login": {
+            "post": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "登入請求",
+                "requestBody": {
+                    "description": "資料格式",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailedWrongPassword"
+                                }
+                            }
+                        }
+                    }
+                }
             }
-          }
-      }
-  }
+        },
+        "/v1/staff/user/profile": {
+            "post": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "修改員工姓名",
+                "requestBody": {
+                    "description": "資料格式",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InfoUpdateReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InfoUpdateRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailedFieldInvalid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/staff/user/profile/{staffId}": {
+            "get": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "取得櫃台人員資料",
+                "parameters": [
+                    {
+                        "name": "staffId",
+                        "in": "path",
+                        "description": "員編",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserProfileRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailedNoFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/staff/user/sticker/{staffId}": {
+            "post": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "上傳櫃台人員大頭貼",
+                "parameters": [
+                    {
+                        "name": "staffId",
+                        "in": "path",
+                        "description": "員編",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CommonUploadReqBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "上傳成功",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonUploadSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "上傳失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/staff/ticketType": {
+            "get": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "取得票種",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ticketTypeRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "新增票種",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ticketTypeReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ticketTypeRes"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/staff/order": {
+            "post": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "結帳",
+                "requestBody": {
+                    "description": "結帳資料",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StaffOrderCreateReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "結帳成功",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StaffOrderCreateSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "結帳失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/staff/order/{orderId}": {
+            "get": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "查詢訂單",
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "description": "訂單編號",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "查詢成功",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StaffOrderSearchSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "查詢失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/staff/schedule/list": {
+            "get": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "場次查詢",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "startDate",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "開始時間"
+                    },
+                    {
+                        "in": "query",
+                        "name": "endDate",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "結束時間"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/scheduleListRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/login": {
+            "post": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "登入請求",
+                "requestBody": {
+                    "description": "資料格式",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailedNoFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/user/profile": {
+            "post": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "修改員工姓名",
+                "requestBody": {
+                    "description": "資料格式",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InfoUpdateReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InfoUpdateRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailedAuthInvalid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/timetable/list": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "取得時刻列表",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/timetableListRes"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "取得時刻表",
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "startDate",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "endDate",
+                        "required": true,
+                        "schema": {
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            }
+        },
+        "/v1/manager/timetable/create": {
+            "post": {
+                "tags": [
+                    "Manager"
+                ],
+                "operationId": "CreateTimetable",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/timetableRes"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "新增時刻表",
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/timetableCreateReq"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/timetable/update": {
+            "patch": {
+                "tags": [
+                    "Manager"
+                ],
+                "operationId": "UpdateTimetable",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/timetableRes"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "更新時刻表",
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/timetableUpdateReq"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/timetable/{timetableId}": {
+            "delete": {
+                "tags": [
+                    "Manager"
+                ],
+                "operationId": "DeleteItem",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/timetableRes"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "刪除時刻表",
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "timetableId",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            }
+        },
+        "/v1/manager/user/profile/{staffId}": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "取得管理人員資料",
+                "parameters": [
+                    {
+                        "name": "staffId",
+                        "in": "path",
+                        "description": "員編",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserProfileRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailedNoFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/user/sticker/{staffId}": {
+            "post": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "上傳管理人員大頭貼",
+                "parameters": [
+                    {
+                        "name": "staffId",
+                        "in": "path",
+                        "description": "員編",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CommonUploadReqBody"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "上傳成功！",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonUploadSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "上傳失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/movie/list": {
+            "get": {
+                "summary": "查詢電影資訊列表",
+                "tags": [
+                    "Manager"
+                ],
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "上映狀態",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "searchDateS",
+                        "in": "query",
+                        "description": "查詢起日",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "searchDateE",
+                        "in": "query",
+                        "description": "查詢迄日",
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "電影中文名",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "查詢成功",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ManagerMovieListSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "查詢失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/movie/{id}": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "取得單一電影資訊",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "電影id",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailGetInfoSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailGetInfoFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/movie": {
+            "post": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "新增單一電影資訊",
+                "requestBody": {
+                    "description": "新增單一電影資訊參數",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovieDetailCreateParameter"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailCreateSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailCreateFaild"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "更新單一電影資訊",
+                "requestBody": {
+                    "description": "更新單一電影資訊參數",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovieDetailUpdateParameter"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailUpdateSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailUpdateFaild"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CommonResFailed": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "系統發生錯誤!"
+                    }
+                }
+            },
+            "CommonOptionSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功取得選項資料!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/CommonOptionSuccessData"
+                    }
+                }
+            },
+            "CommonOptionSuccessData": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/CommonOptionSuccessDataItem"
+                }
+            },
+            "CommonOptionSuccessDataItem": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "選項文字",
+                        "example": "保護級"
+                    },
+                    "value": {
+                        "type": "number",
+                        "description": "選項值",
+                        "example": 6
+                    }
+                }
+            },
+            "CommonUploadSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功取得上傳檔案資料!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/CommonUploadSuccessData"
+                    }
+                }
+            },
+            "CommonUploadSuccessData": {
+                "type": "object",
+                "properties": {
+                    "fileName": {
+                        "type": "string",
+                        "description": "檔案名稱(firebase比對用)",
+                        "example": "ab47d73-30db-4e3a-b3a6-c32621ed0cdf-大頭貼照片.jpeg"
+                    },
+                    "fileUrl": {
+                        "type": "string",
+                        "description": "檔案網址",
+                        "example": "https://firebasestorage.googleapis.com/v0/b/test0421-f01d7.appspot.com/o/0ab47d73-30db-4e3a-b3a6-c32621ed0cdf-%E8%A8%98%E6%86%B6%E9%AB%94%E7%A8%AE%E9%A1%9E.jpeg?alt=media&token=3ab1c84d-f82a-4cb9-af3c-7a8c71d8877e"
+                    },
+                    "fileSize": {
+                        "type": "number",
+                        "description": "檔案大小",
+                        "example": 76458
+                    }
+                }
+            },
+            "CommonResFailedWrongPassword": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "密碼錯誤!"
+                    }
+                }
+            },
+            "CommonResFailedNoFound": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "查無此人!"
+                    }
+                }
+            },
+            "CommonResFailedFieldInvalid": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "欄位驗證錯誤!"
+                    }
+                }
+            },
+            "CommonResFailedAuthInvalid": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "請重新登入!"
+                    }
+                }
+            },
+            "LoginReq": {
+                "required": [
+                    "password",
+                    "staffId"
+                ],
+                "properties": {
+                    "staffId": {
+                        "type": "string",
+                        "description": "員工編號",
+                        "example": "A0002"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "密碼",
+                        "example": "asd123"
+                    }
+                }
+            },
+            "LoginRes": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "message"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/LoginRes_data"
+                    }
+                }
+            },
+            "InfoUpdateReq": {
+                "required": [
+                    "newName",
+                    "staffId"
+                ],
+                "properties": {
+                    "newName": {
+                        "type": "string",
+                        "description": "名字",
+                        "example": "黃小狗"
+                    },
+                    "staffId": {
+                        "type": "string",
+                        "description": "員工編號",
+                        "example": "A0002"
+                    }
+                }
+            },
+            "InfoUpdateRes": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "message"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/InfoUpdateRes_data"
+                    }
+                }
+            },
+            "LoginRes_data": {
+                "type": "object",
+                "properties": {
+                    "staffId": {
+                        "type": "string",
+                        "description": "員工編號",
+                        "example": "A0001"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "姓名",
+                        "example": "文文"
+                    },
+                    "token": {
+                        "type": "string",
+                        "description": "令牌",
+                        "example": "123234345"
+                    }
+                }
+            },
+            "InfoUpdateRes_data": {
+                "type": "object",
+                "properties": {
+                    "staffId": {
+                        "type": "string",
+                        "description": "員工編號",
+                        "example": "A0001"
+                    },
+                    "newName": {
+                        "type": "string",
+                        "description": "姓名",
+                        "example": "文文2"
+                    }
+                }
+            },
+            "UserProfileRes": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功取得使用者資料!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/UserProfileResData"
+                    }
+                }
+            },
+            "UserProfileResData": {
+                "properties": {
+                    "staffId": {
+                        "type": "string",
+                        "description": "員工編號",
+                        "example": "A0001"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "姓名",
+                        "example": "文文"
+                    },
+                    "role": {
+                        "type": "string",
+                        "description": "角色",
+                        "example": "staff"
+                    },
+                    "status": {
+                        "type": "number",
+                        "description": "在職狀態(0:離職,1:在職)",
+                        "example": 1
+                    },
+                    "stickerUrl": {
+                        "type": "string",
+                        "description": "大頭貼圖片網址",
+                        "example": "https://storage.googleapis.com/test0421-f01d7.appspot.com/4338350b-1cf6-48e7-ae4a-aff3df960573-%E8%83%96%E8%99%8E.jpg?GoogleAccessId=firebase-adminsdk-udl5c%40test0421-f01d7.iam.gserviceaccount.com&Expires=1924876800&Signature=DMb2sECe5IEMdjeG3dgiNbz6DfA36Rr4nSoK71RU5LmOHAfN%2BhIeqMdF0tM5XGCQj4JCdy6bHek%2F%2BgeU%2FREWuQZsa057MAS%2FmW4z5qN5Vri%2BFPA2GP6XXZM2v0e3CBahBmyGEyASwqSWCU3jz5YOuMMpl4CzZdmI7DwjaWSRL%2FwiXrq185JJsT8WOKmM1S5YeJEYkHT1Z0tYxrJmOmEAz6r7Y4gVioAUTw5u0YdujG04g%2ByYNMYHMT3Nd7tLST8RNqYIVEDXWGNBPM3epRuVxHQdWtenK4MsCTVfzVsRvJKpcSABVAExwUl8qWUKhxaeLI%2BSf2gt39rdUqo8RTV6Gg%3D%3D"
+                    },
+                    "stickerFileName": {
+                        "type": "string",
+                        "description": "大頭貼檔案名稱(firebase比對用)",
+                        "example": "4338350b-1cf6-48e7-ae4a-aff3df960573-胖虎.jpg"
+                    }
+                }
+            },
+            "CommonUploadReqBody": {
+                "type": "object",
+                "properties": {
+                    "upload": {
+                        "type": "string",
+                        "format": "binary"
+                    }
+                }
+            },
+            "ManagerMovieListSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功查詢電影列表!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ManagerMovieListSuccessData"
+                    }
+                }
+            },
+            "ManagerMovieListSuccessData": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "_id": {
+                            "type": "string",
+                            "example": "3B7D5B63-8EA3-449A-9E0E-6974BE9C3DB8",
+                            "description": "電影編號"
+                        },
+                        "statusName": {
+                            "type": "integer",
+                            "example": "已下線",
+                            "description": "上映狀態文字"
+                        },
+                        "title": {
+                            "type": "string",
+                            "example": "關於我和鬼變成家人的那件事",
+                            "description": "電影名稱"
+                        },
+                        "genreName": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "example": [
+                                "喜劇",
+                                "劇情"
+                            ],
+                            "description": "劇情類型文字"
+                        },
+                        "rateName": {
+                            "type": "string",
+                            "example": "輔12",
+                            "description": "分級制度文字"
+                        },
+                        "releaseDate": {
+                            "type": "object",
+                            "properties": {
+                                "$date": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                }
+                            },
+                            "description": "發行日期",
+                            "example": "2023-05-08T00:00:00.000Z"
+                        },
+                        "provideVersionName": {
+                            "type": "array",
+                            "example": [
+                                "2D",
+                                "3D",
+                                "IMAX",
+                                "4DX"
+                            ],
+                            "items": {
+                                "type": "string"
+                            },
+                            "description": "支援設備文字"
+                        }
+                    }
+                }
+            },
+            "MovieDetailGetInfoSuccess": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功查詢電影資訊!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MovieDetailRes"
+                    }
+                }
+            },
+            "MovieDetailGetInfoFailed": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "查無此電影!"
+                    }
+                }
+            },
+            "MovieDetailRes": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "example": "3B7D5B63-8EA3-449A-9E0E-6974BE9C3DB8",
+                        "description": "電影編號"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "關於我和鬼變成家人的那件事",
+                        "description": "電影中文名"
+                    },
+                    "enTitle": {
+                        "type": "string",
+                        "example": "Marry My Dead Body",
+                        "description": "電影英文名"
+                    },
+                    "genre": {
+                        "type": "array",
+                        "example": [
+                            3,
+                            4
+                        ],
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "電影類型"
+                    },
+                    "genreName": {
+                        "type": "array",
+                        "example": [
+                            "喜劇",
+                            "劇情"
+                        ],
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "電影類型文字"
+                    },
+                    "runtime": {
+                        "type": "number",
+                        "example": 129,
+                        "description": "片長"
+                    },
+                    "provideVersion": {
+                        "type": "array",
+                        "example": [
+                            1,
+                            2,
+                            3,
+                            4
+                        ],
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "支援設備"
+                    },
+                    "provideVersionName": {
+                        "type": "array",
+                        "example": [
+                            "2D",
+                            "3D",
+                            "IMAX",
+                            "4DX"
+                        ],
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "支援設備文字"
+                    },
+                    "rate": {
+                        "type": "number",
+                        "example": 12,
+                        "description": "分級制度"
+                    },
+                    "rateName": {
+                        "type": "string",
+                        "example": "輔12",
+                        "description": "分級制度文字"
+                    },
+                    "director": {
+                        "type": "string",
+                        "example": "程偉豪",
+                        "description": "導演"
+                    },
+                    "cast": {
+                        "type": "array",
+                        "example": [
+                            "許光漢",
+                            "林柏宏",
+                            "王淨"
+                        ],
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "演員"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "恐同男警吳明翰（許光漢 飾演），誤撿地上紅包，沒想到紅包裡的對象是個男的（林柏宏 飾演）！被迫男男冥婚的明翰，一路衰到底，不但甩不掉冥婚對象，就連警花林子晴（王淨 飾演）埋線已久的緝毒案，都被他搞砸。為了挽救危機，恐同又怕鬼的明翰，別無選擇，即使人鬼殊途也要和鬼老公毛毛攜手跨界追兇，一場荒謬絕倫、笑中帶淚的旅程就此展開！",
+                        "description": "電影簡介"
+                    },
+                    "status": {
+                        "type": "number",
+                        "example": 1,
+                        "description": "上映狀態"
+                    },
+                    "statusName": {
+                        "type": "string",
+                        "example": "上映中",
+                        "description": "上映狀態文字"
+                    },
+                    "releaseDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "發行日期",
+                        "example": "2023-05-08T00:00:00.000Z"
+                    },
+                    "trailerLink": {
+                        "type": "string",
+                        "description": "預告片連結",
+                        "example": ""
+                    },
+                    "distributor": {
+                        "type": "string",
+                        "description": "發行商",
+                        "example": "威視電影"
+                    },
+                    "posterUrl": {
+                        "type": "string",
+                        "description": "海報連結",
+                        "example": "https://firebasestorage.googleapis.com/v0/b/test0421-f01d7.appspot.com/o/%E9%97%9C%E6%96%BC%E6%88%91%E5%92%8C%E9%AC%BC%E8%AE%8A%E6%88%90%E5%AE%B6%E4%BA%BA%E7%9A%84%E9%82%A3%E4%BB%B6%E4%BA%8B.jpg?alt=media&token=582e6010-8d6b-4049-a31a-5ba2cfd7bd92"
+                    }
+                }
+            },
+            "MovieDetailCreateParameter": {
+                "required": [
+                    "genre",
+                    "posterUrl",
+                    "provideVersion",
+                    "rate",
+                    "releaseDate",
+                    "runtime",
+                    "status",
+                    "title"
+                ],
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "電影中文名"
+                    },
+                    "enTitle": {
+                        "type": "string",
+                        "description": "電影英文名"
+                    },
+                    "genre": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "電影類型(1：動作,2：冒險,3：喜劇,4：劇情,5：恐怖,6：科幻,7：浪漫愛情,8：動畫,9：紀錄片,10：音樂,11:懸疑,12:驚悚,13:犯罪)"
+                    },
+                    "runtime": {
+                        "type": "number",
+                        "description": "片長"
+                    },
+                    "provideVersion": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "支援設備(1:2D,2:3D,3:IMAX,4:4DX)"
+                    },
+                    "rate": {
+                        "type": "number",
+                        "description": "分級制度(0: 普通級,6: 保護級,12: 輔導十二級,15 : 輔導十五級,18: 限制級)"
+                    },
+                    "director": {
+                        "type": "string",
+                        "description": "導演"
+                    },
+                    "cast": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "演員"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "電影簡介"
+                    },
+                    "status": {
+                        "type": "number",
+                        "description": "上映狀態(-1: 已下檔(下線) / 0: 尚未發佈(籌備中) / 1: 已發佈(上映中))"
+                    },
+                    "releaseDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "發行日期"
+                    },
+                    "trailerLink": {
+                        "type": "string",
+                        "description": "預告片連結"
+                    },
+                    "distributor": {
+                        "type": "string",
+                        "description": "發行商"
+                    },
+                    "posterUrl": {
+                        "type": "string",
+                        "description": "海報連結"
+                    }
+                }
+            },
+            "MovieDetailUpdateParameter": {
+                "required": [
+                    "_id",
+                    "genre",
+                    "posterUrl",
+                    "provideVersion",
+                    "rate",
+                    "releaseDate",
+                    "runtime",
+                    "status",
+                    "title"
+                ],
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "系統編號",
+                        "example": "3B7D5B63-8EA3-449A-9E0E-6974BE9C3DB8"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "電影中文名"
+                    },
+                    "enTitle": {
+                        "type": "string",
+                        "description": "電影英文名"
+                    },
+                    "genre": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "電影類型(1：動作,2：冒險,3：喜劇,4：劇情,5：恐怖,6：科幻,7：浪漫愛情,8：動畫,9：紀錄片,10：音樂,11:懸疑,12:驚悚,13:犯罪)"
+                    },
+                    "runtime": {
+                        "type": "number",
+                        "description": "片長"
+                    },
+                    "provideVersion": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "支援設備(1:2D,2:3D,3:IMAX,4:4DX)"
+                    },
+                    "rate": {
+                        "type": "number",
+                        "description": "分級制度(0: 普通級,6: 保護級,12: 輔導十二級,15 : 輔導十五級,18: 限制級)"
+                    },
+                    "director": {
+                        "type": "string",
+                        "description": "導演"
+                    },
+                    "cast": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "演員"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "電影簡介"
+                    },
+                    "status": {
+                        "type": "number",
+                        "description": "上映狀態(-1: 已下檔(下線) / 0: 尚未發佈(籌備中) / 1: 已發佈(上映中))"
+                    },
+                    "releaseDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "發行日期"
+                    },
+                    "trailerLink": {
+                        "type": "string",
+                        "description": "預告片連結"
+                    },
+                    "distributor": {
+                        "type": "string",
+                        "description": "發行商"
+                    },
+                    "posterUrl": {
+                        "type": "string",
+                        "description": "海報連結"
+                    }
+                }
+            },
+            "MovieDetailCreateSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功新增電影資訊!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MovieDetailCreateSuccessData"
+                    }
+                }
+            },
+            "MovieDetailCreateSuccessData": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "example": "3B7D5B63-8EA3-449A-9E0E-6974BE9C3DB8",
+                        "description": "電影編號"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "電影中文名"
+                    },
+                    "enTitle": {
+                        "type": "string",
+                        "description": "電影英文名"
+                    },
+                    "genre": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "電影類型(1：動作,2：冒險,3：喜劇,4：劇情,5：恐怖,6：科幻,7：浪漫愛情,8：動畫,9：紀錄片,10：音樂,11:懸疑,12:驚悚,13:犯罪)"
+                    },
+                    "runtime": {
+                        "type": "number",
+                        "description": "片長"
+                    },
+                    "provideVersion": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "description": "支援設備(1:2D,2:3D,3:IMAX,4:4DX)"
+                    },
+                    "rate": {
+                        "type": "number",
+                        "description": "分級制度(0: 普通級,6: 保護級,12: 輔導十二級,15 : 輔導十五級,18: 限制級)"
+                    },
+                    "director": {
+                        "type": "string",
+                        "description": "導演"
+                    },
+                    "cast": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "演員"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "電影簡介"
+                    },
+                    "status": {
+                        "type": "number",
+                        "description": "上映狀態(-1: 已下檔(下線) / 0: 尚未發佈(籌備中) / 1: 已發佈(上映中))"
+                    },
+                    "releaseDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "發行日期"
+                    },
+                    "trailerLink": {
+                        "type": "string",
+                        "description": "預告片連結"
+                    },
+                    "distributor": {
+                        "type": "string",
+                        "description": "發行商"
+                    },
+                    "posterUrl": {
+                        "type": "string",
+                        "description": "海報連結"
+                    }
+                }
+            },
+            "MovieDetailCreateFaild": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "請重新檢查資料格式是否正確！"
+                    }
+                }
+            },
+            "MovieDetailUpdateSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功更新電影資訊!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/MovieDetailUpdateParameter"
+                    }
+                }
+            },
+            "MovieDetailUpdateFaild": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": -1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "更新電影資料失敗，請重新檢查資料格式是否正確！"
+                    }
+                }
+            },
+            "ticketTypeReq": {
+                "required": [
+                    "type",
+                    "price"
+                ],
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "票種名稱",
+                        "example": "全票"
+                    },
+                    "price": {
+                        "type": "number",
+                        "description": "票價",
+                        "example": 280
+                    }
+                }
+            },
+            "ticketTypeRes": {
+                "required": [
+                    "code",
+                    "message",
+                    "data"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/ticketTypeResData"
+                    }
+                }
+            },
+            "ticketTypeResData": {
+                "required": [
+                    "_id",
+                    "type",
+                    "price"
+                ],
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "id"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "票種名稱",
+                        "example": "全票"
+                    },
+                    "price": {
+                        "type": "number",
+                        "description": "票價",
+                        "example": 280
+                    }
+                }
+            },
+            "timetableListRes": {
+                "required": [
+                    "code",
+                    "message",
+                    "data"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/timetableListResData"
+                    }
+                }
+            },
+            "timetableListResData": {
+                "required": [
+                    "_id",
+                    "movieId",
+                    "theaterId",
+                    "startDate",
+                    "endDate",
+                    "createdAt",
+                    "updatedAt"
+                ],
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "id"
+                    },
+                    "movieId": {
+                        "type": "object",
+                        "description": "電影資料",
+                        "example": ""
+                    },
+                    "theaterId": {
+                        "type": "object",
+                        "description": "廳院資訊",
+                        "example": ""
+                    },
+                    "startDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "開始時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "endDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "結束時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "createdAt": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "新增時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "updatedAt": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "更新時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    }
+                }
+            },
+            "timetableRes": {
+                "required": [
+                    "code",
+                    "message",
+                    "data"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/timetableResData"
+                    }
+                }
+            },
+            "timetableResData": {
+                "required": [
+                    "_id",
+                    "movieId",
+                    "theaterId",
+                    "startDate",
+                    "endDate",
+                    "createdAt",
+                    "updatedAt"
+                ],
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "id"
+                    },
+                    "movieId": {
+                        "type": "string",
+                        "description": "電影ID",
+                        "example": "645869f668d71390eba143d3"
+                    },
+                    "theaterId": {
+                        "type": "string",
+                        "description": "廳院ID",
+                        "example": "645a210ad658869fb83b1b8b"
+                    },
+                    "startDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "開始時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "endDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "結束時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "createdAt": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "新增時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "updatedAt": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "更新時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    }
+                }
+            },
+            "timetableCreateReq": {
+                "required": [
+                    "movieId",
+                    "theaterId",
+                    "startDate",
+                    "endDate"
+                ],
+                "properties": {
+                    "movieId": {
+                        "type": "string",
+                        "description": "電影ID",
+                        "example": "645869f668d71390eba143d3"
+                    },
+                    "theaterId": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "廳院ID",
+                        "example": "645a210ad658869fb83b1b8b"
+                    },
+                    "startDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "開始時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "endDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "結束時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    }
+                }
+            },
+            "timetableUpdateReq": {
+                "required": [
+                    "_id",
+                    "movieId",
+                    "theaterId",
+                    "startDate",
+                    "endDate"
+                ],
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "id"
+                    },
+                    "movieId": {
+                        "type": "string",
+                        "description": "電影ID",
+                        "example": "645869f668d71390eba143d3"
+                    },
+                    "theaterId": {
+                        "type": "string",
+                        "description": "廳院ID",
+                        "example": "645a210ad658869fb83b1b8b"
+                    },
+                    "startDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "開始時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    },
+                    "endDate": {
+                        "type": "object",
+                        "properties": {
+                            "$date": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "description": "結束時間",
+                        "example": "2023-05-21T12:15:01.972Z"
+                    }
+                }
+            },
+            "StaffOrderCreateReq": {
+                "required": [
+                    "paymentMethod",
+                    "amount",
+                    "ticketList"
+                ],
+                "properties": {
+                    "paymentMethod": {
+                        "type": "number",
+                        "description": "付款方式(1:現金,2:Line Pay)",
+                        "example": 1
+                    },
+                    "amount": {
+                        "type": "number",
+                        "description": " 訂單總金額",
+                        "example": 280
+                    },
+                    "ticketList": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "ticketId": {
+                                    "type": "string",
+                                    "example": "202305172236200001",
+                                    "description": "票券ID"
+                                },
+                                "price": {
+                                    "type": "number",
+                                    "example": 280,
+                                    "description": "票價"
+                                },
+                                "ticketTypeId": {
+                                    "type": "string",
+                                    "example": "6460a7626b1ed843a113b9b6",
+                                    "description": "票種ID"
+                                },
+                                "movieId": {
+                                    "type": "string",
+                                    "example": "6458680f68d71390eb9fe56b",
+                                    "description": "電影ID"
+                                },
+                                "scheduleId": {
+                                    "type": "string",
+                                    "example": "645cf11f2e05063973b5f9ed",
+                                    "description": "場次ID"
+                                },
+                                "seatName": {
+                                    "type": "string",
+                                    "example": "A17",
+                                    "description": "座位號"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "StaffOrderCreateSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功結帳!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/StaffOrderCreateSuccessData"
+                    }
+                }
+            },
+            "StaffOrderCreateSuccessData": {
+                "properties": {
+                    "status": {
+                        "type": "number",
+                        "example": 1,
+                        "description": "付款狀態(-1:付款失敗,0:未付款,1:已付款,2:付款中,3:退款)"
+                    },
+                    "orderId": {
+                        "type": "string",
+                        "example": "202305172236200001",
+                        "description": "訂單ID"
+                    },
+                    "paymentMethod": {
+                        "type": "number",
+                        "description": "付款方式(1:現金,2:Line Pay)",
+                        "example": 1
+                    },
+                    "amount": {
+                        "type": "number",
+                        "description": "訂單總金額",
+                        "example": 280
+                    },
+                    "ticketList": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "ticketId": {
+                                    "type": "string",
+                                    "example": "202305172236200001",
+                                    "description": "票券ID"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "example": "全票",
+                                    "description": "票種名稱"
+                                },
+                                "seatName": {
+                                    "type": "string",
+                                    "example": "A17",
+                                    "description": "座位號"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "StaffOrderSearchSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "查詢訂單成功!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/StaffOrderSearchSuccessData"
+                    }
+                }
+            },
+            "StaffOrderSearchSuccessData": {
+                "properties": {
+                    "orderId": {
+                        "type": "string",
+                        "example": "202305172236200001",
+                        "description": "訂單ID"
+                    },
+                    "amount": {
+                        "type": "number",
+                        "description": " 訂單總金額",
+                        "example": 280
+                    },
+                    "ticketList": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "ticketId": {
+                                    "type": "string",
+                                    "example": "202305172236200001",
+                                    "description": "票券ID"
+                                },
+                                "time": {
+                                    "type": "object",
+                                    "properties": {
+                                        "$date": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "example": "2023-04-31 14:00",
+                                    "description": "場次時間"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "example": "全票",
+                                    "description": "票種名稱"
+                                },
+                                "price": {
+                                    "type": "number",
+                                    "example": 280,
+                                    "description": "票價"
+                                },
+                                "seatName": {
+                                    "type": "string",
+                                    "example": "A17",
+                                    "description": "座位號"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "scheduleListRes": {
+                "required": [
+                    "code",
+                    "message",
+                    "data"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/scheduleListResData"
+                    }
+                }
+            },
+            "scheduleListResData": {
+                "required": [
+                    "movieId",
+                    "title",
+                    "posterUrl",
+                    "rate",
+                    "runtime",
+                    "scheduleList"
+                ],
+                "properties": {
+                    "movieId": {
+                        "type": "string",
+                        "description": "電影ID"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "電影名稱",
+                        "example": "全票"
+                    },
+                    "posterUrl": {
+                        "type": "string",
+                        "description": "電影主視覺海報"
+                    },
+                    "rate": {
+                        "type": "number",
+                        "description": "電影級別(0:普通級、6:保護級、12:輔導十二級、15 :輔導十五級、18:限制級)",
+                        "example": 0
+                    },
+                    "runtime": {
+                        "type": "number",
+                        "description": "電影時長（以分鐘為單位）",
+                        "example": 180
+                    },
+                    "scheduleList": {
+                        "$ref": "#/components/schemas/ScheduleItem"
+                    }
+                }
+            },
+            "ScheduleItem": {
+                "required": [
+                    "scheduleId",
+                    "time",
+                    "theater",
+                    "theaterType",
+                    "totalCapacity",
+                    "remainSeats"
+                ],
+                "properties": {
+                    "scheduleId": {
+                        "type": "string",
+                        "description": "場次ID"
+                    },
+                    "time": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "電影開始時間",
+                        "example": "2023-05-21T02:30:00.000Z"
+                    },
+                    "theater": {
+                        "type": "string",
+                        "description": "幾廳",
+                        "example": "第5聽"
+                    },
+                    "theaterType": {
+                        "type": "number",
+                        "description": "電影種類(1:2D、2:3D、3:iMAX、4:4DX)",
+                        "example": 1
+                    },
+                    "totalCapacity": {
+                        "type": "number",
+                        "description": "總座位",
+                        "example": 200
+                    },
+                    "remainSeats": {
+                        "type": "number",
+                        "description": "剩餘座位",
+                        "example": 10
+                    }
+                }
+            }
+        }
+    }
 }

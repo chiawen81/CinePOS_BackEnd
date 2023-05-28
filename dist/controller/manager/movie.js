@@ -254,7 +254,7 @@ class MovieController {
         console.log('queryData', queryData);
         let condition = {};
         if (queryData.title) {
-            condition["title"] = queryData.title;
+            condition["title"] = { $regex: `.*${queryData.title}.*`, $options: 'i' };
         }
         ;
         if (queryData.searchDateS && queryData.searchDateE) {
