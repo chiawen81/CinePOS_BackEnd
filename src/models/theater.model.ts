@@ -36,7 +36,7 @@ const theaterSchema = new Schema({
     default: []
   },
   seatMap: {
-    type: [Number],
+    type: [String],
     required: true,
     // validate: [(arr) => arr.length === this.row * (this.col + 1), 'Seat map size does not match with row and col values.']
   },
