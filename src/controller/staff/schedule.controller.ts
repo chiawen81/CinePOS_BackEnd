@@ -94,7 +94,7 @@ class ScheduleController {
     scheduleListData(scheduleItem): ScheduleItem {
         return {
             scheduleId: scheduleItem.id,
-            time: scheduleItem.startTime,
+            time: scheduleItem.startDate,
             theater: scheduleItem.theaterId.name,
             theaterType: scheduleItem.theaterId.type,
             totalCapacity: scheduleItem.theaterId.totalCapacity
