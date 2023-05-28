@@ -26,14 +26,14 @@ class SeatController {
                 .findByIdAndUpdate(req.params.scheduleId)
                 .populate({
                     path: 'theaterId',
-                    select: 'name totalCapacity row col rowLabel seatMap'
+                    select: 'name totalCapacity row col rowLabel colLabel seatMap'
                 })
             if(!scheduleTheaters.theaterId){
                 return next(ErrorService.appError(404, "沒有這筆場次座位資料！", next));
-            }
-            console.log('scheduleTheaters',scheduleTheaters);
+            } 
             const seatMap = scheduleTheaters.theaterId['seatMap'];
             const seats =  await Seat.find({ scheduleId: req.params.scheduleId ,status: {$ne:0}});
+
             if(!seats){
                 return next(ErrorService.appError(404, "座位資料錯誤！", next));
             }
@@ -46,7 +46,7 @@ class SeatController {
                     for (let i = scheduleTheaters.theaterId['col'] * rowIndex; i <= (scheduleTheaters.theaterId['col'] * (rowIndex + 1)) - 1; i++) {
                         j++;
                         seat.push({
-                            cols: String(j),
+                            cols: scheduleTheaters.theaterId['colLabel'][j-1],
                             status: 0,
                             type: seatMap[i]
                         })
@@ -62,7 +62,9 @@ class SeatController {
                 }
             });
             seats.forEach(seatsItem => {
+                console.log('seatsItem',seatsItem);
                 list.forEach(listItem => {
+                    console.log('listItem.rows',listItem.rows);
                     if(listItem.rows === seatsItem.seatRow){
                         listItem.seat[Number(seatsItem.seatCol)-1].status =  seatsItem.status
                     }
@@ -74,6 +76,8 @@ class SeatController {
                 free: scheduleTheaters.theaterId['totalCapacity'] - seatsSold.length,
                 maxRows: scheduleTheaters.theaterId['row'],
                 maxColumns: scheduleTheaters.theaterId['col'],
+                rowLabel: scheduleTheaters.theaterId['rowLabel'],
+                colLabel: scheduleTheaters.theaterId['colLabel'],
                 list: list
             }
             res.status(200).json({
