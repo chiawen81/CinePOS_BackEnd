@@ -88,12 +88,12 @@ class MovieController {
 
 
     // ———————————————————————  新增資料  ———————————————————————
-    createInfo = async (req: Request<{}, MovieDetailCreateSuccess, MovieDetailUpdateParameterCustomer, null, {}>, res: Response, next: NextFunction) => {
+    createInfo = async (req: Request<{}, MovieDetailCreateSuccess, MovieDetailCreateParameter, null, {}>, res: Response, next: NextFunction) => {
         const reqData = req.body;       // client端傳過來的參數
         // console.log('reqData', reqData);
 
         // 驗證client端參數
-        let isParaValid = this.isCreateMovieParaValid(reqData);
+        let isParaValid = this.isMovieParaValid(reqData, false);
         console.log('isParaValid ', isParaValid)
         if (!isParaValid.valid) {
             return next(ErrorService.appError(400, isParaValid.errMsg, next));
@@ -121,9 +121,12 @@ class MovieController {
 
 
     // 新增- 驗證client端參數
-    isCreateMovieParaValid(reqData: MovieDetailCreateParameter): { valid: boolean, errMsg: string } {
-
+    isMovieParaValid(reqData: MovieDetailCreateParameter | MovieDetailUpdateParameterCustomer, isUpdate: boolean): { valid: boolean, errMsg: string } {
         let result: { valid: boolean, errMsg: string } = { valid: true, errMsg: "" };
+
+        if (isUpdate && !(reqData as MovieDetailUpdateParameterCustomer)._id) {
+            return result = { valid: false, errMsg: "請輸入電影系統編號！" };
+        };
 
         // 電影名稱
         if (!reqData.title) {
@@ -174,40 +177,41 @@ class MovieController {
 
     // ———————————————————————  更新資料  ———————————————————————
     updateInfo = async (req: Request<{}, MovieDetailUpdateSuccess, MovieDetailUpdateParameterCustomer, null, {}>, res: Response, next: NextFunction) => {
+        const reqData = req.body;       // client端傳過來的參數
+        console.log('更新資料- reqData', reqData);
+
+        // 驗證client端參數
+        let isParaValid = this.isMovieParaValid(reqData, true);
+        console.log('isParaValid ', isParaValid)
+        if (!isParaValid.valid) {
+            return next(ErrorService.appError(400, isParaValid.errMsg, next));
+        };
+        console.log('通過驗證！');
+
+
         try {
             const movieId = req.body._id;
             const movieData = req.body;
             console.log('movieId', movieId, 'movieData', movieData);
 
-            // 驗證資料格式
-            const movie = await Movie.findById(movieId);
-            const validationError = movie.validateSync();
-            if (validationError) {
-                const errorMessage = Object.values(validationError.errors).map(err => err).join('\n');
-                return res.status(422).json({
-                    code: -1,
-                    message: errorMessage || '更新電影資料錯誤！',
-                });
-            };
-
             // 檢查電影資料是否存在
             const updatedMovie = await Movie.findOneAndUpdate(
-                { id: movieId },        // 比對條件
-                { name: movieData },    // 更新的內容
+                { _id: movieId },                        // 比對條件
+                movieData,                               // 更新的內容
                 { new: true }
             );
 
-            if (!updatedMovie) {
-                return res.status(401).json({
-                    code: -1,
-                    message: '找不到此電影資料！',
-                });
-
-            } else {
+            if (updatedMovie) {
                 res.status(200).json({
                     code: 1,
                     message: '電影資料更新成功！',
                     data: updatedMovie,
+                });
+
+            } else {
+                return res.status(401).json({
+                    code: -1,
+                    message: '找不到此電影資料！',
                 });
             };
 

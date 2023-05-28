@@ -81,7 +81,7 @@ class OrderController {
             try {
                 let ticketData = await Ticket.findOneAndUpdate(
                     { _id: val.ticketId },                                                      // 條件
-                    { orderId: newOrderData.orderId },                                              // 更新的內容
+                    { orderId: newOrderData.orderId },                                          // 更新的內容
                     { new: true }                                                               // 參數
                 );
                 console.log('ticketData', ticketData);
