@@ -80,7 +80,7 @@ const moviesSchema = new mongoose.Schema({
     trailerLink: {
         type: String,
         required: false,
-        match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/i
+        match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w.&?=%\-_~]*)*\/?$/i
     },
     distributor: {
         type: String,
@@ -89,7 +89,9 @@ const moviesSchema = new mongoose.Schema({
     posterUrl: {
         type: String,
         required: true,
-        match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/i
+        match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w.&?=%\-_~]*)*\/?$/i
+        // 踩坑note：                                       ＾＾＾＾＾＾＾＾＾ []中間放要允許的特殊字元
+        // 連結的亂碼比較多，要允許多一點的特殊字元，例如：&、=、?、%、-、_、~、.、/，否則正則驗證會失敗
     },
     createdAt: {
         type: Date,
