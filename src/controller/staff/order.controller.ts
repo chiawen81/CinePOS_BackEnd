@@ -32,7 +32,7 @@ class OrderController {
         if (!isParaValid.valid) {
             return next(ErrorService.appError(400, isParaValid.errMsg, next));
         };
-        console.log('通過驗證！')
+        console.log('通過驗證！');
         try {
             // 取到ticketType全部資料
             ticketTypeData = await TicketTypes.find({});
@@ -81,7 +81,7 @@ class OrderController {
             try {
                 let ticketData = await Ticket.findOneAndUpdate(
                     { _id: val.ticketId },                                                      // 條件
-                    { orderId: newOrderData.orderId },                                              // 更新的內容
+                    { orderId: newOrderData.orderId },                                          // 更新的內容
                     { new: true }                                                               // 參數
                 );
                 console.log('ticketData', ticketData);

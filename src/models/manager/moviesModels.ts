@@ -38,7 +38,7 @@ const moviesSchema = new mongoose.Schema({
         type: [{
             type: String
         }],
-        required: true
+        required: false
     },
     rate: {
         type: Number,
@@ -54,14 +54,15 @@ const moviesSchema = new mongoose.Schema({
         required: false,
     },
     cast: {
-        type: Array,
+        type: [{
+            type: String
+        }],
         required: false,
     },
     description: {
         type: String,
         required: false,
-        minlength: 10,
-        maxlength: 300,
+        minlength: 10
     },
     status: {
         type: Number,
@@ -79,33 +80,34 @@ const moviesSchema = new mongoose.Schema({
     trailerLink: {
         type: String,
         required: false,
-        match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/i
+        match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w.&/.?=%\-_~]*)*\/?$/i
     },
     distributor: {
         type: String,
         required: false,
     },
-    posterFile: {
-        type: Buffer,
-        required: false,
-        select: false
-    },
     posterUrl: {
         type: String,
         required: true,
-        match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/i
+        match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w.&/.?=%\-_~]*)*\/?$/i
+        // 踩坑note：                                       ＾＾＾＾＾＾＾＾＾ []中間放要允許的特殊字元
+        // 連結的亂碼比較多，要允許多一點的特殊字元，例如：&、=、?、%、-、_、~、.、/，否則正則驗證會失敗
     },
     createdAt: {
         type: Date,
-        required: true,
+        required: false,
         select: false,
     },
     updatedAt: {
         type: Date,
-        required: true,
+        required: false,
         select: false,
     }
-});
+}, {
+    collection: 'movies',
+    versionKey: false
+}
+);
 
 const Movie = mongoose.model('Movie', moviesSchema);
 

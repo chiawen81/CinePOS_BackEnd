@@ -8,7 +8,7 @@ import AuthService from '../../../service/auth';
 router.post('/', AuthService.isEmpAuth, ErrorService.handleErrorAsync(OrderController.createOrder));
 
 // 查詢訂單
-router.get('/:orderId', AuthService.isEmpAuth, ErrorService.handleErrorAsync(OrderController.createOrder));
+router.get('/:orderId', AuthService.isEmpAuth, ErrorService.handleErrorAsync(OrderController.getOrder));
 
 
 

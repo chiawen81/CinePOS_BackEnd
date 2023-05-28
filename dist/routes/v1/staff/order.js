@@ -10,5 +10,5 @@ const order_controller_1 = __importDefault(require("../../../controller/staff/or
 const error_1 = __importDefault(require("../../../service/error"));
 const auth_1 = __importDefault(require("../../../service/auth"));
 router.post('/', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(order_controller_1.default.createOrder));
-router.get('/:orderId', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(order_controller_1.default.createOrder));
+router.get('/:orderId', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(order_controller_1.default.getOrder));
 exports.StaffOrderRouter = router;
