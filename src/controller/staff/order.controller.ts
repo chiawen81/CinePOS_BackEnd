@@ -32,7 +32,7 @@ class OrderController {
         if (!isParaValid.valid) {
             return next(ErrorService.appError(400, isParaValid.errMsg, next));
         };
-        console.log('通過驗證！')
+        console.log('通過驗證！');
         try {
             // 取到ticketType全部資料
             ticketTypeData = await TicketTypes.find({});

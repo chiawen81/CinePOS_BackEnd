@@ -80,31 +80,26 @@ class MovieController {
             ;
         });
         this.createInfo = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            const reqData = req.body;
+            let isParaValid = this.isCreateMovieParaValid(reqData);
+            console.log('isParaValid ', isParaValid);
+            if (!isParaValid.valid) {
+                return next(error_1.default.appError(400, isParaValid.errMsg, next));
+            }
+            ;
+            console.log('通過驗證！');
             try {
-                const movieData = req.body;
-                console.log('movieData', movieData);
-                const movie = new moviesModels_1.default(movieData);
-                const validationError = movie.validateSync();
-                if (validationError) {
-                    const errorMessage = Object.values(validationError.errors).map(err => err).join('\n');
-                    return res.status(422).json({
-                        code: -1,
-                        message: errorMessage || "新增電影資料錯誤(其它)!",
-                    });
-                }
-                ;
-                const savedMovie = yield movie.save();
+                let newMovieData = yield moviesModels_1.default.create(reqData);
+                console.log('新增電影資料成功');
                 res.status(201).json({
                     code: 1,
                     message: '電影資料新增成功！',
-                    data: savedMovie,
+                    data: newMovieData
                 });
             }
-            catch (error) {
-                res.status(500).json({
-                    code: -1,
-                    message: '電影資料新增失敗！'
-                });
+            catch (err) {
+                console.log('error', err);
+                return next(error_1.default.appError(500, `電影資料新增失敗！${err.message}`, next));
             }
             ;
         });
@@ -183,6 +178,42 @@ class MovieController {
             }
             ;
         });
+    }
+    isCreateMovieParaValid(reqData) {
+        let result = { valid: true, errMsg: "" };
+        if (!reqData.title) {
+            return result = { valid: false, errMsg: "請輸入電影名稱！" };
+        }
+        ;
+        if (!reqData.genre.length) {
+            return result = { valid: false, errMsg: "請輸入電影類型！" };
+        }
+        ;
+        if (!reqData.runtime) {
+            return result = { valid: false, errMsg: "請輸入片長！" };
+        }
+        ;
+        if (!reqData.provideVersion.length) {
+            return result = { valid: false, errMsg: "請輸入支援設備！" };
+        }
+        ;
+        if (reqData.rate === null) {
+            return result = { valid: false, errMsg: "請輸入電影分級！" };
+        }
+        ;
+        if (reqData.status === null) {
+            return result = { valid: false, errMsg: "請輸入上映狀態！" };
+        }
+        ;
+        if (!reqData.releaseDate) {
+            return result = { valid: false, errMsg: "請輸入上映日期！" };
+        }
+        ;
+        if (!reqData.posterUrl) {
+            return result = { valid: false, errMsg: "請輸入海報連結！" };
+        }
+        ;
+        return result;
     }
     getListQuery(data) {
         console.log('data', data);

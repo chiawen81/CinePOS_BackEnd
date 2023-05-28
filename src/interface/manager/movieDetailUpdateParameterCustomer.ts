@@ -6,7 +6,7 @@ export interface MovieDetailUpdateParameterCustomer {
     /**
      * 系統編號
      */
-    _id: string;
+    _id?: string;
     /**
      * 電影中文名
      */

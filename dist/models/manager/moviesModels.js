@@ -42,7 +42,7 @@ const moviesSchema = new mongoose_1.default.Schema({
         type: [{
                 type: String
             }],
-        required: true
+        required: false
     },
     rate: {
         type: Number,
@@ -58,14 +58,15 @@ const moviesSchema = new mongoose_1.default.Schema({
         required: false,
     },
     cast: {
-        type: Array,
+        type: [{
+                type: String
+            }],
         required: false,
     },
     description: {
         type: String,
         required: false,
-        minlength: 10,
-        maxlength: 300,
+        minlength: 10
     },
     status: {
         type: Number,
@@ -89,11 +90,6 @@ const moviesSchema = new mongoose_1.default.Schema({
         type: String,
         required: false,
     },
-    posterFile: {
-        type: Buffer,
-        required: false,
-        select: false
-    },
     posterUrl: {
         type: String,
         required: true,
@@ -101,14 +97,17 @@ const moviesSchema = new mongoose_1.default.Schema({
     },
     createdAt: {
         type: Date,
-        required: true,
+        required: false,
         select: false,
     },
     updatedAt: {
         type: Date,
-        required: true,
+        required: false,
         select: false,
     }
+}, {
+    collection: 'movies',
+    versionKey: false
 });
 const Movie = mongoose_1.default.model('Movie', moviesSchema);
 exports.default = Movie;
