@@ -81,7 +81,7 @@ class MovieController {
         });
         this.createInfo = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             const reqData = req.body;
-            let isParaValid = this.isCreateMovieParaValid(reqData);
+            let isParaValid = this.isMovieParaValid(reqData, false);
             console.log('isParaValid ', isParaValid);
             if (!isParaValid.valid) {
                 return next(error_1.default.appError(400, isParaValid.errMsg, next));
@@ -104,32 +104,31 @@ class MovieController {
             ;
         });
         this.updateInfo = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            const reqData = req.body;
+            console.log('更新資料- reqData', reqData);
+            let isParaValid = this.isMovieParaValid(reqData, true);
+            console.log('isParaValid ', isParaValid);
+            if (!isParaValid.valid) {
+                return next(error_1.default.appError(400, isParaValid.errMsg, next));
+            }
+            ;
+            console.log('通過驗證！');
             try {
                 const movieId = req.body._id;
                 const movieData = req.body;
                 console.log('movieId', movieId, 'movieData', movieData);
-                const movie = yield moviesModels_1.default.findById(movieId);
-                const validationError = movie.validateSync();
-                if (validationError) {
-                    const errorMessage = Object.values(validationError.errors).map(err => err).join('\n');
-                    return res.status(422).json({
-                        code: -1,
-                        message: errorMessage || '更新電影資料錯誤！',
-                    });
-                }
-                ;
-                const updatedMovie = yield moviesModels_1.default.findOneAndUpdate({ id: movieId }, { name: movieData }, { new: true });
-                if (!updatedMovie) {
-                    return res.status(401).json({
-                        code: -1,
-                        message: '找不到此電影資料！',
-                    });
-                }
-                else {
+                const updatedMovie = yield moviesModels_1.default.findOneAndUpdate({ _id: movieId }, movieData, { new: true });
+                if (updatedMovie) {
                     res.status(200).json({
                         code: 1,
                         message: '電影資料更新成功！',
                         data: updatedMovie,
+                    });
+                }
+                else {
+                    return res.status(401).json({
+                        code: -1,
+                        message: '找不到此電影資料！',
                     });
                 }
                 ;
@@ -179,8 +178,12 @@ class MovieController {
             ;
         });
     }
-    isCreateMovieParaValid(reqData) {
+    isMovieParaValid(reqData, isUpdate) {
         let result = { valid: true, errMsg: "" };
+        if (isUpdate && !reqData._id) {
+            return result = { valid: false, errMsg: "請輸入電影系統編號！" };
+        }
+        ;
         if (!reqData.title) {
             return result = { valid: false, errMsg: "請輸入電影名稱！" };
         }
