@@ -84,7 +84,7 @@ const moviesSchema = new mongoose_1.default.Schema({
     trailerLink: {
         type: String,
         required: false,
-        match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/i
+        match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w.&/.?=%\-_~]*)*\/?$/i
     },
     distributor: {
         type: String,
@@ -93,7 +93,7 @@ const moviesSchema = new mongoose_1.default.Schema({
     posterUrl: {
         type: String,
         required: true,
-        match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/i
+        match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w.&/.?=%\-_~]*)*\/?$/i
     },
     createdAt: {
         type: Date,
