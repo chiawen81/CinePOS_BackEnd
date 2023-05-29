@@ -9,10 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ScheduleListResData } from './scheduleListResData';
 
-export interface ScheduleListRes { 
-    code: number;
-    message: string;
-    data: Array<any>;
+export interface Seat { 
+    cols: string;
+    status: number;
+    type: string;
 }
