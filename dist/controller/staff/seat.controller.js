@@ -59,9 +59,7 @@ class SeatController {
                     }
                 });
                 seats.forEach(seatsItem => {
-                    console.log('seatsItem', seatsItem);
                     list.forEach(listItem => {
-                        console.log('listItem.rows', listItem.rows);
                         if (listItem.rows === seatsItem.seatRow) {
                             listItem.seat[Number(seatsItem.seatCol) - 1].status = seatsItem.status;
                         }
