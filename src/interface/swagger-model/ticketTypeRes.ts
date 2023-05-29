@@ -14,5 +14,5 @@ import { TicketTypeResData } from './ticketTypeResData';
 export interface TicketTypeRes { 
     code: number;
     message: string;
-    data: TicketTypeResData;
+    data: Array<any>;
 }

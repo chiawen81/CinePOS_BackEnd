@@ -32,5 +32,5 @@ export interface ScheduleListResData {
      * 電影時長（以分鐘為單位）
      */
     runtime: number;
-    scheduleList: ScheduleItem;
+    scheduleList: Array<any>;
 }
