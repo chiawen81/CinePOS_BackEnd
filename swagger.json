@@ -2444,7 +2444,12 @@
                         "type": "string"
                     },
                     "data": {
-                        "$ref": "#/components/schemas/scheduleListResData"
+                        "type": "array",
+                        "items": {
+                            "type":"object",
+                            "$ref": "#/components/schemas/scheduleListResData"
+                        }
+                        
                     }
                 }
             },
@@ -2458,6 +2463,7 @@
                     "scheduleList"
                 ],
                 "properties": {
+
                     "movieId": {
                         "type": "string",
                         "description": "電影ID"
@@ -2482,7 +2488,12 @@
                         "example": 180
                     },
                     "scheduleList": {
-                        "$ref": "#/components/schemas/ScheduleItem"
+                        "type":"array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/ScheduleItem"
+                        }
+                        
                     }
                 }
             },
