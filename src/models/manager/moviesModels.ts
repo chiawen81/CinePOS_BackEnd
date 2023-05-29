@@ -61,8 +61,7 @@ const moviesSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: false,
-        minlength: 10
+        required: false
     },
     status: {
         type: Number,

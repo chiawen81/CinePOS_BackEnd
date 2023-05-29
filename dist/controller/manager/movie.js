@@ -177,6 +177,70 @@ class MovieController {
             }
             ;
         });
+        this.updateReleaseStatus = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            let reqData = req.body;
+            if (!((typeof reqData.status === 'number') && (typeof reqData.status === 'string'))) {
+                return next(error_1.default.appError(400, "重送參數資料格式錯誤！", next));
+            }
+            ;
+            try {
+                let movieData = yield moviesModels_1.default.findOneAndUpdate({ _id: reqData.movieId }, { status: reqData.status }, { new: true });
+                console.log('movieData-更新電影上映狀態', movieData);
+                if (movieData) {
+                    res.status(200).json({
+                        code: 1,
+                        message: "更新電影上映狀態成功！",
+                        data: movieData
+                    });
+                }
+                else {
+                    res.status(422).json({
+                        code: -1,
+                        message: '查無電影！',
+                    });
+                }
+                ;
+            }
+            catch (err) {
+                res.status(500).json({
+                    code: -1,
+                    message: err.message || '更新電影上映狀態失敗(其它)！',
+                });
+            }
+            ;
+        });
+        this.deleteMovie = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            let movieId = req.query["id"];
+            console.log('movieId', movieId);
+            if (!movieId) {
+                return next(error_1.default.appError(400, "請輸入電影編號！", next));
+            }
+            ;
+            let movieData = moviesModels_1.default.findByIdAndRemove(movieId);
+            console.log('movieData', movieData);
+            try {
+                if (movieData) {
+                    res.status(200).json({
+                        code: 1,
+                        message: "刪除成功！"
+                    });
+                }
+                else {
+                    res.status(422).json({
+                        code: -1,
+                        message: '查無電影！',
+                    });
+                }
+                ;
+            }
+            catch (err) {
+                res.status(500).json({
+                    code: -1,
+                    message: err.message || '刪除電影失敗(其它)！',
+                });
+            }
+            ;
+        });
     }
     isMovieParaValid(reqData, isUpdate) {
         let result = { valid: true, errMsg: "" };

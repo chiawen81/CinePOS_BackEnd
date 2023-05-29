@@ -65,8 +65,7 @@ const moviesSchema = new mongoose_1.default.Schema({
     },
     description: {
         type: String,
-        required: false,
-        minlength: 10
+        required: false
     },
     status: {
         type: Number,

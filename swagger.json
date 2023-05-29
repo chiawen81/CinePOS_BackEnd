@@ -362,49 +362,6 @@
                 }
             }
         },
-        "/v1/staff/seat/{scheduleId}": {
-            "get": {
-                "tags": [
-                    "Staff"
-                ],
-                "summary": "取得場次座位表",
-                "parameters": [
-                    {
-                        "name": "scheduleId",
-                        "in": "path",
-                        "description": "場次ID",
-                        "required": true,
-                        "style": "simple",
-                        "explode": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/seatRes"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Failed",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/CommonResFailed"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/v1/staff/order": {
             "post": {
                 "tags": [
@@ -964,6 +921,47 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "刪除單一電影資訊",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "電影id",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "刪除成功",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailDeleteSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "刪除失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/v1/manager/movie": {
@@ -1039,6 +1037,47 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/MovieDetailUpdateFaild"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/movie/status": {
+            "put": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "更新單一電影資訊上映狀態",
+                "requestBody": {
+                    "description": "電影ID",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovieStatusPara"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "更新狀態成功",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailCreateSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "更新狀態失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailCreateFaild"
                                 }
                             }
                         }
@@ -2444,12 +2483,7 @@
                         "type": "string"
                     },
                     "data": {
-                        "type": "array",
-                        "items": {
-                            "type":"object",
-                            "$ref": "#/components/schemas/scheduleListResData"
-                        }
-                        
+                        "$ref": "#/components/schemas/scheduleListResData"
                     }
                 }
             },
@@ -2463,7 +2497,6 @@
                     "scheduleList"
                 ],
                 "properties": {
-
                     "movieId": {
                         "type": "string",
                         "description": "電影ID"
@@ -2488,12 +2521,7 @@
                         "example": 180
                     },
                     "scheduleList": {
-                        "type":"array",
-                        "items": {
-                            "type": "object",
-                            "$ref": "#/components/schemas/ScheduleItem"
-                        }
-                        
+                        "$ref": "#/components/schemas/ScheduleItem"
                     }
                 }
             },
@@ -2539,76 +2567,36 @@
                     }
                 }
             },
-            "seatRes": {
+            "MovieStatusPara": {
+                "required": [
+                    "movieId",
+                    "status"
+                ],
                 "properties": {
-                    "sold": {
-                        "type": "number",
-                        "description": "已售數量"
-                    },
-                    "free": {
-                        "type": "number",
-                        "description": "未售數量"
-                    },
-                    "maxRows": {
-                        "type": "number",
-                        "description": "總Rows"
-                    },
-                    "maxColumns": {
-                        "type": "number",
-                        "description": "總Columns"
-                    },
-                    "rowLabel": {
-                        "type": "array",
-                        "description": "row項目",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "colLabel": {
-                        "type": "array",
-                        "description": "col項目",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "list": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Row"
-                        }
-                    }
-                },
-                "required": ["sold", "free", "maxRows", "maxColumns", "rowLabel", "colLabel", "list"]
-            },
-            "Seat": {
-                "type": "object",
-                "properties": {
-                    "cols": {
-                        "type": "string"
+                    "movieId": {
+                        "type": "string",
+                        "description": "電影編號",
+                        "example": "202305172236200001"
                     },
                     "status": {
-                        "type": "integer"
-                    },
-                    "type": {
-                        "type": "string"
+                        "type": "number",
+                        "description": "上映狀態(-1: 已下檔(下線) / 0: 尚未發佈(籌備中) / 1: 已發佈(上映中))",
+                        "example": 1
                     }
-                },
-                "required": ["cols", "status", "type"]
+                }
             },
-            "Row": {
+            "MovieDetailDeleteSuccess": {
                 "type": "object",
                 "properties": {
-                    "rows": {
-                        "type": "string"
+                    "code": {
+                        "type": "number",
+                        "example": 1
                     },
-                    "seat": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Seat"
-                        }
+                    "message": {
+                        "type": "string",
+                        "example": "刪除電影成功!"
                     }
-                },
-                "required": ["rows", "seat"]
+                }
             }
         }
     }

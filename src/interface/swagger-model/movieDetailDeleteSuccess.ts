@@ -9,10 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { MovieDetailUpdateParameter } from './movieDetailUpdateParameter';
 
-export interface MovieDetailUpdateSuccess { 
+export interface MovieDetailDeleteSuccess { 
     code?: number;
     message?: string;
-    data?: MovieDetailUpdateParameter;
 }

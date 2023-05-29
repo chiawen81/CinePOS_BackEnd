@@ -10,6 +10,8 @@ import { ManagerMovieListSuccess } from 'src/interface/swagger-model/managerMovi
 import { ManagerMovieListPara } from 'src/interface/manager';
 import { ManagerMovieListSuccessDataInnerCustomer, MovieDetailUpdateParameterCustomer } from 'src/interface/manager';
 import { MovieDetailUpdateSuccess } from 'src/interface/swagger-model/movieDetailUpdateSuccess';
+import { MovieDetailDeleteSuccess } from 'src/interface/swagger-model/movieDetailDeleteSuccess';
+import { MovieStatusPara } from 'src/interface/swagger-model/movieStatusPara';
 
 
 
@@ -378,6 +380,87 @@ class MovieController {
         });
 
         return nameList;
+    }
+
+
+
+
+
+    // ———————————————————————  更新電影上映狀態  ———————————————————————
+    updateReleaseStatus = async (req: Request<{}, MovieDetailCreateSuccess, MovieStatusPara, {}, {}>, res: Response, next: NextFunction) => {
+        let reqData: MovieStatusPara = req.body;
+
+        if (!((typeof reqData.status === 'number') && (typeof reqData.status === 'string'))) {
+            return next(ErrorService.appError(400, "重送參數資料格式錯誤！", next));
+        };
+
+        try {
+            let movieData = await Movie.findOneAndUpdate(
+                { _id: reqData.movieId },
+                { status: reqData.status },                               // 更新的內容
+                { new: true }
+            );
+            console.log('movieData-更新電影上映狀態', movieData);
+
+            if (movieData) {
+                res.status(200).json({
+                    code: 1,
+                    message: "更新電影上映狀態成功！",
+                    data: movieData
+                });
+
+            } else {
+                res.status(422).json({
+                    code: -1,
+                    message: '查無電影！',
+                });
+
+            };
+
+        } catch (err) {
+            res.status(500).json({
+                code: -1,
+                message: err.message || '更新電影上映狀態失敗(其它)！',
+            });
+        };
+    }
+
+
+
+
+
+    // ———————————————————————  刪除電影  ———————————————————————
+    deleteMovie = async (req: Request<{}, MovieDetailDeleteSuccess, {}, string, {}>, res: Response, next: NextFunction) => {
+        let movieId = req.query["id"];
+        console.log('movieId', movieId);
+        if (!movieId) {
+            return next(ErrorService.appError(400, "請輸入電影編號！", next));
+        };
+
+        // 刪除電影
+        let movieData = Movie.findByIdAndRemove(movieId);
+        console.log('movieData', movieData);
+
+        try {
+            if (movieData) {
+                res.status(200).json({
+                    code: 1,
+                    message: "刪除成功！"
+                });
+
+            } else {
+                res.status(422).json({
+                    code: -1,
+                    message: '查無電影！',
+                });
+            };
+
+        } catch (err) {
+            res.status(500).json({
+                code: -1,
+                message: err.message || '刪除電影失敗(其它)！',
+            });
+        };
     }
 
 
