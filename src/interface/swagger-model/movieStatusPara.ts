@@ -9,10 +9,14 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { MovieDetailUpdateParameter } from './movieDetailUpdateParameter';
 
-export interface MovieDetailUpdateSuccess { 
-    code?: number;
-    message?: string;
-    data?: MovieDetailUpdateParameter;
+export interface MovieStatusPara { 
+    /**
+     * 電影編號
+     */
+    movieId: string;
+    /**
+     * 上映狀態(-1: 已下檔(下線) / 0: 尚未發佈(籌備中) / 1: 已發佈(上映中))
+     */
+    status: number;
 }
