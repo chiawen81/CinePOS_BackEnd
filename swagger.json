@@ -362,6 +362,49 @@
                 }
             }
         },
+        "/v1/staff/seat/{scheduleId}": {
+            "get": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "取得場次座位表",
+                "parameters": [
+                    {
+                        "name": "scheduleId",
+                        "in": "path",
+                        "description": "場次ID",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/seatRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v1/staff/order": {
             "post": {
                 "tags": [
@@ -2484,6 +2527,77 @@
                         "example": 10
                     }
                 }
+            },
+            "seatRes": {
+                "properties": {
+                    "sold": {
+                        "type": "number",
+                        "description": "已售數量"
+                    },
+                    "free": {
+                        "type": "number",
+                        "description": "未售數量"
+                    },
+                    "maxRows": {
+                        "type": "number",
+                        "description": "總Rows"
+                    },
+                    "maxColumns": {
+                        "type": "number",
+                        "description": "總Columns"
+                    },
+                    "rowLabel": {
+                        "type": "array",
+                        "description": "row項目",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "colLabel": {
+                        "type": "array",
+                        "description": "col項目",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "list": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Row"
+                        }
+                    }
+                },
+                "required": ["sold", "free", "maxRows", "maxColumns", "rowLabel", "colLabel", "list"]
+            },
+            "Seat": {
+                "type": "object",
+                "properties": {
+                    "cols": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "type": {
+                        "type": "string"
+                    }
+                },
+                "required": ["cols", "status", "type"]
+            },
+            "Row": {
+                "type": "object",
+                "properties": {
+                    "rows": {
+                        "type": "string"
+                    },
+                    "seat": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Seat"
+                        }
+                    }
+                },
+                "required": ["rows", "seat"]
             }
         }
     }
