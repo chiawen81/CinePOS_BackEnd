@@ -37,7 +37,7 @@ const theaterSchema = new Schema({
         default: []
     },
     seatMap: {
-        type: [Number],
+        type: [String],
         required: true,
     },
     status: {

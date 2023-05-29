@@ -30,7 +30,7 @@ class SeatController {
                 })
             if(!scheduleTheaters.theaterId){
                 return next(ErrorService.appError(404, "沒有這筆場次座位資料！", next));
-            } 
+            }
             const seatMap = scheduleTheaters.theaterId['seatMap'];
             const seats =  await Seat.find({ scheduleId: req.params.scheduleId ,status: {$ne:0}});
 
@@ -62,9 +62,7 @@ class SeatController {
                 }
             });
             seats.forEach(seatsItem => {
-                console.log('seatsItem',seatsItem);
                 list.forEach(listItem => {
-                    console.log('listItem.rows',listItem.rows);
                     if(listItem.rows === seatsItem.seatRow){
                         listItem.seat[Number(seatsItem.seatCol)-1].status =  seatsItem.status
                     }
