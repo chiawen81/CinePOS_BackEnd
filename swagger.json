@@ -921,6 +921,47 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "刪除單一電影資訊",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "電影id",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "刪除成功",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailDeleteSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "刪除失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/v1/manager/movie": {
@@ -996,6 +1037,47 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/MovieDetailUpdateFaild"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/movie/status": {
+            "put": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "更新單一電影資訊上映狀態",
+                "requestBody": {
+                    "description": "電影ID",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovieStatusPara"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "更新狀態成功",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailCreateSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "更新狀態失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailCreateFaild"
                                 }
                             }
                         }
@@ -2482,6 +2564,37 @@
                         "type": "number",
                         "description": "剩餘座位",
                         "example": 10
+                    }
+                }
+            },
+            "MovieStatusPara": {
+                "required": [
+                    "movieId",
+                    "status"
+                ],
+                "properties": {
+                    "movieId": {
+                        "type": "string",
+                        "description": "電影編號",
+                        "example": "202305172236200001"
+                    },
+                    "status": {
+                        "type": "number",
+                        "description": "上映狀態(-1: 已下檔(下線) / 0: 尚未發佈(籌備中) / 1: 已發佈(上映中))",
+                        "example": 1
+                    }
+                }
+            },
+            "MovieDetailDeleteSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "刪除電影成功!"
                     }
                 }
             }

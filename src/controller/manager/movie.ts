@@ -381,6 +381,26 @@ class MovieController {
     }
 
 
+
+
+
+    // ———————————————————————  更新電影上映狀態  ———————————————————————
+    updateReleaseStatus = async (req: Request<{}, any, null, string, {}>, res: Response, next: NextFunction) => {
+
+
+    }
+
+
+
+
+
+    // ———————————————————————  刪除電影  ———————————————————————
+    deleteMovie = async (req: Request<{}, any, null, string, {}>, res: Response, next: NextFunction) => {
+
+
+    }
+
+
 }
 
 
