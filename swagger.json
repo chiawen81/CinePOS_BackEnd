@@ -405,6 +405,88 @@
                 }
             }
         },
+        "/v1/staff/seat/checkLock": {
+            "post": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "檢查座位是否有被鎖住",
+                "requestBody": {
+                    "description": "資料格式",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CheckLockReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CheckLockRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/staff/ticket": {
+            "post": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "新增電影票",
+                "requestBody": {
+                    "description": "資料格式",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/createTicketReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/createTicketRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v1/staff/order": {
             "post": {
                 "tags": [
@@ -2729,6 +2811,130 @@
                 "required": [
                     "rows",
                     "seat"
+                ]
+            },
+            "CheckLockReq": {
+                "required": [
+                    "scheduleId",
+                    "seats"
+                ],
+                "properties": {
+                    "scheduleId": {
+                        "type": "string",
+                        "description": "場次ID"
+                    },
+                    "seats": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "CheckLockRes": {
+                "required": [
+                    "code",
+                    "message",
+                    "data"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/CheckLockResData"
+                        }
+                    }
+                }
+            },
+            "CheckLockResData": {
+                "required": [
+                    "seatId",
+                    "seatName"
+                ],
+                "properties": {
+                    "seatId": {
+                        "type": "string",
+                        "description": "座位ID"
+                    },
+                    "seatName": {
+                        "type": "string",
+                        "description": "座位名稱"
+                    }
+                }
+            },
+            "createTicketReq": {
+                "required": [
+                    "ticketData"
+                ],
+                "properties": {
+                    "ticketData": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/createTicketData"
+                        }
+                    }
+                }
+            },
+            "createTicketRes": {
+                "required": [
+                    "code",
+                    "message",
+                    "data"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "createTicketData": {
+                "type": "object",
+                "properties": {
+                    "orderId": {
+                        "type": "string"
+                    },
+                    "movieId": {
+                        "type": "string"
+                    },
+                    "seatId": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "integer"
+                    },
+                    "isRefund": {
+                        "type": "boolean"
+                    },
+                    "paymentMethod": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "orderId",
+                    "movieId",
+                    "seatId",
+                    "price",
+                    "isRefund",
+                    "paymentMethod"
                 ]
             },
             "MovieStatusPara": {
