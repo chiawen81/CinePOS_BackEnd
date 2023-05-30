@@ -16,4 +16,7 @@ router.get('/:theaterId', AuthService.isEmpAuth, ErrorService.handleErrorAsync(T
 // 編輯影廳
 router.patch('/:theaterId', AuthService.isEmpAuth, ErrorService.handleErrorAsync(TheaterController.updateTheater));
 
+// 刪除影廳
+router.delete('/:theaterId', AuthService.isEmpAuth, ErrorService.handleErrorAsync(TheaterController.deleteTheater));
+
 export const ManagerTheaterRouter = router;

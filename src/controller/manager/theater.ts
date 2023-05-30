@@ -250,6 +250,31 @@ class TheaterController {
           res.status(500).json({ error: err.message });
         }
     }
+
+    // ———————————————————————  刪除影廳  ———————————————————————
+    deleteTheater = async (req, res, next) => {
+        const theaterId = req.params.theaterId;
+    
+        // 驗證欄位
+        if (!theaterId) {
+          return next(ErrorService.appError(400, "缺少必要欄位", next));
+        }
+    
+        try {
+          const deletedTheater = await Theater.findByIdAndDelete(theaterId);
+    
+          if (!deletedTheater) {
+            return next(ErrorService.appError(404, "找不到影廳", next));
+          }
+    
+          res.status(200).json({
+            code: 1,
+            message: "影廳已成功刪除！"
+          });
+        } catch (err) {
+          res.status(500).json({ error: err.message });
+        }
+    }
 }
 
 export default new TheaterController();
