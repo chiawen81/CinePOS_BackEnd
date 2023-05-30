@@ -100,11 +100,17 @@ class SeatController {
             };
             const reqSeats = req.body.seats;
             const seatFail = [] // 用來存取無法被選擇的座位
+            const seatSuccess = [] // 用來存取成功可選取的位置
             reqSeats.forEach(reqSeatsItem => {
                 seats.forEach(async seatsItem => {
                     if (reqSeatsItem === seatsItem.seatName) {
                         if (seatsItem.status !== 0) {
                             seatFail.push(seatsItem.seatName)
+                        }else{
+                            seatSuccess.push({
+                                seatId: seatsItem.id,
+                                seatName: seatsItem.seatName
+                            })
                         }
                     }
 
@@ -114,6 +120,7 @@ class SeatController {
             if (seatFail.length > 0) {
                 return next(ErrorService.appError(400, `${seatFail} 無法選取請重新選擇座位`, next));
             }
+
             // 若都可以選擇則將選定得位置鎖住
             await Seat.updateMany(
                 { seatName: { $in: reqSeats } },
@@ -123,7 +130,7 @@ class SeatController {
             res.status(200).json({
                 code: 1,
                 message: "成功鎖定座位!",
-                data: reqSeats
+                data: seatSuccess
             });
         } catch (err) {
             res.status(500).json({

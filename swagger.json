@@ -2848,8 +2848,25 @@
                     "data": {
                         "type": "array",
                         "items": {
-                            "type": "string"
+                            "type": "object",
+                            "$ref": "#/components/schemas/CheckLockResData"
                         }
+                    }
+                }
+            },
+            "CheckLockResData": {
+                "required": [
+                    "seatId",
+                    "seatName"
+                ],
+                "properties": {
+                    "seatId": {
+                        "type": "string",
+                        "description": "座位ID"
+                    },
+                    "seatName": {
+                        "type": "string",
+                        "description": "座位名稱"
                     }
                 }
             },
