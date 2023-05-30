@@ -20,7 +20,7 @@ const ticketsSchema = new mongoose.Schema(
             required: [true, '座位ID必填'],
         },
         price: {
-            type: String,
+            type: Number,
             required: [true, '票價必填'],
         },
         paymentMethod: {

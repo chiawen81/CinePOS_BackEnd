@@ -22,6 +22,7 @@ import { StaffTicketTypeRouter } from './routes/v1/staff/ticketType';
 import { StaffSeatRouter } from './routes/v1/staff/seat';
 import { StaffScheduleRouter } from './routes/v1/staff/schedule';
 import { StaffOrderRouter } from "./routes/v1/staff/order";
+import { StaffTicketRouter } from "./routes/v1/staff/ticket";
 
 // 其它
 import "./service/connection";                        // 資料庫設定
@@ -49,6 +50,7 @@ app.use('/v1/staff', StaffIndexRouter);
 app.use('/v1/staff/user', CommonUserRouter);
 app.use('/v1/staff/login', CommonLogInRouter);
 app.use('/v1/staff/ticketType', StaffTicketTypeRouter);
+app.use('/v1/staff/ticket', StaffTicketRouter);
 app.use('/v1/staff/seat', StaffSeatRouter);
 app.use('/v1/staff/schedule', StaffScheduleRouter);
 app.use('/v1/staff/order', StaffOrderRouter);
