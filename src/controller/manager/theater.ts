@@ -175,6 +175,55 @@ class TheaterController {
             res.status(500).json({ code: -1, error: err.message });
         }
     }
+
+    // ———————————————————————  編輯影廳  ———————————————————————
+    updateTheater = async (req: { params: string, body: TheaterCreateRequest }, res, next) => {
+        
+        let theaterId = req.params["theaterId"];
+        const request: TheaterCreateRequest = req.body;
+
+        // 驗證欄位
+        if (!request) {
+            return next(ErrorService.appError(400, "缺少必要欄位或格式不正確", next));
+        }
+
+        try {
+            // 檢查影廳是否存在
+            const updatedTheater = await Theater.findOneAndUpdate(
+                { _id: theaterId },    // 比對條件
+                {  
+                    name: request.name,
+                    type: request.type,
+                    floor: request.floor,
+                    totalCapacity: request.totalCapacity,
+                    wheelChairCapacity: request.wheelChairCapacity,
+                    row: request.row,
+                    col: request.col,
+                    rowLabel: request.rowLabel,
+                    colLabel: request.colLabel,
+                    seatMap: request.seatMap,
+                    updatedAt: new Date()
+                },    // 更新的內容
+                { new: true }
+            );
+
+            if (!updatedTheater) {
+                return res.status(401).json({
+                    code: -1,
+                    message: '找不到此影廳！',
+                });
+
+            } else {
+                res.status(200).json({
+                    code: 1,
+                    message: '影廳更新成功！',
+                    data: updatedTheater,
+                });
+            };
+        } catch (err) {
+            res.status(500).json({ code: -1, error: err.message });
+        }
+    }
 }
 
 export default new TheaterController();
