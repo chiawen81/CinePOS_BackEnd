@@ -224,6 +224,32 @@ class TheaterController {
             res.status(500).json({ code: -1, error: err.message });
         }
     }
+
+    // ———————————————————————  查詢影廳  ———————————————————————
+    getTheater = async (req, res, next) => {
+        const theaterId = req.params.theaterId;
+    
+        // 驗證欄位
+        if (!theaterId) {
+          return next(ErrorService.appError(400, "缺少必要欄位", next));
+        }
+    
+        try {
+          const theater = await Theater.findOne({ _id: theaterId });
+    
+          if (!theater) {
+            return next(ErrorService.appError(404, "找不到影廳", next));
+          }
+    
+          res.status(200).json({
+            code: 1,
+            message: "成功取得影廳資料！",
+            data: theater
+          });
+        } catch (err) {
+          res.status(500).json({ error: err.message });
+        }
+    }
 }
 
 export default new TheaterController();
