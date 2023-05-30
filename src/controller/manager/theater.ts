@@ -275,6 +275,66 @@ class TheaterController {
           res.status(500).json({ error: err.message });
         }
     }
+
+    // ———————————————————————  上/下架影廳  ———————————————————————
+    updateTheaterStatus = async (req: { params: string, body: TheaterStatusRequest }, res, next) => {
+        
+        let theaterId = req.params["theaterId"];
+        const request: TheaterStatusRequest = req.body;
+
+        // 驗證欄位
+        if (!request) {
+            return next(ErrorService.appError(400, "缺少必要欄位或格式不正確", next));
+        }
+
+        // 驗證前端參數
+        let errMsg: string = "";
+        let statusCheck = request.status ? Number(request.status) : undefined
+
+        if (typeof statusCheck !== 'undefined') {
+            if (isNaN(Number(statusCheck))) {
+                errMsg = "請輸入正確的發佈狀態！";
+            } else {
+                if ((statusCheck !== 0) && (statusCheck !== 1)) {
+                    errMsg = "請輸入正確的發佈狀態！";
+                };
+            };
+        }
+        if (errMsg) {
+            return res.status(400).json({
+                code: -1,
+                message: errMsg
+            });
+        };
+
+        try {
+            // 檢查影廳是否存在
+            const updatedTheater = await Theater.findOneAndUpdate(
+                { _id: theaterId },    // 比對條件
+                {  
+                    status: request.status,
+                    updatedAt: new Date()
+                },    // 更新的內容
+                { new: true }
+            );
+
+            if (!updatedTheater) {
+                return res.status(401).json({
+                    code: -1,
+                    message: '找不到此影廳！',
+                });
+
+            } else {
+                res.status(200).json({
+                    code: 1,
+                    message: '影廳狀態更新成功！',
+                    data: updatedTheater,
+                });
+            };
+        } catch (err) {
+            res.status(500).json({ code: -1, error: err.message });
+        }
+    }
 }
 
 export default new TheaterController();
@@ -290,4 +350,8 @@ export interface TheaterCreateRequest {
     rowLabel: Array<string>,
     colLabel: Array<string>,
     seatMap: Array<string>
+}
+
+export interface TheaterStatusRequest {
+    status: number
 }

@@ -19,4 +19,7 @@ router.patch('/:theaterId', AuthService.isEmpAuth, ErrorService.handleErrorAsync
 // 刪除影廳
 router.delete('/:theaterId', AuthService.isEmpAuth, ErrorService.handleErrorAsync(TheaterController.deleteTheater));
 
+// 上/下架影廳
+router.patch('/:theaterId/onoffline', AuthService.isEmpAuth, ErrorService.handleErrorAsync(TheaterController.updateTheaterStatus));
+
 export const ManagerTheaterRouter = router;
