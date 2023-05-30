@@ -1,5 +1,6 @@
 import Theater from '../../models/common/theater.model';
 import Option from '../../models/common/optionsModels';
+import Seats from '../../models/common/seats.model';
 import ErrorService from './../../service/error';
 
 class TheaterController {
@@ -335,6 +336,81 @@ class TheaterController {
             res.status(500).json({ code: -1, error: err.message });
         }
     }
+
+    // create seats seeder
+    insertSeat = async (req: { body: TheaterCreateSeats }, res, next) => {
+        
+        const request: TheaterCreateSeats = req.body;
+
+        // 驗證欄位
+        if (!request) {
+            return next(ErrorService.appError(400, "缺少必要欄位或格式不正確", next));
+        }
+
+        try {
+            let theaterData = await Theater.findOne({_id: request.theaterId});
+            if (theaterData) {
+                let seatRow = this.splitArrayIntoChunks(theaterData.seatMap, theaterData.row);
+                
+                var dataArray = [];
+                for (let i = 0; i < seatRow.length; i++) {
+                    let colCount = 0;
+                    seatRow[i].forEach(element => {
+                        if(element == "0" || element == "1"){
+                            // 0: 普通, 1:殘障
+                            const seat = {
+                                scheduleId: request.scheduleId,
+                                seatRow: theaterData.rowLabel[i],
+                                seatCol: theaterData.colLabel[colCount],
+                                seatName: theaterData.rowLabel[i] + theaterData.colLabel[colCount] + "",
+                                status: Math.floor(3 * Math.random())
+                            };
+                            console.log("a:" + element);
+                            console.log("colCount:" + element);
+                            dataArray.push(seat);
+
+                        }else if(element === "-1"){
+                            //不開放
+                            const seat = {
+                                scheduleId: request.scheduleId,
+                                seatRow: theaterData.rowLabel[i],
+                                seatCol: theaterData.colLabel[colCount],
+                                seatName: theaterData.rowLabel[i] + theaterData.colLabel[colCount] + "",
+                                status: 3
+                            };
+                            dataArray.push(seat);
+                        }
+
+                        colCount++;
+                    });
+                }
+                await Seats.insertMany(dataArray);
+            }
+            
+            res.status(200).json({
+                code: 1,
+                message: "成功"
+            });
+        } catch (err) {
+            res.status(500).json({ code: -1, error: err.message });
+        }
+    }
+
+    splitArrayIntoChunks<T>(array: T[], chunks: number): T[][] {
+        const result: T[][] = [];
+      
+        if (chunks <= 0) {
+          throw new Error("Chunks should be a positive number.");
+        }
+      
+        const chunkSize = Math.ceil(array.length / chunks);
+      
+        for (let i = 0; i < array.length; i += chunkSize) {
+          result.push(array.slice(i, i + chunkSize));
+        }
+      
+        return result;
+    }
 }
 
 export default new TheaterController();
@@ -354,4 +430,9 @@ export interface TheaterCreateRequest {
 
 export interface TheaterStatusRequest {
     status: number
+}
+
+export interface TheaterCreateSeats {
+    scheduleId: string,
+    theaterId: string
 }

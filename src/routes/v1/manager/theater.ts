@@ -22,4 +22,7 @@ router.delete('/:theaterId', AuthService.isEmpAuth, ErrorService.handleErrorAsyn
 // 上/下架影廳
 router.patch('/:theaterId/onoffline', AuthService.isEmpAuth, ErrorService.handleErrorAsync(TheaterController.updateTheaterStatus));
 
+// insert seats data
+router.post('/insertSeat', AuthService.isEmpAuth, ErrorService.handleErrorAsync(TheaterController.insertSeat));
+
 export const ManagerTheaterRouter = router;
