@@ -17,6 +17,7 @@ import { CommonUploadRouter } from "./routes/v1/common/upload";
 import { TimetableIndexRouter } from './routes/v1/manager/timetable';
 import { ManagerIndexRouter } from './routes/v1/manager/index';
 import { ManagerMovieRouter } from "./routes/v1/manager/movie";
+import { ManagerTheaterRouter } from "./routes/v1/manager/theater";
 import { StaffIndexRouter } from './routes/v1/staff/index';
 import { StaffTicketTypeRouter } from './routes/v1/staff/ticketType';
 import { StaffSeatRouter } from './routes/v1/staff/seat';
@@ -62,6 +63,7 @@ app.use('/v1/manager/user', CommonUserRouter);
 app.use('/v1/manager/login', CommonLogInRouter);
 app.use('/v1/manager/timetable', TimetableIndexRouter);
 app.use('/v1/manager/movie', ManagerMovieRouter);
+app.use('/v1/manager/theater', ManagerTheaterRouter);
 
 
 

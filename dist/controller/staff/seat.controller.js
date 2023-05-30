@@ -97,11 +97,18 @@ class SeatController {
                 ;
                 const reqSeats = req.body.seats;
                 const seatFail = [];
+                const seatSuccess = [];
                 reqSeats.forEach(reqSeatsItem => {
                     seats.forEach((seatsItem) => __awaiter(this, void 0, void 0, function* () {
                         if (reqSeatsItem === seatsItem.seatName) {
                             if (seatsItem.status !== 0) {
                                 seatFail.push(seatsItem.seatName);
+                            }
+                            else {
+                                seatSuccess.push({
+                                    seatId: seatsItem.id,
+                                    seatName: seatsItem.seatName
+                                });
                             }
                         }
                     }));
@@ -113,7 +120,7 @@ class SeatController {
                 res.status(200).json({
                     code: 1,
                     message: "成功鎖定座位!",
-                    data: reqSeats
+                    data: seatSuccess
                 });
             }
             catch (err) {
