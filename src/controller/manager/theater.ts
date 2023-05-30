@@ -1,5 +1,6 @@
 import Theater from '../../models/common/theater.model';
 import Option from '../../models/common/optionsModels';
+import ErrorService from './../../service/error';
 
 class TheaterController {
     constructor() {
@@ -149,6 +150,44 @@ class TheaterController {
 
         return errMsg;
     }
+
+    // ———————————————————————  新增影廳  ———————————————————————
+    createTheater = async (req: { body: TheaterCreateRequest }, res, next) => {
+        
+        const request: TheaterCreateRequest = req.body;
+
+        // 驗證欄位
+        if (!request) {
+            return next(ErrorService.appError(400, "缺少必要欄位或格式不正確", next));
+        }
+
+        try {
+            const theater = await Theater.create(request);
+            await theater.save();
+            res.status(200).json({
+                code: 1,
+                message: "成功",
+                data: {
+                    theater,
+                },
+            });
+        } catch (err) {
+            res.status(500).json({ code: -1, error: err.message });
+        }
+    }
 }
 
 export default new TheaterController();
+
+export interface TheaterCreateRequest {
+    name: string,
+    type: number,
+    floor: number,
+    totalCapacity: number,
+    wheelChairCapacity: number,
+    row: number,
+    col: number,
+    rowLabel: Array<string>,
+    colLabel: Array<string>,
+    seatMap: Array<string>
+}
