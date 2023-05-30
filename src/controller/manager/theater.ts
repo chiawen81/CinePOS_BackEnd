@@ -77,7 +77,7 @@ class TheaterController {
             };
 
             // 取得影廳列表資料
-            let theaterData = await Theater.find(condition ?? {});
+            let theaterData = await Theater.find(condition ?? {}).sort({ name: 1 });
             let theaterType = await Option.find({ typeId: 2 });
             
             let listData = [];
