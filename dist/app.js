@@ -17,6 +17,7 @@ const option_1 = require("./routes/v1/common/option");
 const upload_1 = require("./routes/v1/common/upload");
 const index_1 = require("./routes/v1/manager/index");
 const movie_1 = require("./routes/v1/manager/movie");
+const theater_1 = require("./routes/v1/manager/theater");
 const index_2 = require("./routes/v1/staff/index");
 const ticketType_1 = require("./routes/v1/staff/ticketType");
 const seat_1 = require("./routes/v1/staff/seat");
@@ -41,6 +42,7 @@ app.use('/v1/manager/', index_1.ManagerIndexRouter);
 app.use('/v1/manager/user', user_1.CommonUserRouter);
 app.use('/v1/manager/login', login_1.CommonLogInRouter);
 app.use('/v1/manager/movie', movie_1.ManagerMovieRouter);
+app.use('/v1/manager/theater', theater_1.ManagerTheaterRouter);
 app.use(error_1.default.catchCustomError);
 app.listen(process.env.LOCAL_PORT || 3005, () => {
     console.log(`Server is running on port ${process.env.PORT || 3005}`);

@@ -1,8 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require('mongoose');
-const mongoose_1 = require("mongoose");
-const theaterSchema = new mongoose_1.Schema({
+const { Schema } = mongoose;
+const theaterSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -11,7 +9,7 @@ const theaterSchema = new mongoose_1.Schema({
         type: Number,
         default: null
     },
-    type: Number,
+    type: String,
     totalCapacity: {
         type: Number,
         required: true
@@ -37,8 +35,9 @@ const theaterSchema = new mongoose_1.Schema({
         default: []
     },
     seatMap: {
-        type: [String],
+        type: [Number],
         required: true,
+        validate: [(arr) => arr.length === this.row * (this.col + 1), 'Seat map size does not match with row and col values.']
     },
     status: {
         type: Number,
@@ -52,6 +51,5 @@ const theaterSchema = new mongoose_1.Schema({
         type: Date,
         default: Date.now
     }
-}, { versionKey: false });
-const theaters = mongoose.model('theaters', theaterSchema);
-exports.default = theaters;
+});
+module.exports = mongoose.model('Theater', theaterSchema);
