@@ -28,13 +28,13 @@ class SeatController {
                     path: 'theaterId',
                     select: 'name totalCapacity row col rowLabel colLabel seatMap'
                 })
-            if(!scheduleTheaters.theaterId){
+            if (!scheduleTheaters.theaterId) {
                 return next(ErrorService.appError(404, "沒有這筆場次座位資料！", next));
             }
             const seatMap = scheduleTheaters.theaterId['seatMap'];
-            const seats =  await Seat.find({ scheduleId: req.params.scheduleId ,status: {$ne:0}});
+            const seats = await Seat.find({ scheduleId: req.params.scheduleId, status: { $ne: 0 } });
 
-            if(!seats){
+            if (!seats) {
                 return next(ErrorService.appError(404, "座位資料錯誤！", next));
             }
             const seatsSold = seats.filter(item => item.status === 1);
@@ -46,7 +46,7 @@ class SeatController {
                     for (let i = scheduleTheaters.theaterId['col'] * rowIndex; i <= (scheduleTheaters.theaterId['col'] * (rowIndex + 1)) - 1; i++) {
                         j++;
                         seat.push({
-                            cols: scheduleTheaters.theaterId['colLabel'][j-1],
+                            cols: scheduleTheaters.theaterId['colLabel'][j - 1],
                             status: 0,
                             type: seatMap[i]
                         })
@@ -55,7 +55,7 @@ class SeatController {
                         rows: row,
                         seat: seat
                     })
-                }else{
+                } else {
                     list.push({
                         rows: 'none'
                     })
@@ -63,10 +63,14 @@ class SeatController {
             });
             seats.forEach(seatsItem => {
                 list.forEach(listItem => {
-                    if(listItem.rows === seatsItem.seatRow){
-                        listItem.seat[Number(seatsItem.seatCol)-1].status =  seatsItem.status
+                    if (listItem.rows === seatsItem.seatRow) {
+                        listItem.seat.forEach((item) => {
+                            if (item.cols === seatsItem.seatCol) {
+                                item.status = seatsItem.status;
+                            }
+                        });
                     }
-                    
+
                 });
             });
             const resData = {
@@ -105,6 +109,11 @@ class SeatController {
                     if (reqSeatsItem === seatsItem.seatName) {
                         if (seatsItem.status !== 0) {
                             seatFail.push(seatsItem.seatName)
+                        } else {
+                            seatSuccess.push({
+                                seatId: seatsItem.id,
+                                seatName: seatsItem.seatName
+                            })
                         }
                     }
 
