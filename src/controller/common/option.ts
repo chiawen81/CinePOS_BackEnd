@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import Option from '../../models/common/optionsModels';
+import Option from '../../models/optionsModels';
 import ErrorService from "./../../service/error";
 import { CommonOptionSuccessDataItem } from 'src/interface/swagger-model/commonOptionSuccessDataItem';
 import { CommonOptionSuccess } from 'src/interface/swagger-model/commonOptionSuccess';

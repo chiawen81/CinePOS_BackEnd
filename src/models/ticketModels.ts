@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
 import mongoose = require('mongoose');
-import Movie from "../manager/moviesModels";
-import Seat from "../common/seats.model";
+import Movie from "./moviesModels";
+import Seat from "./seats.model";
 
 const ticketsSchema = new mongoose.Schema(
     {

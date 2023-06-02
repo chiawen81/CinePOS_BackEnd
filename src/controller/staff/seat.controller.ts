@@ -1,8 +1,7 @@
 import { Response, NextFunction } from 'express';
-import Seat from '../../models/common/seats.model';
+import Seat from '../../models/seats.model';
 import ErrorService from '../../service/error';
-import Timetable from '../../models/common/timetable.model';
-// import Theater from '../../models/common/theater.model';
+import Timetable from '../../models/timetable.model';
 
 interface seat {
     cols: string;

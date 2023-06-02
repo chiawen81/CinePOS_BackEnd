@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
 import mongoose = require('mongoose');
-import Theater from '../theater.model';
-import Movie from '../manager/moviesModels';
+import Movie from './moviesModels';
+import Theater from './theater.model';
 
 
 const timetableSchema = new mongoose.Schema({

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import Ticket from '../../models/staff/ticketModels';
+import Ticket from '../../models/ticketModels';
 
 class TicketController {
     constructor() {

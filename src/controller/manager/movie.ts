@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import Movie from '../../models/manager/moviesModels';
+import Movie from '../../models/moviesModels';
 import ErrorService from './../../service/error';
-import Option from '../../models/common/optionsModels';
+import Option from '../../models/optionsModels';
 import { MovieDetailGetInfoSuccess } from 'src/interface/swagger-model/movieDetailGetInfoSuccess';
 import { MovieDetailCreateParameter } from 'src/interface/swagger-model/movieDetailCreateParameter';
 import { MovieDetailCreateSuccess } from 'src/interface/swagger-model/movieDetailCreateSuccess';

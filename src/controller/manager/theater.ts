@@ -1,6 +1,6 @@
-import Theater from '../../models/common/theater.model';
-import Option from '../../models/common/optionsModels';
-import Seats from '../../models/common/seats.model';
+import Theater from '../../models/theater.model';
+import Option from '../../models/optionsModels';
+import Seats from '../../models/seats.model';
 import ErrorService from './../../service/error';
 
 class TheaterController {

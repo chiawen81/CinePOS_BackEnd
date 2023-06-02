@@ -1,4 +1,4 @@
-import Timetable from '../../models/common/timetable.model';
+import Timetable from '../../models/timetable.model';
 import ErrorService from './../../service/error';
 import { NextFunction } from "express";
 
