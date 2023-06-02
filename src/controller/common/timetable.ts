@@ -15,42 +15,71 @@ class TimetableController {
 
 
     // 驗證欄位
-    if (!startDate || !endDate) {
+    if (!startDate && !endDate) {
+      try {
+        const timetable = await Timetable.find()
+          .populate(
+            {
+              path: 'movieId',
+              select: 'title rate runtime'
+            }
+          )
+          .populate({
+            path: 'theaterId',
+            select: 'name'
+          })
+        // .sort('startDate') //照時間排序
+        // .exec();
+        console.log('timetable', timetable);
+        res.status(200).json({
+          code: 1,
+          message: "成功",
+          data: {
+            timetable
+          }
+        });
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      };
+    } else if (startDate && endDate) {
+      try {
+        const timetable = await Timetable.find(
+          {
+            startDate: {
+              $gte: new Date(startDate),
+              $lte: new Date(endDate),
+            },
+          }        // 條件
+        )
+          .populate(
+            {
+              path: 'movieId',
+              select: 'title rate runtime'
+            }
+          )
+          .populate({
+            path: 'theaterId',
+            select: 'name'
+          })
+        // .sort('startDate') //照時間排序
+        // .exec();
+        console.log('timetable', timetable);
+        res.status(200).json({
+          code: 1,
+          message: "成功",
+          data: {
+            timetable
+          }
+        });
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      };
+    }
+    else if (!startDate || !endDate) {
       return next(ErrorService.appError(400, "缺少必要欄位", next));
     };
 
-    try {
-      const timetable = await Timetable.find(
-        {
-          startDate: {
-            $gte: new Date(startDate),
-            $lte: new Date(endDate),
-          },
-        }        // 條件
-      )
-        .populate(
-          {
-            path: 'movieId',
-            select: 'title rate runtime'
-          }
-        )
-        .populate({
-          path: 'theaterId',
-          select: 'name'
-        })
-      // .sort('startDate') //照時間排序
-      // .exec();
-      console.log('timetable', timetable);
-      res.status(200).json({
-        code: 1,
-        message: "成功",
-        data: {
-          timetable
-        }
-      });
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    };
+
   }
 
   /** 更新時刻表 */
@@ -103,11 +132,11 @@ class TimetableController {
 
       const updatedTimetable = await Timetable.findByIdAndUpdate(
         id, {
-          movieId: timetable.movieId,
-          theaterId: timetable.theaterId,
-          startDate: new Date(timetable.startDate),
-          endDate: new Date(timetable.endDate),
-        },
+        movieId: timetable.movieId,
+        theaterId: timetable.theaterId,
+        startDate: new Date(timetable.startDate),
+        endDate: new Date(timetable.endDate),
+      },
         { new: true }
       );
 

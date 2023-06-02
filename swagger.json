@@ -374,7 +374,7 @@
                     {
                         "in": "query",
                         "name": "startDate",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "format": "double",
                             "type": "number"
@@ -383,7 +383,7 @@
                     {
                         "in": "query",
                         "name": "endDate",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "format": "double",
                             "type": "number"
