@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+import mongoose = require('mongoose');
+import { Schema } from 'mongoose';
 
 const theaterSchema = new Schema({
   name: {
@@ -10,7 +10,7 @@ const theaterSchema = new Schema({
     type: Number,
     default: null
   },
-  type: String,
+  type: Number,
   totalCapacity: {
     type: Number,
     required: true
