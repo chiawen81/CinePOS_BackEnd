@@ -20,8 +20,10 @@ const usersModels_1 = __importDefault(require("../../models/common/usersModels")
 class LogInController {
     constructor() {
         this.logIn = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            console.log('req', req);
             console.log('進來登入了～', req.originalUrl.split('/')[1]);
-            let { staffId, password } = req.body;
+            let staffId = req.body.staffId;
+            let password = req.body.password;
             console.log('staffId', staffId, 'password', password);
             let passwordValidator = validator_1.default.isLength(password, { min: 8 });
             let staffIdValidator = validator_1.default.isLength(staffId, { min: 5 });

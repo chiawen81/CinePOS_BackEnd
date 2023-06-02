@@ -6,7 +6,7 @@
     "outDir": "dist",                         /* ts编译输出目录 */
     "rootDir": "src",                         /* ts编译根目录. */
     // "strict": true,                        /* 會一併開啟noImplicitAny、strictNullChecks、strictFunctionTypes、strictBindCallApply */
-    "noUnusedLocals": true,                   /* 未使用局部变量报错*/
+    "noUnusedLocals": false,                   /* 未使用局部变量报错*/  // 等大家都調整好再打開XD
     "noUnusedParameters": false,              /* 未使用参数报错*/
     "allowSyntheticDefaultImports": false,    /* 允许从没有设置默认导出的模块中默认导入，仅用于提示，不影响编译结果*/
     "esModuleInterop": true,                  

@@ -5,15 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const moviesSchema = new mongoose_1.default.Schema({
-    _id: {
-        type: String,
-        required: false,
-        select: false,
-    },
-    id: {
-        type: String,
-        required: true,
-    },
     title: {
         type: String,
         required: true,
@@ -29,7 +20,13 @@ const moviesSchema = new mongoose_1.default.Schema({
             }],
         required: true
     },
-    runTime: {
+    genreName: {
+        type: [{
+                type: String
+            }],
+        required: false
+    },
+    runtime: {
         type: Number,
         required: true,
         min: 60,
@@ -37,34 +34,47 @@ const moviesSchema = new mongoose_1.default.Schema({
     },
     provideVersion: {
         type: [{
-                type: Number,
-                enum: [1, 2, 3, 4]
+                type: Number
             }],
         required: true
+    },
+    provideVersionName: {
+        type: [{
+                type: String
+            }],
+        required: false
     },
     rate: {
         type: Number,
         enum: [0, 6, 12, 15, 18],
         required: true
     },
+    rateName: {
+        type: String,
+        required: false
+    },
     director: {
         type: String,
         required: false,
     },
     cast: {
-        type: Array,
+        type: [{
+                type: String
+            }],
         required: false,
     },
     description: {
         type: String,
-        required: false,
-        minlength: 10,
-        maxlength: 300,
+        required: false
     },
     status: {
         type: Number,
         enum: [-1, 0, 1],
         required: true
+    },
+    statusName: {
+        type: String,
+        required: false
     },
     releaseDate: {
         type: Date,
@@ -73,32 +83,30 @@ const moviesSchema = new mongoose_1.default.Schema({
     trailerLink: {
         type: String,
         required: false,
-        match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/i
+        match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w.&/.?=%\-_~]*)*\/?$/i
     },
     distributor: {
         type: String,
         required: false,
     },
-    posterFile: {
-        type: Buffer,
-        required: false,
-        select: false
-    },
     posterUrl: {
         type: String,
         required: true,
-        match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/i
+        match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w.&/.?=%\-_~]*)*\/?$/i
     },
     createdAt: {
         type: Date,
-        required: true,
+        required: false,
         select: false,
     },
     updatedAt: {
         type: Date,
-        required: true,
+        required: false,
         select: false,
     }
+}, {
+    collection: 'movies',
+    versionKey: false
 });
-var Movie = mongoose_1.default.model('Movie', moviesSchema);
+const Movie = mongoose_1.default.model('Movie', moviesSchema);
 exports.default = Movie;

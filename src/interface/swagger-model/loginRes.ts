@@ -12,7 +12,7 @@
 import { LoginResData } from './loginResData';
 
 export interface LoginRes { 
-    code: number;
-    message: string;
-    data: LoginResData;
+    code?: number;
+    message?: string;
+    data?: LoginResData;
 }

@@ -12,14 +12,18 @@ const swaggerDocument = require('../swagger.json');
 // 路由模組
 import { CommonUserRouter } from './routes/v1/common/user';
 import { CommonLogInRouter } from './routes/v1/common/login';
+import { CommonOptionRouter } from "./routes/v1/common/option";
+import { CommonUploadRouter } from "./routes/v1/common/upload";
 import { TimetableIndexRouter } from './routes/v1/manager/timetable';
-
 import { ManagerIndexRouter } from './routes/v1/manager/index';
 import { ManagerMovieRouter } from "./routes/v1/manager/movie";
-
+import { ManagerTheaterRouter } from "./routes/v1/manager/theater";
 import { StaffIndexRouter } from './routes/v1/staff/index';
 import { StaffTicketTypeRouter } from './routes/v1/staff/ticketType';
-import { StaffSeatCheckLockRouter } from './routes/v1/staff/seatCheckLock';
+import { StaffSeatRouter } from './routes/v1/staff/seat';
+import { StaffScheduleRouter } from './routes/v1/staff/schedule';
+import { StaffOrderRouter } from "./routes/v1/staff/order";
+import { StaffTicketRouter } from "./routes/v1/staff/ticket";
 
 // 其它
 import "./service/connection";                        // 資料庫設定
@@ -38,20 +42,29 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // ——————————  設定路由  ——————————
+// 共用
+app.use('/v1/common/option', CommonOptionRouter);
+app.use('/v1/common/upload', CommonUploadRouter);
+
 // 前台
 app.use('/v1/staff', StaffIndexRouter);
 app.use('/v1/staff/user', CommonUserRouter);
 app.use('/v1/staff/login', CommonLogInRouter);
-
 app.use('/v1/staff/ticketType', StaffTicketTypeRouter);
-app.use('/v1/staff/seat/checkLock', StaffSeatCheckLockRouter);
+app.use('/v1/staff/ticket', StaffTicketRouter);
+app.use('/v1/staff/seat', StaffSeatRouter);
+app.use('/v1/staff/schedule', StaffScheduleRouter);
+app.use('/v1/staff/order', StaffOrderRouter);
+
+
 // 後台
 app.use('/v1/manager/', ManagerIndexRouter);
 app.use('/v1/manager/user', CommonUserRouter);
 app.use('/v1/manager/login', CommonLogInRouter);
-/** 時刻表 */
 app.use('/v1/manager/timetable', TimetableIndexRouter);
 app.use('/v1/manager/movie', ManagerMovieRouter);
+app.use('/v1/manager/theater', ManagerTheaterRouter);
+
 
 
 

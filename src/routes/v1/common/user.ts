@@ -15,7 +15,7 @@ router.post('/profile', AuthService.isEmpAuth, AuthService.isOwnerAuth, ErrorSer
 // 更新大頭貼
 router.post('/sticker/:staffId', AuthService.isEmpAuth, AuthService.isOwnerAuth, UploadController.photoValidator,
     ErrorService.handleErrorAsync(UploadController.upload),                            // 共用- 上傳檔案
-    ErrorService.handleErrorAsync(UserController.changeSticker)                        // 自訂- 更新資料庫大頭貼連結
+    ErrorService.handleErrorAsync(UserController.updateSticker)                        // 自訂- 更新資料庫大頭貼連結
 );
 
 
