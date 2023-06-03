@@ -55,14 +55,28 @@ class OrderController {
                     this.updateTicketDatabase(newOrderData, next);
                 })
                     .catch((err) => {
-                    return next(error_1.default.appError(500, `結帳過程發生錯誤！${err.message}`, next));
+                    return next(this.createOrderError(req.body, orderId, 500, `結帳過程發生錯誤！已更新資料庫${err.message}`, next));
                 });
             }
             catch (err) {
-                return next(error_1.default.appError(500, `結帳過程發生錯誤！${err.message}`, next));
+                return next(this.createOrderError(req.body, orderId, 500, `結帳過程發生錯誤！已更新資料庫${err.message}`, next));
             }
             ;
         });
+        this.createOrderError = (reqData, orderId, httpStatus, errMessage, next) => {
+            const error = new Error(errMessage);
+            error.statusCode = httpStatus;
+            error.isOperational = true;
+            error.errMessage = errMessage;
+            console.log('appError', httpStatus, errMessage);
+            this.updateOrderDatabaseStatus(orderId, EnumOrderStatus.PAYMENT_FAILED);
+            for (const reqTicketData of reqData.ticketList) {
+                this.updateSeatDatabaseStatus(reqTicketData, EnumSeatStatus.FREE);
+                this.updateTicketDatabaseOrderId(orderId, reqTicketData.ticketId);
+            }
+            ;
+            next(error);
+        };
         this.getOrder = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
         });
     }
@@ -180,6 +194,36 @@ class OrderController {
         }
         ;
         return result;
+    }
+    updateSeatDatabaseStatus(reqTicketData, status) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('搜尋seatData 條件', { _id: reqTicketData.scheduleId, seatName: reqTicketData.seatName });
+            let seatData = yield seats_model_1.default.findOneAndUpdate({ scheduleId: reqTicketData.scheduleId, seatName: reqTicketData.seatName }, { status: status }, { new: true });
+            console.log('找到seatData', seatData);
+        });
+    }
+    ;
+    updateOrderDatabaseStatus(orderId, status) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let OrderData = yield orderModels_1.default.find({ _id: orderId });
+            if (OrderData) {
+                yield orderModels_1.default.findOneAndUpdate({ _id: orderId }, { status: status }, { new: true });
+            }
+            ;
+            console.log('更新訂單狀態', OrderData);
+        });
+    }
+    ;
+    updateTicketDatabaseOrderId(orderId, ticketId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let ticketData = yield ticketModels_1.default.find({ _id: ticketId });
+            console.log('ticketData', ticketData);
+            if (ticketData) {
+                let updateTicketData = yield ticketModels_1.default.findOneAndUpdate({ _id: ticketId }, { orderId: orderId }, { new: true });
+                console.log('updateTicketData', updateTicketData);
+            }
+            ;
+        });
     }
 }
 exports.default = new OrderController();
