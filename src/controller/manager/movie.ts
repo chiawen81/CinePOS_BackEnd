@@ -441,7 +441,7 @@ class MovieController {
         };
 
         // 刪除電影
-        let movieData = Movie.findByIdAndRemove(movieId);
+        let movieData = await Movie.findByIdAndRemove(movieId);
         console.log('movieData', movieData);
 
         try {
