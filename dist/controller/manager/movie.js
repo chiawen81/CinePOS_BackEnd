@@ -217,7 +217,7 @@ class MovieController {
                 return next(error_1.default.appError(400, "請輸入電影編號！", next));
             }
             ;
-            let movieData = moviesModels_1.default.findByIdAndRemove(movieId);
+            let movieData = yield moviesModels_1.default.findByIdAndRemove(movieId);
             console.log('movieData', movieData);
             try {
                 if (movieData) {
