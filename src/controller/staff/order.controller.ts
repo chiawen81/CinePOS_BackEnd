@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import ErrorService from '../../service/error';
-import Order from '../../models/staff/orderModels';
-import Seat from '../../models/common/seats.model';
-import Ticket from '../../models/staff/ticketModels';
-import TicketTypes from '../../models/staff/ticketTypeModels';
+import Order from '../../models/orderModels';
+import Seat from '../../models/seats.model';
+import Ticket from '../../models/ticketModels';
+import TicketTypes from '../../models/ticketTypeModels';
 import { StaffOrderCreateReq } from 'src/interface/swagger-model/staffOrderCreateReq';
 import { StaffOrderCreateSuccess } from 'src/interface/swagger-model/staffOrderCreateSuccess';
 import { StaffOrderSearchSuccess } from 'src/interface/swagger-model/staffOrderSearchSuccess';
@@ -11,6 +11,8 @@ import { StaffOrderCreateSuccessData } from 'src/interface/swagger-model/staffOr
 import { StaffOrderCreateSuccessDataTicketList } from 'src/interface/swagger-model/staffOrderCreateSuccessDataTicketList';
 import { StaffOrderCreateModel } from 'src/interface/staff/staffOrderModel';
 import { TicketTypeResDataCustomer } from 'src/interface/staff';
+import { ErrorInfo } from 'src/interface/common';
+import { StaffOrderCreateReqTicketList } from 'src/interface/swagger-model/staffOrderCreateReqTicketList';
 const mongoose = require('mongoose');
 
 
@@ -64,11 +66,11 @@ class OrderController {
                     this.updateTicketDatabase((newOrderData as any), next);
                 })
                 .catch((err) => {
-                    return next(ErrorService.appError(500, `結帳過程發生錯誤！${err.message}`, next));
+                    return next(this.createOrderError(req.body, orderId, 500, `結帳過程發生錯誤！已更新資料庫${err.message}`, next));
                 });
 
         } catch (err) {
-            return next(ErrorService.appError(500, `結帳過程發生錯誤！${err.message}`, next));
+            return next(this.createOrderError(req.body, orderId, 500, `結帳過程發生錯誤！已更新資料庫${err.message}`, next));
         };
     }
 
@@ -225,6 +227,79 @@ class OrderController {
 
         return result;
     }
+
+
+
+    // 結帳失敗
+    createOrderError = (reqData: StaffOrderCreateReq, orderId: string, httpStatus: number, errMessage: string, next: NextFunction) => {
+        const error: ErrorInfo = new Error(errMessage);
+        error.statusCode = httpStatus;
+        error.isOperational = true;
+        error.errMessage = errMessage;
+        console.log('appError', httpStatus, errMessage);
+
+        this.updateOrderDatabaseStatus(orderId, EnumOrderStatus.PAYMENT_FAILED);       // 更新訂單資料庫- 狀態
+
+        // 更新資料庫
+        for (const reqTicketData of reqData.ticketList) {
+            this.updateSeatDatabaseStatus(reqTicketData, EnumSeatStatus.FREE);        // 更新座位資料庫- 狀態
+            this.updateTicketDatabaseOrderId(orderId, reqTicketData.ticketId);        // 更新票券資料庫- 訂單編號
+        };
+
+        next(error);
+    }
+
+
+
+    // 結帳失敗- 更新座位資料庫:狀態
+    async updateSeatDatabaseStatus(reqTicketData: StaffOrderCreateReqTicketList, status: EnumSeatStatus) {
+        // 取得座位資料、更新seat資料庫 
+        console.log('搜尋seatData 條件', { _id: reqTicketData.scheduleId, seatName: reqTicketData.seatName });
+
+        let seatData = await Seat.findOneAndUpdate(
+            { scheduleId: reqTicketData.scheduleId, seatName: reqTicketData.seatName }, // 條件
+            { status: status },                                                         // 更新的內容
+            { new: true }                                                               // 參數
+        );
+        console.log('找到seatData', seatData);
+    };
+
+
+
+    // 結帳失敗- 更新訂單資料庫:狀態
+    async updateOrderDatabaseStatus(orderId: string, status: EnumOrderStatus) {
+        let OrderData = await Order.find({ _id: orderId });
+
+        if (OrderData) {
+            await Order.findOneAndUpdate(
+                { _id: orderId },
+                { status: status },
+                { new: true }
+            );
+        };
+
+        console.log('更新訂單狀態', OrderData);
+    };
+
+
+
+    // 結帳失敗- 更新票券資料庫:訂單編號
+    async updateTicketDatabaseOrderId(orderId: string, ticketId: string) {
+        let ticketData = await Ticket.find({ _id: ticketId });
+        console.log('ticketData', ticketData);
+
+        if (ticketData) {
+            let updateTicketData = await Ticket.findOneAndUpdate(
+                { _id: ticketId },
+                { orderId: orderId },
+                { new: true }
+            );
+
+            console.log('updateTicketData', updateTicketData);
+        };
+    }
+
+
 
 
 

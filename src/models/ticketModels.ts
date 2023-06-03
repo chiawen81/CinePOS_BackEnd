@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
 import mongoose = require('mongoose');
-import Movie from "../manager/moviesModels";
-import Seat from "../common/seats.model";
+import Movie from "./moviesModels";
+import Seat from "./seats.model";
 
 const ticketsSchema = new mongoose.Schema(
     {
@@ -20,7 +20,7 @@ const ticketsSchema = new mongoose.Schema(
             required: [true, '座位ID必填'],
         },
         price: {
-            type: String,
+            type: Number,
             required: [true, '票價必填'],
         },
         paymentMethod: {

@@ -2,7 +2,7 @@ import validator from "validator";
 import bcrypt from "bcryptjs";
 import ErrorService from '../../service/error';
 import AuthService from '../../service/auth';
-import User from '../../models/common/usersModels';
+import User from '../../models/usersModels';
 import { Request, Response, NextFunction } from 'express';
 import { LoginReq } from "src/interface/swagger-model/loginReq";
 import { LoginRes } from "src/interface/swagger-model/loginRes";

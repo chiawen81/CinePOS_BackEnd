@@ -13,4 +13,6 @@ router.get('/list', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(m
 router.get('/:id', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(movie_1.default.getInfo));
 router.post('/', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(movie_1.default.createInfo));
 router.patch('/', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(movie_1.default.updateInfo));
+router.delete('/:id', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(movie_1.default.deleteMovie));
+router.put('/status', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(movie_1.default.updateReleaseStatus));
 exports.ManagerMovieRouter = router;

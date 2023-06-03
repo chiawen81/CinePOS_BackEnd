@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const mongoose = require("mongoose");
-const moviesModels_1 = __importDefault(require("../manager/moviesModels"));
-const seats_model_1 = __importDefault(require("../common/seats.model"));
+const moviesModels_1 = __importDefault(require("./moviesModels"));
+const seats_model_1 = __importDefault(require("./seats.model"));
 const ticketsSchema = new mongoose.Schema({
     orderId: {
         type: String,
@@ -23,7 +23,7 @@ const ticketsSchema = new mongoose.Schema({
         required: [true, '座位ID必填'],
     },
     price: {
-        type: String,
+        type: Number,
         required: [true, '票價必填'],
     },
     paymentMethod: {

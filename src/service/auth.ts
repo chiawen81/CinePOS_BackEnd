@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 import ErrorService from '../service/error';
-import User from '../models/common/usersModels';
+import User from '../models/usersModels';
 import { NextFunction, Request, Response } from 'express';
 import { LoginReq } from '../interface/swagger-model/loginReq';
 import { LoginRes } from '../interface/swagger-model/loginRes';

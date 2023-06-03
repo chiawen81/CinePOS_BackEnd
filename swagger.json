@@ -362,6 +362,131 @@
                 }
             }
         },
+        "/v1/staff/seat/{scheduleId}": {
+            "get": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "取得場次座位表",
+                "parameters": [
+                    {
+                        "name": "scheduleId",
+                        "in": "path",
+                        "description": "場次ID",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/seatRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/staff/seat/checkLock": {
+            "post": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "檢查座位是否有被鎖住",
+                "requestBody": {
+                    "description": "資料格式",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CheckLockReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CheckLockRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/staff/ticket": {
+            "post": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "新增電影票",
+                "requestBody": {
+                    "description": "資料格式",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/createTicketReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/createTicketRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v1/staff/order": {
             "post": {
                 "tags": [
@@ -602,7 +727,7 @@
                     {
                         "in": "query",
                         "name": "startDate",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "format": "double",
                             "type": "number"
@@ -611,7 +736,7 @@
                     {
                         "in": "query",
                         "name": "endDate",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "format": "double",
                             "type": "number"
@@ -921,6 +1046,47 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "刪除單一電影資訊",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "電影id",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "刪除成功",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailDeleteSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "刪除失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/v1/manager/movie": {
@@ -996,6 +1162,47 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/MovieDetailUpdateFaild"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/movie/status": {
+            "put": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "更新單一電影資訊上映狀態",
+                "requestBody": {
+                    "description": "電影ID",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovieStatusPara"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "更新狀態成功",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailCreateSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "更新狀態失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MovieDetailCreateFaild"
                                 }
                             }
                         }
@@ -1344,6 +1551,16 @@
                                 "劇情"
                             ],
                             "description": "劇情類型文字"
+                        },
+                        "runtime": {
+                            "type": "number",
+                            "example": 129,
+                            "description": "片長"
+                        },
+                        "rate": {
+                            "type": "number",
+                            "example": 6,
+                            "description": "分級制度(0: 普通級,6: 保護級,12: 輔導十二級,15 : 輔導十五級,18: 限制級)"
                         },
                         "rateName": {
                             "type": "string",
@@ -1895,7 +2112,11 @@
                         "type": "string"
                     },
                     "data": {
-                        "$ref": "#/components/schemas/ticketTypeResData"
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/ticketTypeResData"
+                        }
                     }
                 }
             },
@@ -2401,7 +2622,11 @@
                         "type": "string"
                     },
                     "data": {
-                        "$ref": "#/components/schemas/scheduleListResData"
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/scheduleListResData"
+                        }
                     }
                 }
             },
@@ -2439,7 +2664,11 @@
                         "example": 180
                     },
                     "scheduleList": {
-                        "$ref": "#/components/schemas/ScheduleItem"
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/ScheduleItem"
+                        }
                     }
                 }
             },
@@ -2482,6 +2711,270 @@
                         "type": "number",
                         "description": "剩餘座位",
                         "example": 10
+                    }
+                }
+            },
+            "seatRes": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/seatResData"
+                        }
+                    }
+                },
+                "required": [
+                    "code",
+                    "message",
+                    "data"
+                ]
+            },
+            "seatResData": {
+                "properties": {
+                    "sold": {
+                        "type": "number",
+                        "description": "已售數量"
+                    },
+                    "free": {
+                        "type": "number",
+                        "description": "未售數量"
+                    },
+                    "maxRows": {
+                        "type": "number",
+                        "description": "總Rows"
+                    },
+                    "maxColumns": {
+                        "type": "number",
+                        "description": "總Columns"
+                    },
+                    "rowLabel": {
+                        "type": "array",
+                        "description": "row項目",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "colLabel": {
+                        "type": "array",
+                        "description": "col項目",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "list": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Row"
+                        }
+                    }
+                },
+                "required": [
+                    "sold",
+                    "free",
+                    "maxRows",
+                    "maxColumns",
+                    "rowLabel",
+                    "colLabel",
+                    "list"
+                ]
+            },
+            "Seat": {
+                "type": "object",
+                "properties": {
+                    "cols": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "type": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "cols",
+                    "status",
+                    "type"
+                ]
+            },
+            "Row": {
+                "type": "object",
+                "properties": {
+                    "rows": {
+                        "type": "string"
+                    },
+                    "seat": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Seat"
+                        }
+                    }
+                },
+                "required": [
+                    "rows",
+                    "seat"
+                ]
+            },
+            "CheckLockReq": {
+                "required": [
+                    "scheduleId",
+                    "seats"
+                ],
+                "properties": {
+                    "scheduleId": {
+                        "type": "string",
+                        "description": "場次ID"
+                    },
+                    "seats": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "CheckLockRes": {
+                "required": [
+                    "code",
+                    "message",
+                    "data"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/CheckLockResData"
+                        }
+                    }
+                }
+            },
+            "CheckLockResData": {
+                "required": [
+                    "seatId",
+                    "seatName"
+                ],
+                "properties": {
+                    "seatId": {
+                        "type": "string",
+                        "description": "座位ID"
+                    },
+                    "seatName": {
+                        "type": "string",
+                        "description": "座位名稱"
+                    }
+                }
+            },
+            "createTicketReq": {
+                "required": [
+                    "ticketData"
+                ],
+                "properties": {
+                    "ticketData": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/createTicketData"
+                        }
+                    }
+                }
+            },
+            "createTicketRes": {
+                "required": [
+                    "code",
+                    "message",
+                    "data"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "createTicketData": {
+                "type": "object",
+                "properties": {
+                    "orderId": {
+                        "type": "string"
+                    },
+                    "movieId": {
+                        "type": "string"
+                    },
+                    "seatId": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "integer"
+                    },
+                    "isRefund": {
+                        "type": "boolean"
+                    },
+                    "paymentMethod": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "orderId",
+                    "movieId",
+                    "seatId",
+                    "price",
+                    "isRefund",
+                    "paymentMethod"
+                ]
+            },
+            "MovieStatusPara": {
+                "required": [
+                    "movieId",
+                    "status"
+                ],
+                "properties": {
+                    "movieId": {
+                        "type": "string",
+                        "description": "電影編號",
+                        "example": "202305172236200001"
+                    },
+                    "status": {
+                        "type": "number",
+                        "description": "上映狀態(-1: 已下檔(下線) / 0: 尚未發佈(籌備中) / 1: 已發佈(上映中))",
+                        "example": 1
+                    }
+                }
+            },
+            "MovieDetailDeleteSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "刪除電影成功!"
                     }
                 }
             }

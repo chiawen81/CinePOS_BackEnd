@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import ErrorService from '../../service/error';
-import TicketTypes from '../../models/staff/ticketTypeModels';
+import TicketTypes from '../../models/ticketTypeModels';
 
 class TicketTypeController {
     constructor() {

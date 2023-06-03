@@ -27,9 +27,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const moviesModels_1 = __importDefault(require("../manager/moviesModels"));
-const timetable_model_1 = __importDefault(require("../common/timetable.model"));
-const seats_model_1 = __importDefault(require("../common/seats.model"));
+const moviesModels_1 = __importDefault(require("./moviesModels"));
+const timetable_model_1 = __importDefault(require("./timetable.model"));
+const seats_model_1 = __importDefault(require("./seats.model"));
 const ticketModels_1 = __importDefault(require("./ticketModels"));
 const ticketTypeModels_1 = __importDefault(require("./ticketTypeModels"));
 const ordersSchema = new mongoose_1.default.Schema({
@@ -72,6 +72,7 @@ const ordersSchema = new mongoose_1.default.Schema({
     paymentMethod: {
         type: Number,
         required: [true, '付款方法必填'],
+        enum: [1, 2],
     },
     amount: {
         type: Number,
@@ -80,6 +81,8 @@ const ordersSchema = new mongoose_1.default.Schema({
     status: {
         type: Number,
         required: [true, '訂單狀態必填'],
+        enum: [-1, 0, 1, 2, 3],
+        default: 0
     },
     createdAt: {
         type: Date,

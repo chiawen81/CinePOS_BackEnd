@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
-import Movie from '../manager/moviesModels';
-import timetableSchema from '../common/timetable.model';
-import Seat from "../common/seats.model";
+import Movie from './moviesModels';
+import timetableSchema from './timetable.model';
+import Seat from "./seats.model";
 import Ticket from "./ticketModels";
 import TicketType from "./ticketTypeModels";
 
@@ -45,6 +45,7 @@ const ordersSchema = new mongoose.Schema({
     paymentMethod: {
         type: Number,
         required: [true, '付款方法必填'],
+        enum: [1, 2],
     },
     amount: {
         type: Number,
@@ -53,6 +54,8 @@ const ordersSchema = new mongoose.Schema({
     status: {
         type: Number,
         required: [true, '訂單狀態必填'],
+        enum: [-1, 0, 1, 2, 3],
+        default: 0
     },
     createdAt: {
         type: Date,

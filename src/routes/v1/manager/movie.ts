@@ -16,6 +16,12 @@ router.post('/', AuthService.isEmpAuth, ErrorService.handleErrorAsync(MovieContr
 // 更新電影資訊
 router.patch('/', AuthService.isEmpAuth, ErrorService.handleErrorAsync(MovieController.updateInfo));
 
+// 刪除電影資訊
+router.delete('/:id', AuthService.isEmpAuth, ErrorService.handleErrorAsync(MovieController.deleteMovie));
+
+// 更新電影上映狀態
+router.put('/status', AuthService.isEmpAuth, ErrorService.handleErrorAsync(MovieController.updateReleaseStatus));
+
 
 
 export const ManagerMovieRouter = router;

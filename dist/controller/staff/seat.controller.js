@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const seats_model_1 = __importDefault(require("../../models/common/seats.model"));
+const seats_model_1 = __importDefault(require("../../models/seats.model"));
 const error_1 = __importDefault(require("../../service/error"));
-const timetable_model_1 = __importDefault(require("../../models/common/timetable.model"));
+const timetable_model_1 = __importDefault(require("../../models/timetable.model"));
 class SeatController {
     constructor() {
         this.getScheduleIdSeat = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
@@ -59,11 +59,13 @@ class SeatController {
                     }
                 });
                 seats.forEach(seatsItem => {
-                    console.log('seatsItem', seatsItem);
                     list.forEach(listItem => {
-                        console.log('listItem.rows', listItem.rows);
                         if (listItem.rows === seatsItem.seatRow) {
-                            listItem.seat[Number(seatsItem.seatCol) - 1].status = seatsItem.status;
+                            listItem.seat.forEach((item) => {
+                                if (item.cols === seatsItem.seatCol) {
+                                    item.status = seatsItem.status;
+                                }
+                            });
                         }
                     });
                 });
@@ -99,11 +101,18 @@ class SeatController {
                 ;
                 const reqSeats = req.body.seats;
                 const seatFail = [];
+                const seatSuccess = [];
                 reqSeats.forEach(reqSeatsItem => {
                     seats.forEach((seatsItem) => __awaiter(this, void 0, void 0, function* () {
                         if (reqSeatsItem === seatsItem.seatName) {
                             if (seatsItem.status !== 0) {
                                 seatFail.push(seatsItem.seatName);
+                            }
+                            else {
+                                seatSuccess.push({
+                                    seatId: seatsItem.id,
+                                    seatName: seatsItem.seatName
+                                });
                             }
                         }
                     }));
@@ -115,7 +124,7 @@ class SeatController {
                 res.status(200).json({
                     code: 1,
                     message: "成功鎖定座位!",
-                    data: reqSeats
+                    data: seatSuccess
                 });
             }
             catch (err) {

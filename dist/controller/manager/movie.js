@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const moviesModels_1 = __importDefault(require("../../models/manager/moviesModels"));
+const moviesModels_1 = __importDefault(require("../../models/moviesModels"));
 const error_1 = __importDefault(require("./../../service/error"));
-const optionsModels_1 = __importDefault(require("../../models/common/optionsModels"));
+const optionsModels_1 = __importDefault(require("../../models/optionsModels"));
 class MovieController {
     constructor() {
         this.getInfo = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
@@ -177,6 +177,71 @@ class MovieController {
             }
             ;
         });
+        this.updateReleaseStatus = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            let reqData = req.body;
+            if (!((typeof reqData.status === 'number') && (typeof reqData.movieId === 'string'))) {
+                return next(error_1.default.appError(400, "重送參數資料格式錯誤！", next));
+            }
+            ;
+            try {
+                let movieData = yield moviesModels_1.default.findOneAndUpdate({ _id: reqData.movieId }, { status: reqData.status }, { new: true });
+                console.log('movieData-更新電影上映狀態', movieData);
+                if (movieData) {
+                    res.status(200).json({
+                        code: 1,
+                        message: "更新電影上映狀態成功！",
+                        data: movieData
+                    });
+                }
+                else {
+                    res.status(422).json({
+                        code: -1,
+                        message: '查無電影！',
+                    });
+                }
+                ;
+            }
+            catch (err) {
+                res.status(500).json({
+                    code: -1,
+                    message: err.message || '更新電影上映狀態失敗(其它)！',
+                });
+            }
+            ;
+        });
+        this.deleteMovie = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            console.log('抓到路由- delete');
+            let movieId = req.params["id"];
+            console.log('movieId', movieId);
+            if (!movieId) {
+                return next(error_1.default.appError(400, "請輸入電影編號！", next));
+            }
+            ;
+            let movieData = yield moviesModels_1.default.findByIdAndRemove(movieId);
+            console.log('movieData', movieData);
+            try {
+                if (movieData) {
+                    res.status(200).json({
+                        code: 1,
+                        message: "刪除成功！"
+                    });
+                }
+                else {
+                    res.status(422).json({
+                        code: -1,
+                        message: '查無電影！',
+                    });
+                }
+                ;
+            }
+            catch (err) {
+                res.status(500).json({
+                    code: -1,
+                    message: err.message || '刪除電影失敗(其它)！',
+                });
+            }
+            ;
+        });
     }
     isMovieParaValid(reqData, isUpdate) {
         let result = { valid: true, errMsg: "" };
@@ -281,6 +346,8 @@ class MovieController {
                     statusName: (optionsData.status.filter(val => val.value === movie.status))[0].name,
                     title: movie.title,
                     genreName: this.getOptionTransListName(movie.genre, optionsData.genre),
+                    runtime: movie.runtime,
+                    rate: movie.rate,
                     rateName: (optionsData.rate.filter(val => val.value === movie.rate))[0].name,
                     releaseDate: movie.releaseDate,
                     provideVersionName: this.getOptionTransListName(movie.provideVersion, optionsData.provideVersion),

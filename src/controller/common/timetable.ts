@@ -1,7 +1,9 @@
-import Timetable from '../../models/common/timetable.model';
+import Timetable from '../../models/timetable.model';
 import ErrorService from './../../service/error';
+import TheaterController from '../manager/theater';
 import { NextFunction } from "express";
-
+import Seats from '../../models/seats.model';
+import Theater from '../../models/theater.model';
 class TimetableController {
   constructor() {
 
@@ -15,42 +17,70 @@ class TimetableController {
 
 
     // 驗證欄位
-    if (!startDate || !endDate) {
+    if (!startDate && !endDate) {
+      try {
+        const timetable = await Timetable.find()
+          .populate(
+            {
+              path: 'movieId',
+              select: 'title rate runtime'
+            }
+          )
+          .populate({
+            path: 'theaterId',
+            select: 'name'
+          })
+        // .sort('startDate') //照時間排序
+        // .exec();
+        res.status(200).json({
+          code: 1,
+          message: "成功",
+          data: {
+            timetable
+          }
+        });
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      };
+    } else if (startDate && endDate) {
+      try {
+        const timetable = await Timetable.find(
+          {
+            startDate: {
+              $gte: new Date(startDate),
+              $lte: new Date(endDate),
+            },
+          }        // 條件
+        )
+          .populate(
+            {
+              path: 'movieId',
+              select: 'title rate runtime'
+            }
+          )
+          .populate({
+            path: 'theaterId',
+            select: 'name'
+          })
+        // .sort('startDate') //照時間排序
+        // .exec();
+        console.log('timetable', timetable);
+        res.status(200).json({
+          code: 1,
+          message: "成功",
+          data: {
+            timetable
+          }
+        });
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      };
+    }
+    else if (!startDate || !endDate) {
       return next(ErrorService.appError(400, "缺少必要欄位", next));
     };
 
-    try {
-      const timetable = await Timetable.find(
-        {
-          startDate: {
-            $gte: new Date(startDate),
-            $lte: new Date(endDate),
-          },
-        }        // 條件
-      )
-        .populate(
-          {
-            path: 'movieId',
-            select: 'title rate runtime'
-          }
-        )
-        .populate({
-          path: 'theaterId',
-          select: 'name'
-        })
-      // .sort('startDate') //照時間排序
-      // .exec();
-      console.log('timetable', timetable);
-      res.status(200).json({
-        code: 1,
-        message: "成功",
-        data: {
-          timetable
-        }
-      });
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    };
+
   }
 
   /** 更新時刻表 */
@@ -65,6 +95,7 @@ class TimetableController {
     }
 
     try {
+      // 新增時刻表
       const timetable = await Timetable.create(
         {
           movieId: request.movieId,
@@ -74,6 +105,45 @@ class TimetableController {
         }
       );
       await timetable.save();
+
+      // 新增對應座位
+      let theaterData = await Theater.findOne({ _id: request.theaterId });
+      if (theaterData) {
+        let seatRow = TheaterController.splitArrayIntoChunks(theaterData.seatMap, theaterData.row);
+
+        const dataArray = [];
+        for (let i = 0; i < seatRow.length; i++) {
+          let colCount = 0;
+          seatRow[i].forEach(element => {
+            if (element == "0" || element == "1") {
+              // 0: 普通, 1:殘障
+              const seat = {
+                scheduleId: timetable._id,
+                seatRow: theaterData.rowLabel[i],
+                seatCol: theaterData.colLabel[colCount],
+                seatName: theaterData.rowLabel[i] + theaterData.colLabel[colCount] + "",
+                status: 0
+              };
+              dataArray.push(seat);
+
+            } else if (element === "-1") {
+              //不開放
+              const seat = {
+                scheduleId: timetable._id,
+                seatRow: theaterData.rowLabel[i],
+                seatCol: theaterData.colLabel[colCount],
+                seatName: theaterData.rowLabel[i] + theaterData.colLabel[colCount] + "",
+                status: 3
+              };
+              dataArray.push(seat);
+            }
+            colCount++;
+          });
+        }
+        await Seats.insertMany(dataArray);
+      }
+
+
       res.status(200).json({
         code: 1,
         message: "成功",
@@ -90,9 +160,8 @@ class TimetableController {
   update = async (req: { body: TimetableUpdateRequest }, res, next: NextFunction) => {
     console.log("update all timetable entries");
     const timetable = req.body;
-    const id = timetable._id;
+    const id = timetable.id;
 
-    console.log(timetable);
 
     // 驗證欄位
     if (!timetable) {
@@ -102,14 +171,17 @@ class TimetableController {
     try {
 
       const updatedTimetable = await Timetable.findByIdAndUpdate(
-        id, {
-          movieId: timetable.movieId,
-          theaterId: timetable.theaterId,
-          startDate: new Date(timetable.startDate),
-          endDate: new Date(timetable.endDate),
-        },
+        id, 
+        {
+        movieId: timetable.movieId,
+        theaterId: timetable.theaterId,
+        startDate: new Date(timetable.startDate),
+        endDate: new Date(timetable.endDate),
+      },
         { new: true }
       );
+
+      console.log('update',updatedTimetable);
 
       res.status(200).json({
         code: 1,
@@ -134,14 +206,18 @@ class TimetableController {
 
     try {
       const deletedTimetable = await Timetable.findByIdAndDelete(timetableId);
+      const deletedSeats = await Seats.deleteMany({
+        scheduleId: timetableId
+      });
 
       if (!deletedTimetable) {
-        return next(ErrorService.appError(404, "找不到指定的時刻表條目", next));
+        return next(ErrorService.appError(404, "找不到指定的時刻表", next));
       }
+      console.log(deletedTimetable,deletedSeats);
 
       res.status(200).json({
         code: 1,
-        message: "時刻表條目已成功刪除！",
+        message: "時刻表已成功刪除！",
         data: {
           deletedTimetable,
         },
@@ -164,7 +240,7 @@ export interface TimetableCreateRequest {
 }
 
 export interface TimetableUpdateRequest {
-  _id: string,
+  id: string,
   movieId: string,
   theaterId: string,
   startDate: Date,

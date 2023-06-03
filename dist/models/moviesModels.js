@@ -1,6 +1,10 @@
-import mongoose from "mongoose";
-
-const moviesSchema = new mongoose.Schema({
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = __importDefault(require("mongoose"));
+const moviesSchema = new mongoose_1.default.Schema({
     title: {
         type: String,
         required: true,
@@ -11,15 +15,15 @@ const moviesSchema = new mongoose.Schema({
     },
     genre: {
         type: [{
-            type: Number,
-            enum: [1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 10, 11, 12]
-        }],
+                type: Number,
+                enum: [1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 10, 11, 12]
+            }],
         required: true
     },
     genreName: {
         type: [{
-            type: String
-        }],
+                type: String
+            }],
         required: false
     },
     runtime: {
@@ -30,14 +34,14 @@ const moviesSchema = new mongoose.Schema({
     },
     provideVersion: {
         type: [{
-            type: Number
-        }],
+                type: Number
+            }],
         required: true
     },
     provideVersionName: {
         type: [{
-            type: String
-        }],
+                type: String
+            }],
         required: false
     },
     rate: {
@@ -55,14 +59,13 @@ const moviesSchema = new mongoose.Schema({
     },
     cast: {
         type: [{
-            type: String
-        }],
+                type: String
+            }],
         required: false,
     },
     description: {
         type: String,
-        required: false,
-        minlength: 10
+        required: false
     },
     status: {
         type: Number,
@@ -90,8 +93,6 @@ const moviesSchema = new mongoose.Schema({
         type: String,
         required: true,
         match: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w.&/.?=%\-_~]*)*\/?$/i
-        // 踩坑note：                                       ＾＾＾＾＾＾＾＾＾ []中間放要允許的特殊字元
-        // 連結的亂碼比較多，要允許多一點的特殊字元，例如：&、=、?、%、-、_、~、.、/，否則正則驗證會失敗
     },
     createdAt: {
         type: Date,
@@ -106,9 +107,6 @@ const moviesSchema = new mongoose.Schema({
 }, {
     collection: 'movies',
     versionKey: false
-}
-);
-
-const Movie = mongoose.model('Movie', moviesSchema);
-
-export default Movie;
+});
+const Movie = mongoose_1.default.model('Movie', moviesSchema);
+exports.default = Movie;
