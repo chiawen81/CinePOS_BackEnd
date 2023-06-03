@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const theater_model_1 = __importDefault(require("../../models/common/theater.model"));
-const optionsModels_1 = __importDefault(require("../../models/common/optionsModels"));
-const seats_model_1 = __importDefault(require("../../models/common/seats.model"));
+const theater_model_1 = __importDefault(require("../../models/theater.model"));
+const optionsModels_1 = __importDefault(require("../../models/optionsModels"));
+const seats_model_1 = __importDefault(require("../../models/seats.model"));
 const error_1 = __importDefault(require("./../../service/error"));
 class TheaterController {
     constructor() {

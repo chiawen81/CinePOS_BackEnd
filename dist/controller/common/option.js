@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const optionsModels_1 = __importDefault(require("../../models/common/optionsModels"));
+const optionsModels_1 = __importDefault(require("../../models/optionsModels"));
 const error_1 = __importDefault(require("./../../service/error"));
 class OptionController {
     constructor() {

@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jwt = require('jsonwebtoken');
 const error_1 = __importDefault(require("../service/error"));
-const usersModels_1 = __importDefault(require("../models/common/usersModels"));
+const usersModels_1 = __importDefault(require("../models/usersModels"));
 class AuthService {
     constructor() {
         this.sendBackJWT = (reqData, res, statusCode) => {

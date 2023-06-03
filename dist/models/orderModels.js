@@ -27,9 +27,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const moviesModels_1 = __importDefault(require("../manager/moviesModels"));
-const timetable_model_1 = __importDefault(require("../common/timetable.model"));
-const seats_model_1 = __importDefault(require("../common/seats.model"));
+const moviesModels_1 = __importDefault(require("./moviesModels"));
+const timetable_model_1 = __importDefault(require("./timetable.model"));
+const seats_model_1 = __importDefault(require("./seats.model"));
 const ticketModels_1 = __importDefault(require("./ticketModels"));
 const ticketTypeModels_1 = __importDefault(require("./ticketTypeModels"));
 const ordersSchema = new mongoose_1.default.Schema({

@@ -16,7 +16,7 @@ const validator_1 = __importDefault(require("validator"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const error_1 = __importDefault(require("../../service/error"));
 const auth_1 = __importDefault(require("../../service/auth"));
-const usersModels_1 = __importDefault(require("../../models/common/usersModels"));
+const usersModels_1 = __importDefault(require("../../models/usersModels"));
 class LogInController {
     constructor() {
         this.logIn = (req, res, next) => __awaiter(this, void 0, void 0, function* () {

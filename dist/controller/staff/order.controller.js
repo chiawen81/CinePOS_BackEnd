@@ -14,10 +14,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EnumOrderStatus = exports.EnumSeatStatus = void 0;
 const error_1 = __importDefault(require("../../service/error"));
-const orderModels_1 = __importDefault(require("../../models/staff/orderModels"));
-const seats_model_1 = __importDefault(require("../../models/common/seats.model"));
-const ticketModels_1 = __importDefault(require("../../models/staff/ticketModels"));
-const ticketTypeModels_1 = __importDefault(require("../../models/staff/ticketTypeModels"));
+const orderModels_1 = __importDefault(require("../../models/orderModels"));
+const seats_model_1 = __importDefault(require("../../models/seats.model"));
+const ticketModels_1 = __importDefault(require("../../models/ticketModels"));
+const ticketTypeModels_1 = __importDefault(require("../../models/ticketTypeModels"));
 const mongoose = require('mongoose');
 const uuid = require('uuid');
 class OrderController {
