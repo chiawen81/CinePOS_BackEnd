@@ -357,6 +357,8 @@ class MovieController {
                     statusName: (optionsData.status.filter(val => val.value === movie.status))[0].name,
                     title: movie.title,
                     genreName: this.getOptionTransListName(movie.genre, optionsData.genre),
+                    runtime: movie.runtime,
+                    rate: movie.rate,
                     rateName: (optionsData.rate.filter(val => val.value === movie.rate))[0].name,
                     releaseDate: movie.releaseDate,
                     provideVersionName: this.getOptionTransListName(movie.provideVersion, optionsData.provideVersion),

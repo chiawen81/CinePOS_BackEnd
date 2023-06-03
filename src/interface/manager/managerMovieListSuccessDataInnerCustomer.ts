@@ -1,6 +1,9 @@
 
 
 export interface ManagerMovieListSuccessDataInnerCustomer {
+
+    runtime?: Number;
+    rate?: Number;
     /**
      * 電影編號
      */
