@@ -12,8 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const timetable_model_1 = __importDefault(require("../../models/common/timetable.model"));
-const seats_model_1 = __importDefault(require("../../models/common/seats.model"));
+const timetable_model_1 = __importDefault(require("../../models/timetable.model"));
+const seats_model_1 = __importDefault(require("../../models/seats.model"));
 const error_1 = __importDefault(require("../../service/error"));
 class ScheduleController {
     constructor() {

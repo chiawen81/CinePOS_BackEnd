@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
-import Movie from '../manager/moviesModels';
-import timetableSchema from '../common/timetable.model';
-import Seat from "../common/seats.model";
+import Movie from './moviesModels';
+import timetableSchema from './timetable.model';
+import Seat from "./seats.model";
 import Ticket from "./ticketModels";
 import TicketType from "./ticketTypeModels";
 

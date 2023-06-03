@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
-import Timetable from '../../models/common/timetable.model';
-import Seat from '../../models/common/seats.model';
+import Timetable from '../../models/timetable.model';
+import Seat from '../../models/seats.model';
 import ErrorService from '../../service/error';
 // // import movies from '../../models/manager/moviesModels'
 

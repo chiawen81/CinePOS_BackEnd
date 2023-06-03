@@ -1,5 +1,5 @@
 import validator from "validator";
-import User from '../../models/common/usersModels';
+import User from '../../models/usersModels';
 import ErrorService from './../../service/error';
 import UploadController from "./../../controller/common/upload";
 import { InfoUpdateReq } from "src/interface/swagger-model/infoUpdateReq";

@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import ErrorService from '../../service/error';
-import Order from '../../models/staff/orderModels';
-import Seat from '../../models/common/seats.model';
-import Ticket from '../../models/staff/ticketModels';
-import TicketTypes from '../../models/staff/ticketTypeModels';
+import Order from '../../models/orderModels';
+import Seat from '../../models/seats.model';
+import Ticket from '../../models/ticketModels';
+import TicketTypes from '../../models/ticketTypeModels';
 import { StaffOrderCreateReq } from 'src/interface/swagger-model/staffOrderCreateReq';
 import { StaffOrderCreateSuccess } from 'src/interface/swagger-model/staffOrderCreateSuccess';
 import { StaffOrderSearchSuccess } from 'src/interface/swagger-model/staffOrderSearchSuccess';

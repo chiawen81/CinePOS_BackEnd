@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
-const theaterSchema = new Schema({
+const mongoose = require("mongoose");
+const mongoose_1 = require("mongoose");
+const theaterSchema = new mongoose_1.Schema({
     name: {
         type: String,
         required: true
@@ -11,7 +11,7 @@ const theaterSchema = new Schema({
         type: Number,
         default: null
     },
-    type: String,
+    type: Number,
     totalCapacity: {
         type: Number,
         required: true

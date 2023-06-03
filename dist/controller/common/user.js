@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const validator_1 = __importDefault(require("validator"));
-const usersModels_1 = __importDefault(require("../../models/common/usersModels"));
+const usersModels_1 = __importDefault(require("../../models/usersModels"));
 const error_1 = __importDefault(require("./../../service/error"));
 const upload_1 = __importDefault(require("./../../controller/common/upload"));
 class UserController {

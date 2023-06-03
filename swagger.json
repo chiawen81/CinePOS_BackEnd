@@ -727,7 +727,7 @@
                     {
                         "in": "query",
                         "name": "startDate",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "format": "double",
                             "type": "number"
@@ -736,7 +736,7 @@
                     {
                         "in": "query",
                         "name": "endDate",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "format": "double",
                             "type": "number"
@@ -1551,6 +1551,16 @@
                                 "劇情"
                             ],
                             "description": "劇情類型文字"
+                        },
+                        "runtime": {
+                            "type": "number",
+                            "example": 129,
+                            "description": "片長"
+                        },
+                        "rate": {
+                            "type": "number",
+                            "example": 6,
+                            "description": "分級制度(0: 普通級,6: 保護級,12: 輔導十二級,15 : 輔導十五級,18: 限制級)"
                         },
                         "rateName": {
                             "type": "string",
