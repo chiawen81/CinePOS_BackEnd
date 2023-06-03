@@ -32,7 +32,6 @@ class TimetableController {
           })
         // .sort('startDate') //照時間排序
         // .exec();
-        console.log('timetable', timetable);
         res.status(200).json({
           code: 1,
           message: "成功",
@@ -161,9 +160,8 @@ class TimetableController {
   update = async (req: { body: TimetableUpdateRequest }, res, next: NextFunction) => {
     console.log("update all timetable entries");
     const timetable = req.body;
-    const id = timetable._id;
+    const id = timetable.id;
 
-    console.log(timetable);
 
     // 驗證欄位
     if (!timetable) {
@@ -173,7 +171,8 @@ class TimetableController {
     try {
 
       const updatedTimetable = await Timetable.findByIdAndUpdate(
-        id, {
+        id, 
+        {
         movieId: timetable.movieId,
         theaterId: timetable.theaterId,
         startDate: new Date(timetable.startDate),
@@ -181,6 +180,8 @@ class TimetableController {
       },
         { new: true }
       );
+
+      console.log('update',updatedTimetable);
 
       res.status(200).json({
         code: 1,
@@ -239,7 +240,7 @@ export interface TimetableCreateRequest {
 }
 
 export interface TimetableUpdateRequest {
-  _id: string,
+  id: string,
   movieId: string,
   theaterId: string,
   startDate: Date,
