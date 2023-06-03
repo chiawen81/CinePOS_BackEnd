@@ -390,7 +390,7 @@ class MovieController {
     updateReleaseStatus = async (req: Request<{}, MovieDetailCreateSuccess, MovieStatusPara, {}, {}>, res: Response, next: NextFunction) => {
         let reqData: MovieStatusPara = req.body;
 
-        if (!((typeof reqData.status === 'number') && (typeof reqData.status === 'string'))) {
+        if (!((typeof reqData.status === 'number') && (typeof reqData.movieId === 'string'))) {
             return next(ErrorService.appError(400, "重送參數資料格式錯誤！", next));
         };
 
@@ -430,8 +430,9 @@ class MovieController {
 
 
     // ———————————————————————  刪除電影  ———————————————————————
-    deleteMovie = async (req: Request<{}, MovieDetailDeleteSuccess, {}, string, {}>, res: Response, next: NextFunction) => {
-        let movieId = req.query["id"];
+    deleteMovie = async (req: Request<{}, MovieDetailDeleteSuccess, {}, {}, {}>, res: Response, next: NextFunction) => {
+        console.log('抓到路由- delete')
+        let movieId = req.params["id"];
         console.log('movieId', movieId);
         if (!movieId) {
             return next(ErrorService.appError(400, "請輸入電影編號！", next));
