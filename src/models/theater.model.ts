@@ -52,7 +52,11 @@ const theaterSchema = new Schema({
     type: Date,
     default: Date.now
   }
-});
+},
+{
+  versionKey: false
+}
+);
 
 // module.exports = mongoose.model('Theater', theaterSchema);
 const Theater = mongoose.model('Theater', theaterSchema);
