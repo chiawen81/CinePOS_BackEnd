@@ -52,6 +52,8 @@ const theaterSchema = new mongoose_1.Schema({
         type: Date,
         default: Date.now
     }
+}, {
+    versionKey: false
 });
 const Theater = mongoose.model('Theater', theaterSchema);
 exports.default = Theater;
