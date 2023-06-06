@@ -42,8 +42,8 @@ class TheaterController {
                 condition["type"] = { $in: queryParm.type };
             };
             if (queryParm.capacityFrom && queryParm.capacityTo) {
-                // swap if to < from
-                if(queryParm.capacityTo < queryParm.capacityFrom){
+                // swap if to > from
+                if(queryParm.capacityTo > queryParm.capacityFrom){
                     let temp = queryParm.capacityFrom;
                     queryParm.capacityFrom = queryParm.capacityTo;
                     queryParm.capacityTo = temp;
@@ -88,6 +88,7 @@ class TheaterController {
                     let item = {
                         _id: theater.id,
                         status: theater.status,
+                        floor: theater.floor,
                         name: theater.name,
                         type: (theaterType.find(val => val.value === theater.type)).name,
                         totalCapacity: theater.totalCapacity,

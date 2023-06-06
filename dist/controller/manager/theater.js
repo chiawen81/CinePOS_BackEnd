@@ -51,7 +51,7 @@ class TheaterController {
                 }
                 ;
                 if (queryParm.capacityFrom && queryParm.capacityTo) {
-                    if (queryParm.capacityTo < queryParm.capacityFrom) {
+                    if (queryParm.capacityTo > queryParm.capacityFrom) {
                         let temp = queryParm.capacityFrom;
                         queryParm.capacityFrom = queryParm.capacityTo;
                         queryParm.capacityTo = temp;
@@ -99,6 +99,7 @@ class TheaterController {
                         let item = {
                             _id: theater.id,
                             status: theater.status,
+                            floor: theater.floor,
                             name: theater.name,
                             type: (theaterType.find(val => val.value === theater.type)).name,
                             totalCapacity: theater.totalCapacity,
