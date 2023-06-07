@@ -28,6 +28,7 @@ import { StaffTicketRouter } from "./routes/v1/staff/ticket";
 // 其它
 import "./service/connection";                        // 資料庫設定
 import ErrorService from './service/error';           // 錯誤處理 
+import { StaffRefundRouter } from "./routes/v1/staff/refund";
 
 
 
@@ -55,7 +56,7 @@ app.use('/v1/staff/ticket', StaffTicketRouter);
 app.use('/v1/staff/seat', StaffSeatRouter);
 app.use('/v1/staff/schedule', StaffScheduleRouter);
 app.use('/v1/staff/order', StaffOrderRouter);
-
+app.use('/v1/staff/refund', StaffRefundRouter);
 
 // 後台
 app.use('/v1/manager/', ManagerIndexRouter);

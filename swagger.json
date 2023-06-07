@@ -621,6 +621,49 @@
                 }
             }
         },
+        "/v1/staff/refund/{orderId}": {
+            "get": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "取得訂單下電影票",
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "description": "訂單ID",
+                        "required": true,
+                        "style": "simple",
+                        "explode": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/refundRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v1/manager/login": {
             "post": {
                 "tags": [
@@ -2979,6 +3022,91 @@
                     "message": {
                         "type": "string",
                         "example": "刪除電影成功!"
+                    }
+                }
+            },
+            "refundRes": {
+                "required": [
+                    "code",
+                    "message",
+                    "data"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/refundResData"
+                    }
+                }
+            },
+            "refundResData": {
+                "required": [
+                    "orderId",
+                    "ticketList"
+                ],
+                "properties": {
+                    "orderId": {
+                        "type": "string",
+                        "description": "訂單ID"
+                    },
+                    "ticketList": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/refundResTicketList"
+                        }
+                    }
+                }
+            },
+            "refundResTicketList": {
+                "required": [
+                    "title",
+                    "ticketId",
+                    "seatId",
+                    "seatName",
+                    "ticketType",
+                    "price",
+                    "startDate"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "電影名稱"
+                    },
+                    "ticketId": {
+                        "type": "string",
+                        "description": "電影票ID"
+                    },
+                    "ticketStatus": {
+                        "type": "integer",
+                        "description": "電影票狀態 0:未退,1已退"
+                    },
+                    "seatId": {
+                        "type": "string",
+                        "description": "座位ID"
+                    },
+                    "seatName": {
+                        "type": "string",
+                        "description": "座位名稱"
+                    },
+                    "ticketType": {
+                        "type": "string",
+                        "description": "票種名稱"
+                    },
+                    "price": {
+                        "type": "integer",
+                        "description": "票價"
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "場次開始時間",
+                        "example": "2023-05-21T02:30:00.000Z"
                     }
                 }
             }
