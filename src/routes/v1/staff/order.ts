@@ -10,6 +10,7 @@ router.post('/', AuthService.isEmpAuth, ErrorService.handleErrorAsync(OrderContr
 // 查詢訂單
 router.get('/:orderId', AuthService.isEmpAuth, ErrorService.handleErrorAsync(OrderController.getOrder));
 
-
+// 更新訂單狀態
+router.patch('/', AuthService.isEmpAuth, ErrorService.handleErrorAsync(OrderController.updateOrderStatus))
 
 export const StaffOrderRouter = router;

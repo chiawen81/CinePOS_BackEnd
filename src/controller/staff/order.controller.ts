@@ -332,6 +332,28 @@ class OrderController {
         };
     }
 
+    // ———————————————————————  更新訂單狀態  ———————————————————————
+    updateOrderStatus = async (req, res: Response, next: NextFunction) => {
+        try {
+            const reqArr = req.body;
+            for (let i = 0; i < reqArr.length; i++) {
+                await Order.findByIdAndUpdate(reqArr[i].id,{
+                    "status": reqArr[i].status,
+                    "amount": reqArr[i].newAmount
+                })
+            }
+            const resData = req.body;
+            res.status(200).json({
+                code: 1,
+                message: "成功修改訂單狀態!",
+            });
+        } catch (err) {
+            res.status(500).json({
+                code: -1,
+                message: err.message || "更新訂單狀態錯誤(其它)!",
+            });
+        };
+    }
 
 }
 
