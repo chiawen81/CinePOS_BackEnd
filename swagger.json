@@ -294,6 +294,56 @@
                 }
             }
         },
+        "/v1/staff/schedule/list": {
+            "get": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "場次查詢",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "startDate",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "開始時間"
+                    },
+                    {
+                        "in": "query",
+                        "name": "endDate",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "結束時間"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/scheduleListRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v1/staff/ticketType": {
             "get": {
                 "tags": [
@@ -560,99 +610,6 @@
                     },
                     "401": {
                         "description": "查詢失敗",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/CommonResFailed"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/staff/schedule/list": {
-            "get": {
-                "tags": [
-                    "Staff"
-                ],
-                "summary": "場次查詢",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "startDate",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "required": true,
-                        "description": "開始時間"
-                    },
-                    {
-                        "in": "query",
-                        "name": "endDate",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "required": true,
-                        "description": "結束時間"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/scheduleListRes"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Failed",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/CommonResFailed"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/staff/refund/{orderId}": {
-            "get": {
-                "tags": [
-                    "Staff"
-                ],
-                "summary": "取得訂單下電影票",
-                "parameters": [
-                    {
-                        "name": "orderId",
-                        "in": "path",
-                        "description": "訂單ID",
-                        "required": true,
-                        "style": "simple",
-                        "explode": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/refundRes"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Failed",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2598,47 +2555,64 @@
                 }
             },
             "StaffOrderSearchSuccessData": {
+                "required": [
+                    "orderId",
+                    "ticketList"
+                ],
                 "properties": {
                     "orderId": {
                         "type": "string",
                         "example": "202305172236200001",
                         "description": "訂單ID"
                     },
-                    "amount": {
-                        "type": "number",
-                        "description": " 訂單總金額",
-                        "example": 280
-                    },
                     "ticketList": {
                         "type": "array",
                         "items": {
+                            "required": [
+                                "title",
+                                "ticketId",
+                                "ticketType",
+                                "ticketStatus",
+                                "price",
+                                "time",
+                                "seatId",
+                                "seatName"
+                            ],
                             "type": "object",
                             "properties": {
+                                "title": {
+                                    "type": "string",
+                                    "description": "電影名稱"
+                                },
                                 "ticketId": {
                                     "type": "string",
                                     "example": "202305172236200001",
                                     "description": "票券ID"
                                 },
-                                "time": {
-                                    "type": "object",
-                                    "properties": {
-                                        "$date": {
-                                            "type": "string",
-                                            "format": "date-time"
-                                        }
-                                    },
-                                    "example": "2023-04-31 14:00",
-                                    "description": "場次時間"
-                                },
-                                "type": {
+                                "ticketType": {
                                     "type": "string",
                                     "example": "全票",
                                     "description": "票種名稱"
+                                },
+                                "ticketStatus": {
+                                    "type": "integer",
+                                    "example": "1",
+                                    "description": "票券狀態(1:已退,0:未退)"
                                 },
                                 "price": {
                                     "type": "number",
                                     "example": 280,
                                     "description": "票價"
+                                },
+                                "time": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "description": "場次開始時間",
+                                    "example": "2023-05-21T02:30:00.000Z"
+                                },
+                                "seatId": {
+                                    "type": "string",
+                                    "description": "座位ID"
                                 },
                                 "seatName": {
                                     "type": "string",
@@ -3022,91 +2996,6 @@
                     "message": {
                         "type": "string",
                         "example": "刪除電影成功!"
-                    }
-                }
-            },
-            "refundRes": {
-                "required": [
-                    "code",
-                    "message",
-                    "data"
-                ],
-                "properties": {
-                    "code": {
-                        "type": "number",
-                        "example": 1
-                    },
-                    "message": {
-                        "type": "string"
-                    },
-                    "data": {
-                        "$ref": "#/components/schemas/refundResData"
-                    }
-                }
-            },
-            "refundResData": {
-                "required": [
-                    "orderId",
-                    "ticketList"
-                ],
-                "properties": {
-                    "orderId": {
-                        "type": "string",
-                        "description": "訂單ID"
-                    },
-                    "ticketList": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "$ref": "#/components/schemas/refundResTicketList"
-                        }
-                    }
-                }
-            },
-            "refundResTicketList": {
-                "required": [
-                    "title",
-                    "ticketId",
-                    "seatId",
-                    "seatName",
-                    "ticketType",
-                    "price",
-                    "startDate"
-                ],
-                "properties": {
-                    "title": {
-                        "type": "string",
-                        "description": "電影名稱"
-                    },
-                    "ticketId": {
-                        "type": "string",
-                        "description": "電影票ID"
-                    },
-                    "ticketStatus": {
-                        "type": "integer",
-                        "description": "電影票狀態 0:未退,1已退"
-                    },
-                    "seatId": {
-                        "type": "string",
-                        "description": "座位ID"
-                    },
-                    "seatName": {
-                        "type": "string",
-                        "description": "座位名稱"
-                    },
-                    "ticketType": {
-                        "type": "string",
-                        "description": "票種名稱"
-                    },
-                    "price": {
-                        "type": "integer",
-                        "description": "票價"
-                    },
-                    "startDate": {
-                        "type": "string",
-                        "format": "date",
-                        "description": "場次開始時間",
-                        "example": "2023-05-21T02:30:00.000Z"
                     }
                 }
             }

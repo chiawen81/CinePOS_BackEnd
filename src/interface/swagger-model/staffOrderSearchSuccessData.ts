@@ -15,10 +15,6 @@ export interface StaffOrderSearchSuccessData {
     /**
      * 訂單ID
      */
-    orderId?: string;
-    /**
-     *  訂單總金額
-     */
-    amount?: number;
-    ticketList?: Array<StaffOrderSearchSuccessDataTicketList>;
+    orderId: string;
+    ticketList: Array<StaffOrderSearchSuccessDataTicketList>;
 }

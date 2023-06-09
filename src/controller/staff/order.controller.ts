@@ -4,6 +4,8 @@ import Order from '../../models/orderModels';
 import Seat from '../../models/seats.model';
 import Ticket from '../../models/ticketModels';
 import TicketTypes from '../../models/ticketTypeModels';
+import Movie from '../../models/moviesModels';
+import Timetable from '../../models/timetable.model';
 import { StaffOrderCreateReq } from 'src/interface/swagger-model/staffOrderCreateReq';
 import { StaffOrderCreateSuccess } from 'src/interface/swagger-model/staffOrderCreateSuccess';
 import { StaffOrderSearchSuccess } from 'src/interface/swagger-model/staffOrderSearchSuccess';
@@ -13,6 +15,7 @@ import { StaffOrderCreateModel } from 'src/interface/staff/staffOrderModel';
 import { TicketTypeResDataCustomer } from 'src/interface/staff';
 import { ErrorInfo } from 'src/interface/common';
 import { StaffOrderCreateReqTicketList } from 'src/interface/swagger-model/staffOrderCreateReqTicketList';
+import { StaffOrderSearchSuccessData } from 'src/interface/swagger-model/staffOrderSearchSuccessData';
 const mongoose = require('mongoose');
 
 
@@ -305,16 +308,56 @@ class OrderController {
 
     // —————————————————————  查詢訂單  —————————————————————
     getOrder = async (req: Request<{}, StaffOrderSearchSuccess, {}, string, {}>, res: Response, next: NextFunction) => {
-
-
-
-
+        try {
+            const order = await Order.findByIdAndUpdate(req.params['orderId'])
+            if(!order){
+                return next(ErrorService.appError(404, "沒有這筆訂單！", next));
+            }
+            const resData: StaffOrderSearchSuccessData = {
+                orderId: '',
+                ticketList: []
+            };
+            resData.orderId = String(order['_id']);
+            resData.ticketList = await findOrderInfo(order.ticketList);
+            res.status(200).json({
+                code: 1,
+                message: "OK",
+                data: resData
+            });
+        } catch (err) {
+            res.status(500).json({
+                code: -1,
+                message: err.message || "取得訂單錯誤(其它)!",
+            });
+        };
     }
 
 
 }
 
-
+// 將訂單資訊解析
+async function findOrderInfo(ticketArr) {
+    let ticketList = [];
+    for (let i = 0; i < ticketArr.length; i++) {
+        const movie = await Movie.findByIdAndUpdate(ticketArr[i].movieId)
+        const ticketType = await TicketTypes.findByIdAndUpdate(ticketArr[i].ticketTypeId)
+        const seat = await Seat.findByIdAndUpdate(ticketArr[i].seatId)
+        const schedule = await Timetable.findByIdAndUpdate(ticketArr[i].scheduleId)
+        const ticket = await Ticket.findByIdAndUpdate(ticketArr[i].ticketId)
+        ticketList.push({
+            title: movie['title'],
+            ticketId: ticketArr[i].ticketId,
+            ticketStatus: ticket['isRefund']? 1:0,
+            time: schedule['startDate'],
+            seatId: ticketArr[i].seatId,
+            seatName: seat['seatName'],
+            ticketType: ticketType['type'],
+            price: ticketArr[i].price,
+            
+        })
+    }
+    return ticketList;
+}
 
 export default new OrderController();
 
