@@ -37,6 +37,7 @@ class SeatController {
                 return next(ErrorService.appError(404, "座位資料錯誤！", next));
             }
             const seatsSold = seats.filter(item => item.status === 1);
+            const seatsLock = seats.filter(item => item.status === 2);
             let list: list[] = [];
             scheduleTheaters.theaterId['rowLabel'].forEach((row, rowIndex) => {
                 let seat: seat[] = [];
@@ -74,7 +75,8 @@ class SeatController {
             });
             const resData = {
                 sold: seatsSold.length,
-                free: scheduleTheaters.theaterId['totalCapacity'] - seatsSold.length,
+                lock: seatsLock.length,
+                free: scheduleTheaters.theaterId['totalCapacity'] - seatsSold.length - seatsLock.length,
                 maxRows: scheduleTheaters.theaterId['row'],
                 maxColumns: scheduleTheaters.theaterId['col'],
                 rowLabel: scheduleTheaters.theaterId['rowLabel'],

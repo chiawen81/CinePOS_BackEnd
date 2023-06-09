@@ -2743,6 +2743,10 @@
                         "type": "number",
                         "description": "已售數量"
                     },
+                    "lock": {
+                        "type": "number",
+                        "description": "已鎖數量"
+                    },
                     "free": {
                         "type": "number",
                         "description": "未售數量"
