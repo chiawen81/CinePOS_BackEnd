@@ -315,9 +315,11 @@ class OrderController {
             }
             const resData: StaffOrderSearchSuccessData = {
                 orderId: '',
+                amount: 0,
                 ticketList: []
             };
             resData.orderId = String(order['_id']);
+            resData.amount = order['amount'];
             resData.ticketList = await findOrderInfo(order.ticketList);
             res.status(200).json({
                 code: 1,

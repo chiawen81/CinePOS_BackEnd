@@ -2688,6 +2688,7 @@
             "StaffOrderSearchSuccessData": {
                 "required": [
                     "orderId",
+                    "amount",
                     "ticketList"
                 ],
                 "properties": {
@@ -2695,6 +2696,11 @@
                         "type": "string",
                         "example": "202305172236200001",
                         "description": "訂單ID"
+                    },
+                    "amount": {
+                        "type": "integer",
+                        "example": "300",
+                        "description": "訂單總金額"
                     },
                     "ticketList": {
                         "type": "array",
