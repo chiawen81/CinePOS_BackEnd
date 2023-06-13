@@ -56,7 +56,6 @@ app.use('/v1/staff/seat', StaffSeatRouter);
 app.use('/v1/staff/schedule', StaffScheduleRouter);
 app.use('/v1/staff/order', StaffOrderRouter);
 
-
 // 後台
 app.use('/v1/manager/', ManagerIndexRouter);
 app.use('/v1/manager/user', CommonUserRouter);

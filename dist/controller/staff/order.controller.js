@@ -18,6 +18,8 @@ const orderModels_1 = __importDefault(require("../../models/orderModels"));
 const seats_model_1 = __importDefault(require("../../models/seats.model"));
 const ticketModels_1 = __importDefault(require("../../models/ticketModels"));
 const ticketTypeModels_1 = __importDefault(require("../../models/ticketTypeModels"));
+const moviesModels_1 = __importDefault(require("../../models/moviesModels"));
+const timetable_model_1 = __importDefault(require("../../models/timetable.model"));
 const mongoose = require('mongoose');
 const uuid = require('uuid');
 class OrderController {
@@ -78,6 +80,55 @@ class OrderController {
             next(error);
         };
         this.getOrder = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const order = yield orderModels_1.default.findByIdAndUpdate(req.params['orderId']);
+                if (!order) {
+                    return next(error_1.default.appError(404, "沒有這筆訂單！", next));
+                }
+                const resData = {
+                    orderId: '',
+                    amount: 0,
+                    ticketList: []
+                };
+                resData.orderId = String(order['_id']);
+                resData.amount = order['amount'];
+                resData.ticketList = yield findOrderInfo(order.ticketList);
+                res.status(200).json({
+                    code: 1,
+                    message: "OK",
+                    data: resData
+                });
+            }
+            catch (err) {
+                res.status(500).json({
+                    code: -1,
+                    message: err.message || "取得訂單錯誤(其它)!",
+                });
+            }
+            ;
+        });
+        this.updateOrderStatus = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const reqArr = req.body;
+                for (let i = 0; i < reqArr.length; i++) {
+                    yield orderModels_1.default.findByIdAndUpdate(reqArr[i].id, {
+                        "status": reqArr[i].status,
+                        "amount": reqArr[i].newAmount
+                    });
+                }
+                const resData = req.body;
+                res.status(200).json({
+                    code: 1,
+                    message: "成功修改訂單狀態!",
+                });
+            }
+            catch (err) {
+                res.status(500).json({
+                    code: -1,
+                    message: err.message || "更新訂單狀態錯誤(其它)!",
+                });
+            }
+            ;
         });
     }
     updateTicketDatabase(newOrderData, next) {
@@ -225,6 +276,29 @@ class OrderController {
             ;
         });
     }
+}
+function findOrderInfo(ticketArr) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let ticketList = [];
+        for (let i = 0; i < ticketArr.length; i++) {
+            const movie = yield moviesModels_1.default.findByIdAndUpdate(ticketArr[i].movieId);
+            const ticketType = yield ticketTypeModels_1.default.findByIdAndUpdate(ticketArr[i].ticketTypeId);
+            const seat = yield seats_model_1.default.findByIdAndUpdate(ticketArr[i].seatId);
+            const schedule = yield timetable_model_1.default.findByIdAndUpdate(ticketArr[i].scheduleId);
+            const ticket = yield ticketModels_1.default.findByIdAndUpdate(ticketArr[i].ticketId);
+            ticketList.push({
+                title: movie['title'],
+                ticketId: ticketArr[i].ticketId,
+                ticketStatus: ticket['isRefund'] ? 1 : 0,
+                time: schedule['startDate'],
+                seatId: ticketArr[i].seatId,
+                seatName: seat['seatName'],
+                ticketType: ticketType['type'],
+                price: ticketArr[i].price,
+            });
+        }
+        return ticketList;
+    });
 }
 exports.default = new OrderController();
 var EnumSeatStatus;

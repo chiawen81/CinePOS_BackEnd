@@ -15,10 +15,10 @@ export interface StaffOrderSearchSuccessData {
     /**
      * 訂單ID
      */
-    orderId?: string;
+    orderId: string;
     /**
-     *  訂單總金額
+     * 訂單總金額
      */
-    amount?: number;
-    ticketList?: Array<StaffOrderSearchSuccessDataTicketList>;
+    amount: number;
+    ticketList: Array<StaffOrderSearchSuccessDataTicketList>;
 }

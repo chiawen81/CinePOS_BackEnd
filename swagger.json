@@ -294,6 +294,56 @@
                 }
             }
         },
+        "/v1/staff/schedule/list": {
+            "get": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "場次查詢",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "startDate",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "開始時間"
+                    },
+                    {
+                        "in": "query",
+                        "name": "endDate",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "結束時間"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/scheduleListRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/v1/staff/ticketType": {
             "get": {
                 "tags": [
@@ -351,6 +401,47 @@
                     },
                     "400": {
                         "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/staff/seat": {
+            "patch": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "更新座位狀態",
+                "requestBody": {
+                    "description": "更新訂單狀態資料",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/patchSeatReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "更新成功",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "更新失敗",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -485,6 +576,45 @@
                         }
                     }
                 }
+            },
+            "patch": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "更新電影票狀態",
+                "requestBody": {
+                    "description": "資料格式",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/patchTicketReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/v1/staff/order": {
@@ -517,6 +647,45 @@
                     },
                     "400": {
                         "description": "結帳失敗",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "更新訂單狀態",
+                "requestBody": {
+                    "description": "更新訂單狀態資料",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/patchOrderReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "更新成功",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "更新失敗",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -560,56 +729,6 @@
                     },
                     "401": {
                         "description": "查詢失敗",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/CommonResFailed"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/staff/schedule/list": {
-            "get": {
-                "tags": [
-                    "Staff"
-                ],
-                "summary": "場次查詢",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "startDate",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "required": true,
-                        "description": "開始時間"
-                    },
-                    {
-                        "in": "query",
-                        "name": "endDate",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "required": true,
-                        "description": "結束時間"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/scheduleListRes"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Failed",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1222,6 +1341,18 @@
                     "message": {
                         "type": "string",
                         "example": "系統發生錯誤!"
+                    }
+                }
+            },
+            "CommonResSuccess": {
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "成功訊息!"
                     }
                 }
             },
@@ -2555,6 +2686,11 @@
                 }
             },
             "StaffOrderSearchSuccessData": {
+                "required": [
+                    "orderId",
+                    "amount",
+                    "ticketList"
+                ],
                 "properties": {
                     "orderId": {
                         "type": "string",
@@ -2562,40 +2698,58 @@
                         "description": "訂單ID"
                     },
                     "amount": {
-                        "type": "number",
-                        "description": " 訂單總金額",
-                        "example": 280
+                        "type": "integer",
+                        "example": "300",
+                        "description": "訂單總金額"
                     },
                     "ticketList": {
                         "type": "array",
                         "items": {
+                            "required": [
+                                "title",
+                                "ticketId",
+                                "ticketType",
+                                "ticketStatus",
+                                "price",
+                                "time",
+                                "seatId",
+                                "seatName"
+                            ],
                             "type": "object",
                             "properties": {
+                                "title": {
+                                    "type": "string",
+                                    "description": "電影名稱"
+                                },
                                 "ticketId": {
                                     "type": "string",
                                     "example": "202305172236200001",
                                     "description": "票券ID"
                                 },
-                                "time": {
-                                    "type": "object",
-                                    "properties": {
-                                        "$date": {
-                                            "type": "string",
-                                            "format": "date-time"
-                                        }
-                                    },
-                                    "example": "2023-04-31 14:00",
-                                    "description": "場次時間"
-                                },
-                                "type": {
+                                "ticketType": {
                                     "type": "string",
                                     "example": "全票",
                                     "description": "票種名稱"
+                                },
+                                "ticketStatus": {
+                                    "type": "integer",
+                                    "example": "1",
+                                    "description": "票券狀態(1:已退,0:未退)"
                                 },
                                 "price": {
                                     "type": "number",
                                     "example": 280,
                                     "description": "票價"
+                                },
+                                "time": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "description": "場次開始時間",
+                                    "example": "2023-05-21T02:30:00.000Z"
+                                },
+                                "seatId": {
+                                    "type": "string",
+                                    "description": "座位ID"
                                 },
                                 "seatName": {
                                     "type": "string",
@@ -2605,6 +2759,31 @@
                             }
                         }
                     }
+                }
+            },
+            "patchOrderReq": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "description": "orderID"
+                        },
+                        "status": {
+                            "type": "integer",
+                            "description": "付款狀態(-1:付款失敗,0:未付款,1:已付款,2:部分退款,3:全部退款)"
+                        },
+                        "newAmount": {
+                            "type": "integer",
+                            "description": "扣款金額"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "status",
+                        "newAmount"
+                    ]
                 }
             },
             "scheduleListRes": {
@@ -2827,6 +3006,26 @@
                     "seat"
                 ]
             },
+            "patchSeatReq": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "description": "seatID"
+                        },
+                        "status": {
+                            "type": "integer",
+                            "description": "座位狀態(0:未售、1:已售、2:鎖定中、3:暫停販售)"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "status"
+                    ]
+                }
+            },
             "CheckLockReq": {
                 "required": [
                     "scheduleId",
@@ -2951,6 +3150,31 @@
                     "paymentMethod"
                 ]
             },
+            "patchTicketReq": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "description": "ticketID"
+                        },
+                        "isRefund": {
+                            "type": "boolean",
+                            "description": "是否退票"
+                        },
+                        "refundMethod": {
+                            "type": "integer",
+                            "description": "退票方式(0:無、1:現金、2:line Pay)"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "isRefund",
+                        "refundMethod"
+                    ]
+                }
+            },
             "MovieStatusPara": {
                 "required": [
                     "movieId",
@@ -2982,6 +3206,7 @@
                     }
                 }
             }
+
         }
     }
 }

@@ -9,24 +9,38 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { StaffOrderSearchSuccessDataTime } from './staffOrderSearchSuccessDataTime';
 
 export interface StaffOrderSearchSuccessDataTicketList { 
     /**
+     * 電影名稱
+     */
+    title: string;
+    /**
      * 票券ID
      */
-    ticketId?: string;
-    time?: StaffOrderSearchSuccessDataTime;
+    ticketId: string;
     /**
      * 票種名稱
      */
-    type?: string;
+    ticketType: string;
+    /**
+     * 票券狀態(1:已退,0:未退)
+     */
+    ticketStatus?: number;
     /**
      * 票價
      */
-    price?: number;
+    price: number;
+    /**
+     * 場次開始時間
+     */
+    time: string;
+    /**
+     * 座位ID
+     */
+    seatId: string;
     /**
      * 座位號
      */
-    seatName?: string;
+    seatName: string;
 }
