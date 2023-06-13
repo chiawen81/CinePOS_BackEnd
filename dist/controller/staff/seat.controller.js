@@ -137,6 +137,28 @@ class SeatController {
             }
             ;
         });
+        this.updateSeatStatus = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const reqArr = req.body;
+                for (let i = 0; i < reqArr.length; i++) {
+                    yield seats_model_1.default.findByIdAndUpdate(reqArr[i].id, {
+                        "status": reqArr[i].status
+                    });
+                }
+                const resData = req.body;
+                res.status(200).json({
+                    code: 1,
+                    message: "成功修改座位狀態!",
+                });
+            }
+            catch (err) {
+                res.status(500).json({
+                    code: -1,
+                    message: err.message || "更新座位狀態錯誤(其它)!",
+                });
+            }
+            ;
+        });
     }
 }
 exports.default = new SeatController();
