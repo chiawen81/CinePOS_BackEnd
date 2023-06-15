@@ -4,7 +4,7 @@ export interface StaffOrderCreateModel {
     // order資料庫欄位
 
     _id?: string;
-    orderId: string;
+    orderId?: string;
     status: number;
     createdAt?: Date;
     updatedAt?: Date;
