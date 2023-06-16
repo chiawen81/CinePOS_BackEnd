@@ -1373,7 +1373,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/DashboardBoxOfficeCharSuccess"
+                                    "$ref": "#/components/schemas/DashboardBoxOfficeChartSuccess"
                                 }
                             }
                         }
@@ -3304,7 +3304,7 @@
                     }
                 }
             },
-            "DashboardBoxOfficeCharSuccess": {
+            "DashboardBoxOfficeChartSuccess": {
                 "type": "object",
                 "properties": {
                     "code": {
@@ -3316,7 +3316,7 @@
                         "example": "查詢票房圖表資料成功!"
                     },
                     "data": {
-                        "$ref": "#/components/schemas/DashboardBoxOfficeCharSuccessData"
+                        "$ref": "#/components/schemas/DashboardBoxOfficeChartSuccessData"
                     }
                 }
             },

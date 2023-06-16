@@ -9,10 +9,17 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { DashboardBoxOfficeChartSuccessData } from './dashboardBoxOfficeChartSuccessData';
 
-export interface DashboardBoxOfficeChartSuccess { 
-    code?: number;
-    message?: string;
-    data?: DashboardBoxOfficeChartSuccessData;
+/**
+ * 票房排行
+ */
+export interface DashboardBoxOfficeChartSuccessDataRankChartData { 
+    /**
+     * 電影名稱(Y軸)
+     */
+    name?: Array<string>;
+    /**
+     * 電影票房金額(X軸)
+     */
+    value?: Array<number>;
 }

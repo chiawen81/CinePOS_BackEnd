@@ -10,16 +10,11 @@
  * Do not edit the class manually.
  */
 
-/**
- * 票房排行
- */
-export interface DashboardBoxOfficeCharSuccessDataRankChartData { 
+export interface MovieGetChatGPTKeySuccess { 
+    code?: number;
+    message?: string;
     /**
-     * 電影名稱(Y軸)
+     * ChatGPT的金鑰
      */
-    name?: Array<string>;
-    /**
-     * 電影票房金額(X軸)
-     */
-    value?: Array<number>;
+    data?: string;
 }

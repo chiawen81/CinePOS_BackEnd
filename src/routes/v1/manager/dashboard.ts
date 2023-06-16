@@ -7,7 +7,7 @@ import AuthService from '../../../service/auth';
 // 取得指標
 router.get('/metric', AuthService.isEmpAuth, ErrorService.handleErrorAsync(DashboardController.getMetric));
 
-// 電影票房
+// 電影票房(圖表資料)
 router.get('/boxOffice', AuthService.isEmpAuth, ErrorService.handleErrorAsync(DashboardController.getBoxOfficeStatistics));
 
 

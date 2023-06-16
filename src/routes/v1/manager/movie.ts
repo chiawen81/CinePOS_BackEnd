@@ -22,6 +22,8 @@ router.delete('/:id', AuthService.isEmpAuth, ErrorService.handleErrorAsync(Movie
 // 更新電影上映狀態
 router.put('/status', AuthService.isEmpAuth, ErrorService.handleErrorAsync(MovieController.updateReleaseStatus));
 
+// 取得chatGPT金鑰
+router.get('/chatGPTKey', AuthService.isEmpAuth, ErrorService.handleErrorAsync(MovieController.getChatGPTKey));
 
 
 export const ManagerMovieRouter = router;

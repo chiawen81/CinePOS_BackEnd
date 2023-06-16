@@ -10,13 +10,11 @@
  * Do not edit the class manually.
  */
 
-export interface DashboardBoxOfficeCharSuccessDataPercentChartData { 
+export interface MovieGetChatGPTKeySuccess { 
+    code?: number;
+    message?: string;
     /**
-     * 電影名稱
+     * ChatGPT的金鑰
      */
-    name?: string;
-    /**
-     * 票房金額
-     */
-    value?: number;
+    data?: string;
 }
