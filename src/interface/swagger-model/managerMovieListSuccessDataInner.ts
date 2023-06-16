@@ -28,6 +28,14 @@ export interface ManagerMovieListSuccessDataInner {
      */
     genreName?: Array<string>;
     /**
+     * 片長
+     */
+    runtime?: number;
+    /**
+     * 分級制度(0: 普通級,6: 保護級,12: 輔導十二級,15 : 輔導十五級,18: 限制級)
+     */
+    rate?: number;
+    /**
      * 分級制度文字
      */
     rateName?: string;

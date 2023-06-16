@@ -30,7 +30,7 @@ class OrderController {
     // ———————————————————————  結帳  ———————————————————————
     createOrder = async (req: Request<{}, StaffOrderCreateSuccess, StaffOrderCreateReq, null, {}>, res: Response, next: NextFunction) => {
         let orderId = uuid.v4();
-        let ticketTypeData: TicketTypeResDataCustomer[];
+        let ticketTypeData: TicketTypeResDataCustomer[] = [];
 
         // 驗證傳過來的參數
         let isParaValid = this.isCreateOrderParaValid(req.body);
@@ -310,7 +310,7 @@ class OrderController {
     getOrder = async (req: Request<{}, StaffOrderSearchSuccess, {}, string, {}>, res: Response, next: NextFunction) => {
         try {
             const order = await Order.findByIdAndUpdate(req.params['orderId'])
-            if(!order){
+            if (!order) {
                 return next(ErrorService.appError(404, "沒有這筆訂單！", next));
             }
             const resData: StaffOrderSearchSuccessData = {
@@ -339,7 +339,7 @@ class OrderController {
         try {
             const reqArr = req.body;
             for (let i = 0; i < reqArr.length; i++) {
-                await Order.findByIdAndUpdate(reqArr[i].id,{
+                await Order.findByIdAndUpdate(reqArr[i].id, {
                     "status": reqArr[i].status,
                     "amount": reqArr[i].newAmount
                 })
@@ -371,13 +371,13 @@ async function findOrderInfo(ticketArr) {
         ticketList.push({
             title: movie['title'],
             ticketId: ticketArr[i].ticketId,
-            ticketStatus: ticket['isRefund']? 1:0,
+            ticketStatus: ticket['isRefund'] ? 1 : 0,
             time: schedule['startDate'],
             seatId: ticketArr[i].seatId,
             seatName: seat['seatName'],
             ticketType: ticketType['type'],
             price: ticketArr[i].price,
-            
+
         })
     }
     return ticketList;

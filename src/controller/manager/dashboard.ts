@@ -4,6 +4,8 @@ import Order from 'src/models/orderModels';
 import { ManagerDashboardBoxOfficePercentChartData, ManagerDashboardBoxOfficeRankChartData } from 'src/interface/manager';
 import { StaffOrderCreateModel } from 'src/interface/staff/staffOrderModel';
 import { StaffOrderCreateReqTicketList } from 'src/interface/swagger-model/staffOrderCreateReqTicketList';
+import { DashboardMetricSuccess } from 'src/interface/swagger-model/dashboardMetricSuccess';
+import { DashboardBoxOfficeChartSuccess } from 'src/interface/swagger-model/dashboardBoxOfficeChartSuccess';
 const moment = require('moment');
 
 class DashboardController {
@@ -12,7 +14,7 @@ class DashboardController {
 
     }
 
-    getMetric = async (req: Request<{}, any/**res的型別 */, null, string, {}>, res: Response, next: NextFunction) => {
+    getMetric = async (req: Request<{}, DashboardMetricSuccess, {}, {}, {}>, res: Response, next: NextFunction) => {
         let metricData = {};                                                                        // 要回傳client端的資料
 
         try {
@@ -62,7 +64,7 @@ class DashboardController {
 
 
     // 本日累計營收- 取得當日收入
-    getOneDayTotalIncome(orderData: any[]): number {
+    getOneDayTotalIncome(orderData: StaffOrderCreateModel[]): number {
         let total = 0;
 
         if (orderData?.length) {
@@ -81,7 +83,7 @@ class DashboardController {
 
     // ———————————————————————  票房收入  ———————————————————————
     // 票房收入
-    getBoxOfficeStatistics = async (req: Request<{}, any/**res的型別 */, null, string, {}>, res: Response, next: NextFunction) => {
+    getBoxOfficeStatistics = async (req: Request<{}, DashboardBoxOfficeChartSuccess, {}, {}, {}>, res: Response, next: NextFunction) => {
         let resData = { percentChartData: [], rankChartData: null };
         let today: string = "2023/06/16";  // 今日的寫法moment=> moment().format('YYYY/MM/DD');     // 先寫死參數====        
         let todayOrderData: StaffOrderCreateModel[] = [];
@@ -202,7 +204,7 @@ class DashboardController {
 
     // ———————————————————————  共用  ———————————————————————
     // 共用- 取得當日訂單資料
-    getRangeDateOrderData(startDate: string, endDate: string, next: NextFunction): Promise<any> {
+    getRangeDateOrderData(startDate: string, endDate: string, next: NextFunction): Promise<StaffOrderCreateModel[]> {
         const _startDate = moment(startDate, "YYYY/MM/DD").startOf('day');
         const _endDate = moment(endDate, "YYYY/MM/DD").endOf('day');
 
