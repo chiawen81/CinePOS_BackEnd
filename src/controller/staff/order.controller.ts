@@ -29,7 +29,7 @@ class OrderController {
 
     // ———————————————————————  結帳  ———————————————————————
     createOrder = async (req: Request<{}, StaffOrderCreateSuccess, StaffOrderCreateReq, null, {}>, res: Response, next: NextFunction) => {
-        let orderId = uuid.v4();
+        let orderId;
         let ticketTypeData: TicketTypeResDataCustomer[] = [];
 
         // 驗證傳過來的參數
@@ -44,7 +44,7 @@ class OrderController {
             console.log('ticketType全部資料', ticketTypeData);
 
             // 新增資料至order資料庫、更新seat資料庫(售出狀態)
-            this.getNewOrderDataAndUpdateSeatDatabase(req.body, orderId)
+            this.getNewOrderDataAndUpdateSeatDatabase(req.body)
                 .then((newOrderData: StaffOrderCreateModel) => {
                     console.log('newOrderData-主程式', newOrderData);
                     return Order.create(newOrderData);
@@ -52,7 +52,9 @@ class OrderController {
                 .then((newOrderData) => {
                     // 回傳成功訊息給client端
                     console.log('newOrderData-新增order資料庫', newOrderData);
-                    let successData = this.setCreateOrderSuccessData((req.body as StaffOrderCreateReq), ticketTypeData, orderId);
+                    let successData = this.setCreateOrderSuccessData((req.body as StaffOrderCreateReq), ticketTypeData, (newOrderData as any)._id);
+                    orderId = newOrderData._id;
+
                     console.log('successData-res', successData);
 
                     res.status(200).json({
@@ -136,7 +138,7 @@ class OrderController {
 
 
     // 結帳- 整理要寫進order資料庫的資料
-    async getNewOrderDataAndUpdateSeatDatabase(reqData: StaffOrderCreateReq, orderId: string): Promise<StaffOrderCreateModel> {
+    async getNewOrderDataAndUpdateSeatDatabase(reqData: StaffOrderCreateReq): Promise<StaffOrderCreateModel> {
         let newOrderData: StaffOrderCreateModel;
         let newOrderTicketList: StaffOrderCreateSuccessDataTicketList[] = [];
         console.log('reqData-整理要寫進order資料庫的資料', reqData);
@@ -169,7 +171,6 @@ class OrderController {
 
         // 組新訂單資料(資料庫)
         newOrderData = {
-            orderId: orderId,
             status: EnumOrderStatus.PAID,
             paymentMethod: reqData.paymentMethod,
             amount: reqData.amount,
