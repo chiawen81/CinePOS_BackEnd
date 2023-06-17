@@ -83,7 +83,7 @@ class TimetableController {
 
   }
 
-  /** 更新時刻表 */
+  /** 新增時刻表 */
   create = async (req: { body: TimetableCreateRequest }, res, next) => {
     console.log("create timetable entry");
     const request: TimetableCreateRequest = req.body;
@@ -161,6 +161,7 @@ class TimetableController {
     console.log("update all timetable entries");
     const timetable = req.body;
     const id = timetable.id;
+    const theaterId = timetable.theaterId;
 
 
     // 驗證欄位
@@ -171,17 +172,62 @@ class TimetableController {
     try {
 
       const updatedTimetable = await Timetable.findByIdAndUpdate(
-        id, 
+        id,
         {
-        movieId: timetable.movieId,
-        theaterId: timetable.theaterId,
-        startDate: new Date(timetable.startDate),
-        endDate: new Date(timetable.endDate),
-      },
+          movieId: timetable.movieId,
+          theaterId: timetable.theaterId,
+          startDate: new Date(timetable.startDate),
+          endDate: new Date(timetable.endDate),
+        },
         { new: true }
       );
 
-      console.log('update',updatedTimetable);
+      // 刪除前次產生座位
+      const deletedSeats = await Seats.deleteMany({
+        scheduleId: id
+      });
+      if (!deletedSeats) {
+        return next(ErrorService.appError(404, "找不到指定的座位", next));
+      }
+
+      // 新增對應座位
+      let theaterData = await Theater.findOne({ _id: theaterId });
+      if (theaterData) {
+        let seatRow = TheaterController.splitArrayIntoChunks(theaterData.seatMap, theaterData.row);
+
+        const dataArray = [];
+        for (let i = 0; i < seatRow.length; i++) {
+          let colCount = 0;
+          seatRow[i].forEach(element => {
+            if (element == "0" || element == "1") {
+              // 0: 普通, 1:殘障
+              const seat = {
+                scheduleId: id,
+                seatRow: theaterData.rowLabel[i],
+                seatCol: theaterData.colLabel[colCount],
+                seatName: theaterData.rowLabel[i] + theaterData.colLabel[colCount] + "",
+                status: 0
+              };
+              dataArray.push(seat);
+
+            } else if (element === "-1") {
+              //不開放
+              const seat = {
+                scheduleId: id,
+                seatRow: theaterData.rowLabel[i],
+                seatCol: theaterData.colLabel[colCount],
+                seatName: theaterData.rowLabel[i] + theaterData.colLabel[colCount] + "",
+                status: 3
+              };
+              dataArray.push(seat);
+            }
+            colCount++;
+          });
+        }
+        await Seats.insertMany(dataArray);
+      }
+
+      console.log('update', updatedTimetable, theaterData);
 
       res.status(200).json({
         code: 1,
@@ -213,7 +259,7 @@ class TimetableController {
       if (!deletedTimetable) {
         return next(ErrorService.appError(404, "找不到指定的時刻表", next));
       }
-      console.log(deletedTimetable,deletedSeats);
+      console.log(deletedTimetable, deletedSeats);
 
       res.status(200).json({
         code: 1,
