@@ -26,7 +26,7 @@ export interface StaffOrderSearchSuccessDataTicketList {
     /**
      * 票券狀態(1:已退,0:未退)
      */
-    ticketStatus?: number;
+    ticketStatus: number;
     /**
      * 票價
      */
