@@ -27,10 +27,12 @@ class LogInController {
 
         if (passwordValidator && staffIdValidator) {
             let role = (req.originalUrl.split('/')[2] === "manager") ? "manager" : "staff";
+            console.log('role', role);
 
             // 驗證密碼
             try {
                 const user = await User.findOne({ staffId, role }).select('+password');
+                console.log('user', user);
 
                 if (!user) {
                     return next(ErrorService.appError(401, "查無此人！", next));
