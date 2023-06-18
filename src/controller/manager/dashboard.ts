@@ -24,7 +24,7 @@ class DashboardController {
         console.log('getMetric')
         try {
             let searchDate = moment(req.query['searchDate']).format('YYYY/MM/DD');
-            metricData["metricOfTodayIncome"] = await this.getMetricOfDailyIncome(searchDate, next);            // 本日累計營收
+            metricData["dailyIncome"] = await this.getMetricOfDailyIncome(searchDate, next);            // 本日累計營收
 
             res.status(200).json({
                 code: 1,
@@ -62,7 +62,7 @@ class DashboardController {
         console.log('todayIncome', todayIncome, 'formatIncreasePercent', formatIncreasePercent);
 
         return {
-            todayIncome: todayIncome,
+            total: todayIncome,
             increasePercent: formatIncreasePercent
         };
     }
