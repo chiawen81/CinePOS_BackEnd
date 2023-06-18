@@ -27,7 +27,7 @@ class DashboardController {
             console.log('getMetric');
             try {
                 let searchDate = moment(req.query['searchDate']).format('YYYY/MM/DD');
-                metricData["metricOfTodayIncome"] = yield this.getMetricOfDailyIncome(searchDate, next);
+                metricData["dailyIncome"] = yield this.getMetricOfDailyIncome(searchDate, next);
                 res.status(200).json({
                     code: 1,
                     message: '成功取得指標！',
@@ -95,7 +95,7 @@ class DashboardController {
             let formatIncreasePercent = (increasePercent * 100).toFixed(0);
             console.log('todayIncome', todayIncome, 'formatIncreasePercent', formatIncreasePercent);
             return {
-                todayIncome: todayIncome,
+                total: todayIncome,
                 increasePercent: formatIncreasePercent
             };
         });

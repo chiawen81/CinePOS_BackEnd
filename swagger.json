@@ -1340,6 +1340,7 @@
                         "name": "searchDate",
                         "in": "query",
                         "description": "查詢日期",
+                        "required": true,
                         "schema": {
                             "type": "string"
                         }
@@ -1369,7 +1370,7 @@
                 }
             }
         },
-        "/v1/manager/dashboard/boxOfficeChart": {
+        "/v1/manager/dashboard/boxOffice": {
             "get": {
                 "tags": [
                     "Manager"
@@ -1380,6 +1381,7 @@
                         "name": "searchDate",
                         "in": "query",
                         "description": "查詢日期",
+                        "required": true,
                         "schema": {
                             "type": "string"
                         }
@@ -3304,9 +3306,9 @@
             },
             "DashboardMetricSuccessData": {
                 "properties": {
-                    "boxOffice": {
+                    "dailyIncome": {
                         "type": "object",
-                        "description": "票房資訊",
+                        "description": "當日營收",
                         "properties": {
                             "total": {
                                 "type": "number",
