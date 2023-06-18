@@ -1328,6 +1328,86 @@
                     }
                 }
             }
+        },
+        "/v1/manager/dashboard/metric": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "取得儀表板北極星指標",
+                "parameters": [
+                    {
+                        "name": "searchDate",
+                        "in": "query",
+                        "description": "查詢日期",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DashboardMetricSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/manager/dashboard/boxOfficeChart": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "取得圖表資料(票房統計)",
+                "parameters": [
+                    {
+                        "name": "searchDate",
+                        "in": "query",
+                        "description": "查詢日期",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DashboardBoxOfficeChartSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -3205,8 +3285,112 @@
                         "example": "刪除電影成功!"
                     }
                 }
+            },
+            "DashboardMetricSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "查詢儀表版主要指標成功!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/DashboardMetricSuccessData"
+                    }
+                }
+            },
+            "DashboardMetricSuccessData": {
+                "properties": {
+                    "boxOffice": {
+                        "type": "object",
+                        "description": "票房資訊",
+                        "properties": {
+                            "total": {
+                                "type": "number",
+                                "description": "當日總收入",
+                                "example": 150000
+                            },
+                            "increasePercent": {
+                                "type": "number",
+                                "description": "漲幅百分比(相較昨日)",
+                                "example": 56.33
+                            }
+                        }
+                    }
+                }
+            },
+            "DashboardBoxOfficeChartSuccess": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "查詢票房圖表資料成功!"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/DashboardBoxOfficeChartSuccessData"
+                    }
+                }
+            },
+            "DashboardBoxOfficeChartSuccessData": {
+                "properties": {
+                    "percentChartData": {
+                        "type": "array",
+                        "description": "票房佔比",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "電影名稱",
+                                    "example": "蜘蛛人"
+                                },
+                                "value": {
+                                    "type": "number",
+                                    "description": "票房金額",
+                                    "example": 150000
+                                }
+                            }
+                        }
+                    },
+                    "rankChartData": {
+                        "type": "object",
+                        "description": "票房排行",
+                        "properties": {
+                            "name": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "電影名稱(Y軸)",
+                                "example": [
+                                    "X戰警",
+                                    "小美人魚",
+                                    "鞋貓劍客2"
+                                ]
+                            },
+                            "value": {
+                                "type": "array",
+                                "items": {
+                                    "type": "number"
+                                },
+                                "description": "電影票房金額(X軸)",
+                                "example": [
+                                    16000,
+                                    18000,
+                                    340000
+                                ]
+                            }
+                        }
+                    }
+                }
             }
-
         }
     }
 }

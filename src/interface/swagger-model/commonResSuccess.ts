@@ -10,9 +10,7 @@
  * Do not edit the class manually.
  */
 
-/**
- * 場次時間
- */
-export interface StaffOrderSearchSuccessDataTime { 
-    date?: Date;
+export interface CommonResSuccess { 
+    code?: number;
+    message?: string;
 }

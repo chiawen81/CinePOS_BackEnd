@@ -17,6 +17,10 @@ export interface SeatResData {
      */
     sold: number;
     /**
+     * 已鎖數量
+     */
+    lock?: number;
+    /**
      * 未售數量
      */
     free: number;
