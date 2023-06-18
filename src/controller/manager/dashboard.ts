@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import ErrorService from '../../service/error';
-import Order from 'src/models/orderModels';
+import Order from '../../models/orderModels';
+import Movie from '../../models/moviesModels';
+import ErrorService from './../../service/error';
 import { ManagerDashboardBoxOfficePercentChartData, ManagerDashboardBoxOfficeRankChartData } from 'src/interface/manager';
 import { StaffOrderCreateModel } from 'src/interface/staff/staffOrderModel';
 import { StaffOrderCreateReqTicketList } from 'src/interface/swagger-model/staffOrderCreateReqTicketList';
@@ -14,11 +15,16 @@ class DashboardController {
 
     }
 
-    getMetric = async (req: Request<{}, DashboardMetricSuccess, {}, {}, {}>, res: Response, next: NextFunction) => {
-        let metricData = {};                                                                        // 要回傳client端的資料
+    getMetric = async (req: Request<{}, DashboardMetricSuccess, {}, string, {}>, res: Response, next: NextFunction) => {
+        if (!req?.query['searchDate']) {
+            return next(ErrorService.appError(401, "請輸入查詢日期！", next));
+        };
 
+        let metricData = {};                                                                        // 要回傳client端的資料
+        console.log('getMetric')
         try {
-            metricData["metricOfTodayIncome"] = await this.getMetricOfTodayIncome(next);            // 本日累計營收
+            let searchDate = moment(req.query['searchDate']).format('YYYY/MM/DD');
+            metricData["metricOfTodayIncome"] = await this.getMetricOfDailyIncome(searchDate, next);            // 本日累計營收
 
             res.status(200).json({
                 code: 1,
@@ -38,9 +44,9 @@ class DashboardController {
 
     // ———————————————————————  本日累計營收  ———————————————————————
     // 本日累計營收(總)
-    async getMetricOfTodayIncome(next: NextFunction) {
+    async getMetricOfDailyIncome(searchDate: string, next: NextFunction) {
         // 取得日期
-        let today: string = "2023/06/16";  // 今日的寫法moment=> moment().format('YYYY/MM/DD');     // 先寫死參數====
+        let today: string = searchDate;
         let lastDay: string = moment(today, 'YYYY/MM/DD').subtract(1, 'days').format('YYYY/MM/DD');
 
         // 取得訂單資料
@@ -49,10 +55,10 @@ class DashboardController {
         console.log('todayOrderData', todayOrderData, 'lastDayOrderData', lastDayOrderData);
 
         // 計算指標
-        let todayIncome = this.getOneDayTotalIncome(todayOrderData);
-        let lastDayIncome = this.getOneDayTotalIncome(lastDayOrderData);
+        let todayIncome = this.getOneDayTotalIncome(todayOrderData as any);
+        let lastDayIncome = this.getOneDayTotalIncome(lastDayOrderData as any);
         let increasePercent = (todayIncome / lastDayIncome);
-        let formatIncreasePercent = Math.floor(increasePercent * Math.pow(10, 1)) / Math.pow(10, 1);
+        let formatIncreasePercent = (increasePercent * 100).toFixed(0);
         console.log('todayIncome', todayIncome, 'formatIncreasePercent', formatIncreasePercent);
 
         return {
@@ -83,14 +89,19 @@ class DashboardController {
 
     // ———————————————————————  票房收入  ———————————————————————
     // 票房收入
-    getBoxOfficeStatistics = async (req: Request<{}, DashboardBoxOfficeChartSuccess, {}, {}, {}>, res: Response, next: NextFunction) => {
+    getBoxOfficeStatistics = async (req: Request<{}, DashboardBoxOfficeChartSuccess, {}, string, {}>, res: Response, next: NextFunction) => {
+        if (!req?.query['searchDate']) {
+            return next(ErrorService.appError(401, "請輸入查詢日期！", next));
+        };
+
         let resData = { percentChartData: [], rankChartData: null };
-        let today: string = "2023/06/16";  // 今日的寫法moment=> moment().format('YYYY/MM/DD');     // 先寫死參數====        
-        let todayOrderData: StaffOrderCreateModel[] = [];
+        let searchDate: string = moment(req.query['searchDate']).format('YYYY/MM/DD');
+        let todayOrderData = [];
 
         // 取得訂單資料
         try {
-            todayOrderData = await this.getRangeDateOrderData(today, today, next);
+            todayOrderData = await this.getRangeDateOrderData(searchDate, searchDate, next);
+            console.log('todayOrderData', todayOrderData);
 
         } catch (err) {
             res.status(500).json({
@@ -104,8 +115,8 @@ class DashboardController {
         // 取得圖表資料並回傳client端
         try {
             if (todayOrderData?.length) {
-                resData.percentChartData = this.getBoxOfficeStatisticsPercentChartData(todayOrderData);     // 票房佔比
-                resData.rankChartData = this.getBoxOfficeStatisticsRankChartData(resData.percentChartData); // 票行排行
+                resData.percentChartData = await this.getBoxOfficeStatisticsPercentChartData(todayOrderData) as any;     // 票房佔比
+                resData.rankChartData = await this.getBoxOfficeStatisticsRankChartData(resData.percentChartData);        // 票行排行
             };
 
             res.status(200).json({
@@ -125,13 +136,14 @@ class DashboardController {
 
 
     // 票房收入- 取得佔比圖表資料
-    getBoxOfficeStatisticsPercentChartData(todayOrderData: StaffOrderCreateModel[]): ManagerDashboardBoxOfficePercentChartData[] {
+    async getBoxOfficeStatisticsPercentChartData(todayOrderData: StaffOrderCreateModel[]): Promise<ManagerDashboardBoxOfficePercentChartData[]> {
         let chartData: ManagerDashboardBoxOfficePercentChartData[] = [];
 
         if (todayOrderData?.length) {
             // 取得圖表資料
             for (let idx = 0; idx < todayOrderData.length; idx++) {
                 const singleOrderVal = todayOrderData[idx];
+                console.log('singleOrderVal', singleOrderVal);
                 chartData = JSON.parse(JSON.stringify(
                     this.updateSingleOrderTicketBoxOfficeForPercentChartData(chartData, singleOrderVal.ticketList)
                 ));
@@ -141,6 +153,8 @@ class DashboardController {
             // 拿掉前端不需要的欄位
             for (let idx = 0; idx < chartData.length; idx++) {
                 let obj = chartData[idx];
+                let movieData = await Movie.findById(obj.movieId);
+                obj.name = (movieData.title as string);
                 delete obj.movieId;
             };
         };
@@ -156,12 +170,12 @@ class DashboardController {
         originalChartData: ManagerDashboardBoxOfficePercentChartData[],
         ticketList: StaffOrderCreateReqTicketList[]): ManagerDashboardBoxOfficePercentChartData[] {
         let newChartData: ManagerDashboardBoxOfficePercentChartData[] = JSON.parse(JSON.stringify(originalChartData));
-
+        console.log('newChartData', newChartData, 'ticketList', ticketList);
         for (let idx = 0; idx < ticketList.length; idx++) {
             let singleTicketVal = ticketList[idx];
-            let targetMovieIdx = newChartData ? newChartData.findIndex(val => val.movieId === singleTicketVal.movieId) : null;
-
-            if ((targetMovieIdx === 0) || targetMovieIdx) {
+            let targetMovieIdx = newChartData ? newChartData.findIndex(val => val.movieId === singleTicketVal.movieId.toString()) : null;
+            console.log('targetMovieIdx', targetMovieIdx)
+            if (targetMovieIdx > -1) {
                 // 圖表資料已有該電影
                 newChartData[targetMovieIdx].value += singleTicketVal.price;
 
@@ -204,27 +218,20 @@ class DashboardController {
 
     // ———————————————————————  共用  ———————————————————————
     // 共用- 取得當日訂單資料
-    getRangeDateOrderData(startDate: string, endDate: string, next: NextFunction): Promise<StaffOrderCreateModel[]> {
-        const _startDate = moment(startDate, "YYYY/MM/DD").startOf('day');
-        const _endDate = moment(endDate, "YYYY/MM/DD").endOf('day');
+    async getRangeDateOrderData(startDate: string, endDate: string, next: NextFunction) {
+        const _startDate = moment(startDate, "YYYY/MM/DD").startOf('day').add(8, 'hours').toISOString();
+        const _endDate = moment(endDate, "YYYY/MM/DD").endOf('day').add(8, 'hours').toISOString();
 
-        return new Promise((resolve, reject) => {
-            const searchCondition = {
-                createdAt: {
-                    $gte: _startDate.toDate(),
-                    $lt: _endDate.toDate(),
-                },
-            };
+        const searchCondition = {
+            createdAt: {
+                $gte: new Date(_startDate),
+                $lte: new Date(_endDate),
+            },
+        };
 
-            Order.find(searchCondition, (err, orderData) => {
-                if (err) {
-                    reject(ErrorService.appError(500, `尋找本日累計營收的訂單資料時發生錯誤:${err}`, next));
-                } else {
-                    console.log('orderData', orderData);
-                    resolve(orderData);
-                }
-            });
-        });
+        const orderData = await Order.find(searchCondition);
+
+        return orderData;
     }
 
 }

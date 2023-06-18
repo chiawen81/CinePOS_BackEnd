@@ -1335,7 +1335,16 @@
                     "Manager"
                 ],
                 "summary": "取得儀表板北極星指標",
-                "parameters": [],
+                "parameters": [
+                    {
+                        "name": "searchDate",
+                        "in": "query",
+                        "description": "查詢日期",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -1366,7 +1375,16 @@
                     "Manager"
                 ],
                 "summary": "取得圖表資料(票房統計)",
-                "parameters": [],
+                "parameters": [
+                    {
+                        "name": "searchDate",
+                        "in": "query",
+                        "description": "查詢日期",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Success",
