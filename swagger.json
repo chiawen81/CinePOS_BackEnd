@@ -3306,9 +3306,9 @@
             },
             "DashboardMetricSuccessData": {
                 "properties": {
-                    "boxOffice": {
+                    "dailyIncome": {
                         "type": "object",
-                        "description": "票房資訊",
+                        "description": "當日營收",
                         "properties": {
                             "total": {
                                 "type": "number",
