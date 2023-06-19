@@ -15,5 +15,4 @@ router.post('/', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(movi
 router.patch('/', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(movie_1.default.updateInfo));
 router.delete('/:id', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(movie_1.default.deleteMovie));
 router.put('/status', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(movie_1.default.updateReleaseStatus));
-router.get('/chatGPTKey', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(movie_1.default.getChatGPTKey));
 exports.ManagerMovieRouter = router;

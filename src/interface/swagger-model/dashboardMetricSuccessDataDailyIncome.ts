@@ -10,11 +10,16 @@
  * Do not edit the class manually.
  */
 
-export interface MovieGetChatGPTKeySuccess { 
-    code?: number;
-    message?: string;
+/**
+ * 當日營收
+ */
+export interface DashboardMetricSuccessDataDailyIncome { 
     /**
-     * ChatGPT的金鑰
+     * 當日總收入
      */
-    data?: string;
+    total?: number;
+    /**
+     * 漲幅百分比(相較昨日)
+     */
+    increasePercent?: number;
 }
