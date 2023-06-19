@@ -145,6 +145,7 @@ class TimetableController {
             console.log("update all timetable entries");
             const timetable = req.body;
             const id = timetable.id;
+            const theaterId = timetable.theaterId;
             if (!timetable) {
                 return next(error_1.default.appError(400, "缺少必要欄位或格式不正確", next));
             }
@@ -155,7 +156,45 @@ class TimetableController {
                     startDate: new Date(timetable.startDate),
                     endDate: new Date(timetable.endDate),
                 }, { new: true });
-                console.log('update', updatedTimetable);
+                const deletedSeats = yield seats_model_1.default.deleteMany({
+                    scheduleId: id
+                });
+                if (!deletedSeats) {
+                    return next(error_1.default.appError(404, "找不到指定的座位", next));
+                }
+                let theaterData = yield theater_model_1.default.findOne({ _id: theaterId });
+                if (theaterData) {
+                    let seatRow = theater_1.default.splitArrayIntoChunks(theaterData.seatMap, theaterData.row);
+                    const dataArray = [];
+                    for (let i = 0; i < seatRow.length; i++) {
+                        let colCount = 0;
+                        seatRow[i].forEach(element => {
+                            if (element == "0" || element == "1") {
+                                const seat = {
+                                    scheduleId: id,
+                                    seatRow: theaterData.rowLabel[i],
+                                    seatCol: theaterData.colLabel[colCount],
+                                    seatName: theaterData.rowLabel[i] + theaterData.colLabel[colCount] + "",
+                                    status: 0
+                                };
+                                dataArray.push(seat);
+                            }
+                            else if (element === "-1") {
+                                const seat = {
+                                    scheduleId: id,
+                                    seatRow: theaterData.rowLabel[i],
+                                    seatCol: theaterData.colLabel[colCount],
+                                    seatName: theaterData.rowLabel[i] + theaterData.colLabel[colCount] + "",
+                                    status: 3
+                                };
+                                dataArray.push(seat);
+                            }
+                            colCount++;
+                        });
+                    }
+                    yield seats_model_1.default.insertMany(dataArray);
+                }
+                console.log('update', updatedTimetable, theaterData);
                 res.status(200).json({
                     code: 1,
                     message: "成功",
