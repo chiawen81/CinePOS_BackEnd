@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { MovieDetailDeleteSuccess } from 'src/interface/swagger-model/movieDetailDeleteSuccess';
+import { MovieDetailDeleteSuccess } from '../../interface/swagger-model/movieDetailDeleteSuccess';
 import { enc, AES } from 'crypto-js';
 
 class ChatGPTController {
@@ -9,7 +9,7 @@ class ChatGPTController {
 
     // ———————————————————————  取得chatGPT的金鑰  ———————————————————————
     getChatGPTKey = async (req: Request<{}, MovieDetailDeleteSuccess, {}, {}, {}>, res: Response, next: NextFunction) => {
-        let key: string = process.env.CHATGPT_TOKEN;
+        let key = process.env.CHATGPT_TOKEN;
         // const encryptedData = this.encryptData(process.env.CHATGPT_TOKEN, process.env.CRYPTOKEY);
         // console.log('加密後的資料:', encryptedData);
 
