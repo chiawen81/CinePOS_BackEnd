@@ -1,11 +1,7 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -38,7 +34,7 @@ __exportStar(require("./dashboardBoxOfficeChartSuccessDataPercentChartData"), ex
 __exportStar(require("./dashboardBoxOfficeChartSuccessDataRankChartData"), exports);
 __exportStar(require("./dashboardMetricSuccess"), exports);
 __exportStar(require("./dashboardMetricSuccessData"), exports);
-__exportStar(require("./dashboardMetricSuccessDataBoxOffice"), exports);
+__exportStar(require("./dashboardMetricSuccessDataDailyIncome"), exports);
 __exportStar(require("./infoUpdateReq"), exports);
 __exportStar(require("./infoUpdateRes"), exports);
 __exportStar(require("./infoUpdateResData"), exports);
@@ -61,7 +57,6 @@ __exportStar(require("./movieDetailResReleaseDate"), exports);
 __exportStar(require("./movieDetailUpdateFaild"), exports);
 __exportStar(require("./movieDetailUpdateParameter"), exports);
 __exportStar(require("./movieDetailUpdateSuccess"), exports);
-__exportStar(require("./movieGetChatGPTKeySuccess"), exports);
 __exportStar(require("./movieStatusPara"), exports);
 __exportStar(require("./patchOrderReq"), exports);
 __exportStar(require("./patchOrderReqInner"), exports);

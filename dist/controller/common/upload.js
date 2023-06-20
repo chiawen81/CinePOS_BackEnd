@@ -115,7 +115,7 @@ class UploadController {
         };
     }
     photoValidator(req, res, next) {
-        return (0, multer_1.default)({
+        return multer_1.default({
             limits: { fileSize: 1 * 1024 * 1024 },
             fileFilter: (req, file, callback) => {
                 if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
@@ -134,7 +134,7 @@ class UploadController {
         }).single("upload")(req, res, next);
     }
     fileValidator(req, res, next) {
-        return (0, multer_1.default)({
+        return multer_1.default({
             limits: { fileSize: 1 * 1024 * 1024 },
             fileFilter: (req, file, callback) => {
                 if (file.size > 1048576) {
