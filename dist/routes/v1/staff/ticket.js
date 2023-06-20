@@ -11,4 +11,5 @@ const error_1 = __importDefault(require("../../../service/error"));
 const auth_1 = __importDefault(require("../../../service/auth"));
 router.post('/', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(ticket_controller_1.default.createTicket));
 router.patch('/', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(ticket_controller_1.default.updateTicketStatus));
+router.delete('/', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(ticket_controller_1.default.deleteTicket));
 exports.StaffTicketRouter = router;

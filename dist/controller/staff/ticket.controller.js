@@ -58,6 +58,26 @@ class TicketController {
             }
             ;
         });
+        this.deleteTicket = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const reqArr = req.body;
+                for (let i = 0; i < reqArr.length; i++) {
+                    yield ticketModels_1.default.findByIdAndDelete(reqArr[i]);
+                }
+                const resData = req.body;
+                res.status(200).json({
+                    code: 1,
+                    message: "成功刪除電影票",
+                });
+            }
+            catch (err) {
+                res.status(500).json({
+                    code: -1,
+                    message: err.message || "更新電影票狀態錯誤(其它)!",
+                });
+            }
+            ;
+        });
     }
 }
 exports.default = new TicketController();
