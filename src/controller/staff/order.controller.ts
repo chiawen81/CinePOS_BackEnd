@@ -310,7 +310,14 @@ class OrderController {
     // —————————————————————  查詢訂單  —————————————————————
     getOrder = async (req: Request<{}, StaffOrderSearchSuccess, {}, string, {}>, res: Response, next: NextFunction) => {
         try {
-            const order = await Order.findByIdAndUpdate(req.params['orderId'])
+            const order = await Order.findById(req.params['orderId'])
+            .catch(err =>{
+                res.status(200).json({
+                    code: -1,
+                    message: "沒有這筆訂單！"
+                });
+            })
+
             if (!order) {
                 return next(ErrorService.appError(404, "沒有這筆訂單！", next));
             }
