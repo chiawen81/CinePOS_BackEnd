@@ -82,7 +82,13 @@ class OrderController {
         };
         this.getOrder = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const order = yield orderModels_1.default.findByIdAndUpdate(req.params['orderId']);
+                const order = yield orderModels_1.default.findById(req.params['orderId'])
+                    .catch(err => {
+                    res.status(200).json({
+                        code: -1,
+                        message: "沒有這筆訂單！"
+                    });
+                });
                 if (!order) {
                     return next(error_1.default.appError(404, "沒有這筆訂單！", next));
                 }
