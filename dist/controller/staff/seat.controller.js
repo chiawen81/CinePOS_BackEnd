@@ -20,7 +20,7 @@ class SeatController {
         this.getScheduleIdSeat = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const scheduleTheaters = yield timetable_model_1.default
-                    .findByIdAndUpdate(req.params.scheduleId)
+                    .findById(req.params.scheduleId)
                     .populate({
                     path: 'theaterId',
                     select: 'name totalCapacity row col rowLabel colLabel seatMap'
@@ -119,10 +119,17 @@ class SeatController {
                         }
                     }));
                 });
-                if (seatFail.length > 0) {
-                    return next(error_1.default.appError(400, `${seatFail} 無法選取請重新選擇座位`, next));
+                if (seatFail.length === 0 && seatSuccess.length === 0) {
+                    return next(error_1.default.appError(404, "資料錯誤", next));
                 }
-                yield seats_model_1.default.updateMany({ seatName: { $in: reqSeats } }, { $set: { status: 2 } });
+                if (seatFail.length > 0) {
+                    res.status(200).json({
+                        code: -1,
+                        message: `${seatFail} 無法選取請重新選擇座位`,
+                    });
+                    return;
+                }
+                yield seats_model_1.default.updateMany({ scheduleId: { $eq: req.body.scheduleId }, seatName: { $in: reqSeats } }, { $set: { status: 2 } });
                 res.status(200).json({
                     code: 1,
                     message: "成功鎖定座位!",
