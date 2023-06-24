@@ -35,7 +35,7 @@ const ticketTypeModels_1 = __importDefault(require("./ticketTypeModels"));
 const ordersSchema = new mongoose_1.default.Schema({
     orderId: {
         type: String,
-        required: true,
+        required: false,
         unique: true
     },
     ticketList: [{
