@@ -120,12 +120,16 @@ class SeatController {
 
                 });
             });
-            if(seatFail.length === 0 && seatFail.length === 0){
+            if(seatFail.length === 0 && seatSuccess.length === 0){
                 return next(ErrorService.appError(404, "資料錯誤", next));
             }
             // 若有位置無法選擇則回傳錯誤訊息
             if (seatFail.length > 0) {
-                return next(ErrorService.appError(400, `${seatFail} 無法選取請重新選擇座位`, next));
+                res.status(200).json({
+                    code: -1,
+                    message: `${seatFail} 無法選取請重新選擇座位`,
+                });
+                return;
             }
 
             // 若都可以選擇則將選定得位置鎖住
