@@ -22,7 +22,7 @@ class SeatController {
         try {
 
             const scheduleTheaters = await Timetable
-                .findByIdAndUpdate(req.params.scheduleId)
+                .findById(req.params.scheduleId)
                 .populate({
                     path: 'theaterId',
                     select: 'name totalCapacity row col rowLabel colLabel seatMap'
@@ -32,7 +32,6 @@ class SeatController {
             }
             const seatMap = scheduleTheaters.theaterId['seatMap'];
             const seats = await Seat.find({ scheduleId: req.params.scheduleId, status: { $ne: 0 } });
-
             if (!seats) {
                 return next(ErrorService.appError(404, "座位資料錯誤！", next));
             }
@@ -128,7 +127,7 @@ class SeatController {
 
             // 若都可以選擇則將選定得位置鎖住
             await Seat.updateMany(
-                { seatName: { $in: reqSeats } },
+                {  scheduleId: { $eq: req.body.scheduleId } ,seatName: { $in: reqSeats } },
                 { $set: { status: 2 } }
             )
             // 回傳成功選取得座位
