@@ -319,7 +319,11 @@ class OrderController {
             })
 
             if (!order) {
-                return next(ErrorService.appError(404, "沒有這筆訂單！", next));
+                res.status(200).json({
+                    code: -1,
+                    message: "沒有這筆訂單！"
+                });
+                return;
             }
             const resData: StaffOrderSearchSuccessData = {
                 orderId: '',

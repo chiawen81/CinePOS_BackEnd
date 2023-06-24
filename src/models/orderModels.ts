@@ -8,7 +8,7 @@ import TicketType from "./ticketTypeModels";
 const ordersSchema = new mongoose.Schema({
     orderId: {
         type: String,
-        required: true,
+        required: false,
         unique: true
     },
     ticketList: [{
