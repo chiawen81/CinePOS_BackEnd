@@ -120,6 +120,9 @@ class SeatController {
 
                 });
             });
+            if(seatFail.length === 0 && seatFail.length === 0){
+                return next(ErrorService.appError(404, "資料錯誤", next));
+            }
             // 若有位置無法選擇則回傳錯誤訊息
             if (seatFail.length > 0) {
                 return next(ErrorService.appError(400, `${seatFail} 無法選取請重新選擇座位`, next));
