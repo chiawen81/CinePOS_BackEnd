@@ -20,11 +20,8 @@ COPY package*.json ./
 # 安裝相依套件
 RUN npm install --production
 
-# 複製 TypeScript 專案到工作目錄
-COPY . .
-
-# 編譯 TypeScript 專案
-RUN tsc
+# 複製已編譯好的 JavaScript 文件到工作目錄
+COPY dist/ .
 
 # 設定環境變數
 ENV NODE_ENV=production
