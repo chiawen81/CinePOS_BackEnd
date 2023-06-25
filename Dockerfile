@@ -16,7 +16,7 @@ RUN npm install --production
 COPY . .
 
 # 編譯 TypeScript 專案
-RUN npm run build
+RUN tsc
 
 # 設定環境變數
 ENV NODE_ENV=production
