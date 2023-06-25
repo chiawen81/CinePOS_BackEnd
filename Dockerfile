@@ -3,6 +3,9 @@
 # 使用 Node.js 版本 16 作為基礎映像
 FROM node:16.20.0
 
+# 安裝 TypeScript
+RUN npm install -g typescript
+
 # 設定工作目錄
 WORKDIR /app
 
