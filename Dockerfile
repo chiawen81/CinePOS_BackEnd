@@ -8,7 +8,6 @@ RUN npm cache clean --force
 
 # 安裝 TypeScript
 RUN npm install -g typescript
-RUN npm install multer
 RUN npm install mongoose
 RUN npm install mongodb
 
