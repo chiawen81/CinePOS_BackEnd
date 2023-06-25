@@ -11,6 +11,7 @@ const error_1 = __importDefault(require("../../../service/error"));
 const auth_1 = __importDefault(require("../../../service/auth"));
 router.get('/list', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(theater_1.default.getTheaterList));
 router.post('/', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(theater_1.default.createTheater));
+router.get('/:theaterId/usage', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(theater_1.default.getTheaterUsage));
 router.get('/:theaterId', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(theater_1.default.getTheater));
 router.patch('/:theaterId', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(theater_1.default.updateTheater));
 router.delete('/:theaterId', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(theater_1.default.deleteTheater));
