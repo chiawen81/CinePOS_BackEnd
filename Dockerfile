@@ -5,6 +5,11 @@ FROM node:16.20.0
 
 # 安裝 TypeScript
 RUN npm install -g typescript
+RUN npm install multer
+RUN npm install mongoose
+RUN npm install mongodb
+
+RUN ls -al
 
 # 設定工作目錄
 WORKDIR /app
