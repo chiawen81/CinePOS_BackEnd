@@ -10,6 +10,9 @@ router.get('/list', AuthService.isEmpAuth, ErrorService.handleErrorAsync(Theater
 // 新增影廳
 router.post('/', AuthService.isEmpAuth, ErrorService.handleErrorAsync(TheaterController.createTheater));
 
+// 查詢影廳使用狀況
+router.get('/:theaterId/usage', AuthService.isEmpAuth, ErrorService.handleErrorAsync(TheaterController.getTheaterUsage));
+
 // 查詢影廳
 router.get('/:theaterId', AuthService.isEmpAuth, ErrorService.handleErrorAsync(TheaterController.getTheater));
 
