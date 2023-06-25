@@ -3,6 +3,9 @@
 # 使用 Node.js 版本 16 作為基礎映像
 FROM node:16.20.0
 
+# 清除 npm 缓存
+RUN npm cache clean --force
+
 # 安裝 TypeScript
 RUN npm install -g typescript
 RUN npm install multer
