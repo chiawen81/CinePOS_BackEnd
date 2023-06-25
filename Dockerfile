@@ -33,4 +33,4 @@ ENV NODE_ENV=production
 EXPOSE 3005
 
 # 執行指令
-CMD ["node", "app.js"]
+CMD ["node", "./dist/app.js"]
