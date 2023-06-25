@@ -1,10 +1,37 @@
 import Theater from '../../models/theater.model';
+import Timetable from '../../models/timetable.model';
 import Option from '../../models/optionsModels';
 import Seats from '../../models/seats.model';
 import ErrorService from './../../service/error';
 
 class TheaterController {
     constructor() {
+    }
+
+    // ———————————————————————  查詢影廳使用狀況  ———————————————————————
+    getTheaterUsage = async (req, res) => {
+        const theaterId = req.params.theaterId;
+    
+        try {
+            const timetable = await Timetable.find(
+              {
+                theaterId: theaterId,
+                startDate: {
+                  $gte: new Date(),
+                }
+              } 
+            )
+
+            res.status(200).json({
+                code: 1,
+                message: "成功取得影廳使用狀況資料！",
+                data: {
+                    inUse : timetable.length > 0 ? true : false
+                }
+            });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        };
     }
 
     // ———————————————————————  查詢影廳列表  ———————————————————————
