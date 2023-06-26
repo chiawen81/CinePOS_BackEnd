@@ -10,7 +10,7 @@ RUN npm cache clean --force
 RUN npm install -g typescript
 
 # 設定工作目錄
-WORKDIR /app
+WORKDIR ./
 
 # 將 package.json 和 package-lock.json 複製到工作目錄
 COPY package*.json ./
