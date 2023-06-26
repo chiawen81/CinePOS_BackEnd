@@ -21,8 +21,6 @@ RUN npm install --omit=dev
 # 複製已編譯好的 JavaScript 文件到工作目錄
 COPY dist/ .
 
-# 複製 app.js 文件到工作目錄
-COPY ./dist/app.js .
 
 # 設定環境變數
 ENV NODE_ENV=production
@@ -31,4 +29,4 @@ ENV NODE_ENV=production
 EXPOSE 3005
 
 # 執行指令
-CMD ["node", "dist/app.js"]
+CMD ["node", "app.js"]
