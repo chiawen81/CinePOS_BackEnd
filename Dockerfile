@@ -10,7 +10,7 @@ RUN npm cache clean --force
 RUN npm install -g typescript
 
 # 設定工作目錄
-WORKDIR ./
+WORKDIR /
 
 # 將 package.json 和 package-lock.json 複製到工作目錄
 COPY package*.json ./
@@ -20,7 +20,6 @@ RUN npm install --omit=dev
 
 # 複製已編譯好的 JavaScript 文件到工作目錄
 COPY dist/ .
-
 
 # 設定環境變數
 ENV NODE_ENV=production
