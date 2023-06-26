@@ -15,6 +15,7 @@ COPY package*.json ./
 
 # 安裝相依套件
 RUN npm install --omit=dev
+RUN npm install swagger-ui-express
 
 # 複製已編譯好的 JavaScript 文件到工作目錄
 COPY dist /dist
