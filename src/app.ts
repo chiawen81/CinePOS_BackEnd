@@ -15,7 +15,6 @@ import { CommonLogInRouter } from './routes/v1/common/login';
 import { CommonOptionRouter } from "./routes/v1/common/option";
 import { CommonUploadRouter } from "./routes/v1/common/upload";
 import { TimetableIndexRouter } from './routes/v1/manager/timetable';
-import { ManagerIndexRouter } from './routes/v1/manager/index';
 import { ManagerMovieRouter } from "./routes/v1/manager/movie";
 import { ManagerTheaterRouter } from "./routes/v1/manager/theater";
 import { ManagerDashboardRouter } from "./routes/v1/manager/dashboard";
@@ -58,7 +57,6 @@ app.use('/v1/staff/schedule', StaffScheduleRouter);
 app.use('/v1/staff/order', StaffOrderRouter);
 
 // 後台
-app.use('/v1/manager/', ManagerIndexRouter);
 app.use('/v1/manager/user', CommonUserRouter);
 app.use('/v1/manager/login', CommonLogInRouter);
 app.use('/v1/manager/timetable', TimetableIndexRouter);
