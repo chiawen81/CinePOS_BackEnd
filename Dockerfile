@@ -9,8 +9,6 @@ RUN npm cache clean --force
 # 安裝 TypeScript
 RUN npm install -g typescript
 
-RUN ls -al
-
 # 設定工作目錄
 WORKDIR /app
 
@@ -18,7 +16,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # 安裝相依套件
-RUN npm install --production
+RUN npm install --omit=dev
 
 # 複製已編譯好的 JavaScript 文件到工作目錄
 COPY dist/ .
@@ -33,4 +31,4 @@ ENV NODE_ENV=production
 EXPOSE 3005
 
 # 執行指令
-CMD ["node", "app.js"]
+CMD ["node", "dist/app.js"]
