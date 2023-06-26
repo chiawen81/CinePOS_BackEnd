@@ -1,5 +1,3 @@
-
-
 # 使用 Node.js 版本 16 作為基礎映像
 FROM node:16.20.0
 
@@ -19,7 +17,7 @@ COPY package*.json ./
 RUN npm install --omit=dev
 
 # 複製已編譯好的 JavaScript 文件到工作目錄
-COPY dist/ .
+COPY dist /dist
 
 # 設定環境變數
 ENV NODE_ENV=production
@@ -28,4 +26,4 @@ ENV NODE_ENV=production
 EXPOSE 3005
 
 # 執行指令
-CMD ["node", "app.js"]
+CMD ["node", "dist/app.js"]
