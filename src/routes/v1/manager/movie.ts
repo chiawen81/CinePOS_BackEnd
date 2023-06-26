@@ -4,6 +4,7 @@ import MovieController from '../../../controller/manager/movie';
 import ErrorService from '../../../service/error';
 import AuthService from '../../../service/auth';
 import ResponseService from '../../../service/response';
+import ChatGPTController from '../../../controller/common/chatGPT';
 
 // 查詢電影資訊列表
 router.get('/list', AuthService.isEmpAuth, ResponseService.setHeaderCROS, ErrorService.handleErrorAsync(MovieController.getList));
@@ -24,7 +25,7 @@ router.delete('/:id', AuthService.isEmpAuth, ResponseService.setHeaderCROS, Erro
 router.put('/status', AuthService.isEmpAuth, ResponseService.setHeaderCROS, ErrorService.handleErrorAsync(MovieController.updateReleaseStatus));
 
 // 取得chatGPT金鑰
-router.get('/chatGPTKey', AuthService.isEmpAuth, ResponseService.setHeaderCROS, ErrorService.handleErrorAsync(MovieController.getChatGPTKey));
+router.get('/chatGPTKey', AuthService.isEmpAuth, ResponseService.setHeaderCROS, ErrorService.handleErrorAsync(ChatGPTController.getChatGPTKey));
 
 
 export const ManagerMovieRouter = router;
