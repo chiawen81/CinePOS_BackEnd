@@ -12,6 +12,7 @@ WORKDIR /
 
 # 將 package.json 和 package-lock.json 複製到工作目錄
 COPY package*.json ./
+COPY swagger.json ./
 
 # 安裝相依套件
 RUN npm install --omit=dev
