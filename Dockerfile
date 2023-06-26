@@ -1,5 +1,3 @@
-
-
 # 使用 Node.js 版本 16 作為基礎映像
 FROM node:16.20.0
 
@@ -9,22 +7,19 @@ RUN npm cache clean --force
 # 安裝 TypeScript
 RUN npm install -g typescript
 
-RUN ls -al
+# 設定docker容器起始位置
+WORKDIR /
 
-# 設定工作目錄
-WORKDIR /app
-
-# 將 package.json 和 package-lock.json 複製到工作目錄
+# 將其它要用到的檔案複製到docker容器內
 COPY package*.json ./
+COPY swagger.json ./
 
 # 安裝相依套件
-RUN npm install --production
+RUN npm install --omit=dev
+RUN npm install swagger-ui-express
 
-# 複製已編譯好的 JavaScript 文件到工作目錄
-COPY dist/ .
-
-# 複製 app.js 文件到工作目錄
-COPY dist/app.js .
+# 複製已編譯好的 JavaScript 檔案到docker容器內
+COPY dist /dist
 
 # 設定環境變數
 ENV NODE_ENV=production
