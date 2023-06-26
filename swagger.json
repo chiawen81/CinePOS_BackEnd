@@ -1335,7 +1335,17 @@
                     "Manager"
                 ],
                 "summary": "取得儀表板北極星指標",
-                "parameters": [],
+                "parameters": [
+                    {
+                        "name": "searchDate",
+                        "in": "query",
+                        "description": "查詢日期",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -1360,13 +1370,23 @@
                 }
             }
         },
-        "/v1/manager/dashboard/boxOfficeChart": {
+        "/v1/manager/dashboard/boxOffice": {
             "get": {
                 "tags": [
                     "Manager"
                 ],
                 "summary": "取得圖表資料(票房統計)",
-                "parameters": [],
+                "parameters": [
+                    {
+                        "name": "searchDate",
+                        "in": "query",
+                        "description": "查詢日期",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -3286,9 +3306,9 @@
             },
             "DashboardMetricSuccessData": {
                 "properties": {
-                    "boxOffice": {
+                    "dailyIncome": {
                         "type": "object",
-                        "description": "票房資訊",
+                        "description": "當日營收",
                         "properties": {
                             "total": {
                                 "type": "number",

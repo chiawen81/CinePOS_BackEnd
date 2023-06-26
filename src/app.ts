@@ -14,6 +14,7 @@ import { CommonUserRouter } from './routes/v1/common/user';
 import { CommonLogInRouter } from './routes/v1/common/login';
 import { CommonOptionRouter } from "./routes/v1/common/option";
 import { CommonUploadRouter } from "./routes/v1/common/upload";
+import { ChatGPTRouter } from "./routes/v1/common/chatGPT";
 import { TimetableIndexRouter } from './routes/v1/manager/timetable';
 import { ManagerMovieRouter } from "./routes/v1/manager/movie";
 import { ManagerTheaterRouter } from "./routes/v1/manager/theater";
@@ -45,6 +46,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 共用
 app.use('/v1/common/option', CommonOptionRouter);
 app.use('/v1/common/upload', CommonUploadRouter);
+app.use('/v1/common/chatGPT', ChatGPTRouter);
 
 // 前台
 app.use('/v1/staff', StaffIndexRouter);

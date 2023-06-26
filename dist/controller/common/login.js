@@ -30,8 +30,10 @@ class LogInController {
             console.log('passwordValidator', passwordValidator, 'staffIdValidator', staffIdValidator);
             if (passwordValidator && staffIdValidator) {
                 let role = (req.originalUrl.split('/')[2] === "manager") ? "manager" : "staff";
+                console.log('role', role);
                 try {
                     const user = yield usersModels_1.default.findOne({ staffId, role }).select('+password');
+                    console.log('user', user);
                     if (!user) {
                         return next(error_1.default.appError(401, "查無此人！", next));
                     }
