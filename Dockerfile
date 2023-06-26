@@ -22,7 +22,7 @@ RUN npm install --omit=dev
 COPY dist/ .
 
 # 複製 app.js 文件到工作目錄
-COPY dist/app.js .
+COPY ./dist/app.js .
 
 # 設定環境變數
 ENV NODE_ENV=production
