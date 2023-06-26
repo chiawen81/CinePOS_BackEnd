@@ -615,6 +615,45 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "刪除電影票",
+                "requestBody": {
+                    "description": "資料格式",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/deleteTicketReq"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResSuccess"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommonResFailed"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/v1/staff/order": {
@@ -3255,6 +3294,12 @@
                         "isRefund",
                         "refundMethod"
                     ]
+                }
+            },
+            "deleteTicketReq": {
+                "type": "array",
+                "items": {
+                    "type": "string"
                 }
             },
             "MovieStatusPara": {

@@ -25,8 +25,8 @@ const uuid = require('uuid');
 class OrderController {
     constructor() {
         this.createOrder = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-            let orderId = uuid.v4();
-            let ticketTypeData;
+            let orderId;
+            let ticketTypeData = [];
             let isParaValid = this.isCreateOrderParaValid(req.body);
             if (!isParaValid.valid) {
                 return next(error_1.default.appError(400, isParaValid.errMsg, next));
@@ -36,14 +36,15 @@ class OrderController {
             try {
                 ticketTypeData = yield ticketTypeModels_1.default.find({});
                 console.log('ticketType全部資料', ticketTypeData);
-                this.getNewOrderDataAndUpdateSeatDatabase(req.body, orderId)
+                this.getNewOrderDataAndUpdateSeatDatabase(req.body)
                     .then((newOrderData) => {
                     console.log('newOrderData-主程式', newOrderData);
                     return orderModels_1.default.create(newOrderData);
                 })
                     .then((newOrderData) => {
                     console.log('newOrderData-新增order資料庫', newOrderData);
-                    let successData = this.setCreateOrderSuccessData(req.body, ticketTypeData, orderId);
+                    let successData = this.setCreateOrderSuccessData(req.body, ticketTypeData, newOrderData._id);
+                    orderId = newOrderData._id;
                     console.log('successData-res', successData);
                     res.status(200).json({
                         code: 1,
@@ -81,9 +82,19 @@ class OrderController {
         };
         this.getOrder = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const order = yield orderModels_1.default.findByIdAndUpdate(req.params['orderId']);
+                const order = yield orderModels_1.default.findById(req.params['orderId'])
+                    .catch(err => {
+                    res.status(200).json({
+                        code: -1,
+                        message: "沒有這筆訂單！"
+                    });
+                });
                 if (!order) {
-                    return next(error_1.default.appError(404, "沒有這筆訂單！", next));
+                    res.status(200).json({
+                        code: -1,
+                        message: "沒有這筆訂單！"
+                    });
+                    return;
                 }
                 const resData = {
                     orderId: '',
@@ -175,7 +186,7 @@ class OrderController {
         console.log('successData', successData);
         return successData;
     }
-    getNewOrderDataAndUpdateSeatDatabase(reqData, orderId) {
+    getNewOrderDataAndUpdateSeatDatabase(reqData) {
         return __awaiter(this, void 0, void 0, function* () {
             let newOrderData;
             let newOrderTicketList = [];
@@ -196,7 +207,6 @@ class OrderController {
             }
             ;
             newOrderData = {
-                orderId: orderId,
                 status: EnumOrderStatus.PAID,
                 paymentMethod: reqData.paymentMethod,
                 amount: reqData.amount,

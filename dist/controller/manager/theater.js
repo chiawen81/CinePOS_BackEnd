@@ -13,11 +13,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const theater_model_1 = __importDefault(require("../../models/theater.model"));
+const timetable_model_1 = __importDefault(require("../../models/timetable.model"));
 const optionsModels_1 = __importDefault(require("../../models/optionsModels"));
 const seats_model_1 = __importDefault(require("../../models/seats.model"));
 const error_1 = __importDefault(require("./../../service/error"));
 class TheaterController {
     constructor() {
+        this.getTheaterUsage = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const theaterId = req.params.theaterId;
+            try {
+                const timetable = yield timetable_model_1.default.find({
+                    theaterId: theaterId,
+                    startDate: {
+                        $gte: new Date(),
+                    }
+                });
+                res.status(200).json({
+                    code: 1,
+                    message: "成功取得影廳使用狀況資料！",
+                    data: {
+                        inUse: timetable.length > 0 ? true : false
+                    }
+                });
+            }
+            catch (err) {
+                res.status(500).json({ error: err.message });
+            }
+            ;
+        });
         this.getTheaterList = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 let queryParm = {
