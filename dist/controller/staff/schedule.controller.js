@@ -62,7 +62,8 @@ class ScheduleController {
                     for (let j = 0; j < resData[i].scheduleList.length; j++) {
                         const seats = yield seats_model_1.default.find({ scheduleId: resData[i].scheduleList[j].scheduleId, status: { $ne: 0 } });
                         const seatsSold = seats.filter(item => item.status === 1);
-                        resData[i].scheduleList[j].remainSeats = resData[i].scheduleList[j].totalCapacity - seatsSold.length;
+                        const seatsLock = seats.filter(item => item.status === 2);
+                        resData[i].scheduleList[j].remainSeats = resData[i].scheduleList[j].totalCapacity - seatsSold.length - seatsLock.length;
                     }
                 }
                 res.status(200).json({
