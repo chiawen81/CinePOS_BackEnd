@@ -4,13 +4,14 @@ import UploadController from '../../../controller/common/upload';
 import UserController from '../../../controller/common/user';
 import ErrorService from '../../../service/error';
 import AuthService from '../../../service/auth';
+import ResponseService from '../../../service/response';
 
 
 // 取得使用者資料
-router.get('/profile/:staffId', AuthService.isEmpAuth, AuthService.isOwnerAuth, ErrorService.handleErrorAsync(UserController.getUserProfile));
+router.get('/profile/:staffId', AuthService.isEmpAuth, AuthService.isOwnerAuth, ResponseService.setHeaderCROS, ErrorService.handleErrorAsync(UserController.getUserProfile));
 
 // 更新使用者資料(姓名)
-router.post('/profile', AuthService.isEmpAuth, AuthService.isOwnerAuth, ErrorService.handleErrorAsync(UserController.changeUserName));
+router.post('/profile', AuthService.isEmpAuth, AuthService.isOwnerAuth, ResponseService.setHeaderCROS, ErrorService.handleErrorAsync(UserController.changeUserName));
 
 // 更新大頭貼
 router.post('/sticker/:staffId', AuthService.isEmpAuth, AuthService.isOwnerAuth, UploadController.photoValidator,

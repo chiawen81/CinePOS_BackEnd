@@ -9,5 +9,6 @@ const router = express.Router();
 const schedule_controller_1 = __importDefault(require("../../../controller/staff/schedule.controller"));
 const error_1 = __importDefault(require("../../../service/error"));
 const auth_1 = __importDefault(require("../../../service/auth"));
-router.get('/list', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(schedule_controller_1.default.getScheduleList));
+const response_1 = __importDefault(require("../../../service/response"));
+router.get('/list', auth_1.default.isEmpAuth, response_1.default.setHeaderCROS, error_1.default.handleErrorAsync(schedule_controller_1.default.getScheduleList));
 exports.StaffScheduleRouter = router;

@@ -9,5 +9,6 @@ const router = express.Router();
 const option_1 = __importDefault(require("../../../controller/common/option"));
 const error_1 = __importDefault(require("../../../service/error"));
 const auth_1 = __importDefault(require("../../../service/auth"));
-router.get('/:typeId', auth_1.default.isEmpAuth, error_1.default.handleErrorAsync(option_1.default.getOptionData));
+const response_1 = __importDefault(require("../../../service/response"));
+router.get('/:typeId', auth_1.default.isEmpAuth, response_1.default.setHeaderCROS, error_1.default.handleErrorAsync(option_1.default.getOptionData));
 exports.CommonOptionRouter = router;
