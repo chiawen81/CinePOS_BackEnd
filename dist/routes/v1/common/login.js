@@ -8,5 +8,6 @@ const express = require('express');
 const router = express.Router();
 const login_1 = __importDefault(require("../../../controller/common/login"));
 const error_1 = __importDefault(require("../../../service/error"));
-router.post('/', error_1.default.handleErrorAsync(login_1.default.logIn));
+const response_1 = __importDefault(require("../../../service/response"));
+router.post('/', response_1.default.setHeaderCROS, error_1.default.handleErrorAsync(login_1.default.logIn));
 exports.CommonLogInRouter = router;

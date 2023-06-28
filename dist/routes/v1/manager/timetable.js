@@ -15,12 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TimetableIndexRouter = void 0;
 const error_1 = __importDefault(require("../../../service/error"));
 const timetable_1 = __importDefault(require("../../../controller/common/timetable"));
+const response_1 = __importDefault(require("../../../service/response"));
 const express = require('express');
 const router = express.Router();
-router.get('/list', error_1.default.handleErrorAsync(timetable_1.default.getList));
-router.post('/create', error_1.default.handleErrorAsync(timetable_1.default.create));
-router.patch('/update', error_1.default.handleErrorAsync(timetable_1.default.update));
-router.delete('/:timetableId', error_1.default.handleErrorAsync(timetable_1.default.delete));
+router.get('/list', response_1.default.setHeaderCROS, error_1.default.handleErrorAsync(timetable_1.default.getList));
+router.post('/create', response_1.default.setHeaderCROS, error_1.default.handleErrorAsync(timetable_1.default.create));
+router.patch('/update', response_1.default.setHeaderCROS, error_1.default.handleErrorAsync(timetable_1.default.update));
+router.delete('/:timetableId', response_1.default.setHeaderCROS, error_1.default.handleErrorAsync(timetable_1.default.delete));
 router.options('*', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(200).end();
 }));
