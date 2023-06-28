@@ -3,10 +3,11 @@ const router = express.Router();
 import UploadController from '../../../controller/common/upload';
 import ErrorService from '../../../service/error';
 import AuthService from '../../../service/auth';
+import ResponseService from '../../../service/response';
 
 
 // 上傳檔案
-router.post('/', AuthService.isEmpAuth, UploadController.uploadValidator,              // 共用- 驗證上傳檔案
+router.post('/', AuthService.isEmpAuth, ResponseService.setHeaderCROS, UploadController.uploadValidator,              // 共用- 驗證上傳檔案
     ErrorService.handleErrorAsync(UploadController.upload),                            // 共用- 上傳檔案
     ErrorService.handleErrorAsync(UploadController.getUploadSuccessInfo),              // 共用- 取得上傳成功的通用檔案資訊
 );
